@@ -159,6 +159,83 @@ const HealthCheckPage: React.FC = () => {
     );
 };
 
+
+
+
+// TARGETED CLEANUP COMPONENT
+import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { db } from '../firebase';
+import { showSuccess, showError } from '../utils/toast';
+import { useState } from 'react';
+
+const CleanupTool = () => {
+    const [targetDate, setTargetDate] = useState('2026-02-16');
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleCleanup = async () => {
+        if (!confirm(`ATTENTION: Cela va supprimer TOUTES les données (Finances + Présences) pour la date du ${targetDate}. Continuer ?`)) return;
+
+        setIsLoading(true);
+        try {
+            let count = 0;
+
+            // 1. Delete Finances for this date
+            const financeQuery = query(collection(db, 'finances'), where('date', '==', targetDate));
+            const financeDocs = await getDocs(financeQuery);
+            for (const d of financeDocs.docs) {
+                await deleteDoc(doc(db, 'finances', d.id));
+                count++;
+            }
+
+            // 2. Delete Attendance for this date
+            const attendanceQuery = query(collection(db, 'attendance'), where('date', '==', targetDate));
+            const attendanceDocs = await getDocs(attendanceQuery);
+            for (const d of attendanceDocs.docs) {
+                await deleteDoc(doc(db, 'attendance', d.id));
+                count++;
+            }
+
+            if (count > 0) {
+                showSuccess(`Grand Ménage terminé ! ${count} documents supprimés pour le ${targetDate}.`);
+                setTimeout(() => window.location.reload(), 1500);
+            } else {
+                showError(`Aucune donnée trouvée pour le ${targetDate}`);
+            }
+        } catch (error: any) {
+            console.error("Cleanup error:", error);
+            showError(`Erreur: ${error.message}`);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    return (
+        <Card className="mt-6 bg-orange-50 border-orange-200">
+            <div className="p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div>
+                    <h3 className="text-lg font-black text-orange-900 mb-1">Nettoyage Ciblé</h3>
+                    <p className="text-sm text-orange-800">Supprimer les données pour une date spécifique</p>
+                </div>
+                <div className="flex gap-2">
+                    <input
+                        type="date"
+                        value={targetDate}
+                        onChange={(e) => setTargetDate(e.target.value)}
+                        className="px-4 py-2 rounded-lg border border-orange-300"
+                    />
+                    <button
+                        onClick={handleCleanup}
+                        disabled={isLoading}
+                        className="px-4 py-2 bg-orange-600 text-white font-bold rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50"
+                    >
+                        {isLoading ? '...' : 'Supprimer'}
+                    </button>
+                </div>
+            </div>
+        </Card>
+    );
+};
+
 const CheckItem: React.FC<{ label: string; status: boolean }> = ({ label, status }) => (
     <div className="flex items-center justify-between">
         <span className="text-sm font-bold text-slate-700">{label}</span>

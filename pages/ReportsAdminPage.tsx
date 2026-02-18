@@ -9,11 +9,43 @@ import { FileTextIcon, CheckIcon, XIcon, FilterIcon, DownloadIcon, EyeIcon } fro
 import { showSuccess, showError } from '../utils/toast';
 
 const ReportsAdminPage: React.FC = () => {
-    const { departmentReports, departments, updateReportStatus, deleteDepartmentReport, isLoading, hasPermission } = useData();
+    const { departmentReports, departments, updateReportStatus, updateDepartmentReport, deleteDepartmentReport, isLoading, hasPermission } = useData();
     const [filterStatus, setFilterStatus] = useState<'All' | 'En attente' | 'Approuvé' | 'Révisé'>('En attente');
     const [selectedReports, setSelectedReports] = useState<string[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [viewReport, setViewReport] = useState<DepartmentReport | null>(null);
+
+    // Edit State
+    const [isEditing, setIsEditing] = useState(false);
+    const [editForm, setEditForm] = useState({ content: '', month: '', year: 2024 });
+
+    // Identify when checking a report to prep edit form
+    React.useEffect(() => {
+        if (viewReport) {
+            setEditForm({
+                content: viewReport.content,
+                month: viewReport.month,
+                year: viewReport.year
+            });
+            setIsEditing(false);
+        }
+    }, [viewReport]);
+
+    const handleSaveEdit = async () => {
+        if (!viewReport) return;
+        setIsSubmitting(true);
+        try {
+            await updateDepartmentReport(viewReport.id, editForm);
+            showSuccess("Rapport mis à jour avec succès");
+            setIsEditing(false);
+            // Update local view
+            setViewReport(prev => prev ? { ...prev, ...editForm } : null);
+        } catch (error) {
+            showError("Erreur lors de la mise à jour");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     // Filter reports
     const filteredReports = useMemo(() => {
@@ -230,38 +262,90 @@ const ReportsAdminPage: React.FC = () => {
                                 <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Période</p>
                                 <p className="font-bold text-lg capitalize">{viewReport.month} {viewReport.year}</p>
                             </div>
-                            <div className="text-right">
-                                <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Soumis le</p>
-                                <p className="font-bold">{new Date(viewReport.submittedAt).toLocaleDateString('fr-FR', { dateStyle: 'long' })}</p>
+                            <div className="text-right flex flex-col items-end gap-2">
+                                <div>
+                                    <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Soumis le</p>
+                                    <p className="font-bold">{new Date(viewReport.submittedAt).toLocaleDateString('fr-FR', { dateStyle: 'long' })}</p>
+                                </div>
+                                {!isEditing && (
+                                    <button
+                                        onClick={() => setIsEditing(true)}
+                                        className="text-primary text-xs font-bold hover:underline"
+                                    >
+                                        Modifier le contenu
+                                    </button>
+                                )}
                             </div>
                         </div>
 
-                        <div>
-                            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Contenu</p>
-                            <div className="p-4 bg-white border border-slate-200 rounded-xl text-sm leading-relaxed text-slate-700 whitespace-pre-wrap">
-                                {viewReport.content}
-                            </div>
-                        </div>
-
-                        {viewReport.fileUrl && (
-                            <div>
-                                <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Pièce Jointe</p>
-                                <a
-                                    href={viewReport.fileUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-3 p-4 bg-blue-50 border border-blue-100 rounded-xl text-blue-700 hover:bg-blue-100 transition-colors group"
-                                >
-                                    <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-blue-500 shadow-sm">
-                                        <FileTextIcon className="w-5 h-5" />
+                        {isEditing ? (
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Contenu du rapport</label>
+                                    <textarea
+                                        className="w-full h-64 p-4 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                                        value={editForm.content}
+                                        onChange={(e) => setEditForm(prev => ({ ...prev, content: e.target.value }))}
+                                    />
+                                </div>
+                                <div className="flex gap-4">
+                                    <div className="flex-1">
+                                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Mois</label>
+                                        <select
+                                            className="w-full p-2 border border-slate-200 rounded-lg"
+                                            value={editForm.month}
+                                            onChange={(e) => setEditForm(prev => ({ ...prev, month: e.target.value }))}
+                                        >
+                                            {['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'].map(m => (
+                                                <option key={m} value={m}>{m}</option>
+                                            ))}
+                                        </select>
                                     </div>
                                     <div className="flex-1">
-                                        <p className="font-bold text-sm">Voir le document joint</p>
-                                        <p className="text-xs opacity-70">Cliquez pour ouvrir</p>
+                                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Année</label>
+                                        <input
+                                            type="number"
+                                            className="w-full p-2 border border-slate-200 rounded-lg"
+                                            value={editForm.year}
+                                            onChange={(e) => setEditForm(prev => ({ ...prev, year: parseInt(e.target.value) }))}
+                                        />
                                     </div>
-                                    <DownloadIcon className="w-4 h-4 opacity-50 group-hover:opacity-100" />
-                                </a>
+                                </div>
+                                <div className="flex justify-end gap-2 pt-4">
+                                    <Button variant="ghost" onClick={() => setIsEditing(false)}>Annuler</Button>
+                                    <Button onClick={handleSaveEdit} isLoading={isSubmitting}>Enregistrer</Button>
+                                </div>
                             </div>
+                        ) : (
+                            <>
+                                <div>
+                                    <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Contenu</p>
+                                    <div className="p-4 bg-white border border-slate-200 rounded-xl text-sm leading-relaxed text-slate-700 whitespace-pre-wrap">
+                                        {viewReport.content}
+                                    </div>
+                                </div>
+
+                                {viewReport.fileUrl && (
+                                    <div>
+                                        <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Pièce Jointe</p>
+                                        <a
+                                            href={viewReport.fileUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-3 p-4 bg-blue-50 border border-blue-100 rounded-xl text-blue-700 hover:bg-blue-100 transition-colors group"
+                                        >
+                                            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-blue-500 shadow-sm">
+                                                <FileTextIcon className="w-5 h-5" />
+                                            </div>
+                                            <div className="flex-1">
+                                                <p className="font-bold text-sm">Voir le document joint</p>
+                                                <p className="text-xs opacity-70">Cliquez pour ouvrir</p>
+                                            </div>
+                                            <DownloadIcon className="w-4 h-4 opacity-50 group-hover:opacity-100" />
+                                        </a>
+                                    </div>
+                                )}
+                            </>
                         )}
 
                         <div className="flex gap-3 pt-4 border-t border-slate-100">

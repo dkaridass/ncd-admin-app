@@ -13,150 +13,150 @@ export const mockMembers: Member[] = [
 
 // Liste intégrale des 29 départements basée sur les documents fournis
 export const mockDepartments: Department[] = [
-  { 
-    id: 'dept-1', number: 1, name: "CORPS DES PRÉDICATEURS", category: 'Culte', 
+  {
+    id: 'dept-1', number: 1, name: "CORPS DES PRÉDICATEURS", category: 'Culte',
     leaderName: "Samy Makengu", leaderTitle: "Pasteur", vpName: "Olivier Senga", vpTitle: "Pasteur",
-    meetingDay: "Jeudi", meetingTime: "17:00", memberCount: 15, reportStatus: 'À jour' 
+    meetingDay: "Jeudi", meetingTime: "17:00", memberCount: 15, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-2', number: 2, name: "TECHNIQUE", category: 'Technique', 
+  {
+    id: 'dept-2', number: 2, name: "TECHNIQUE", category: 'Technique',
     leaderName: "Grace Tshilombo", leaderTitle: "Frère", vpName: "Ephraim Kaly Nsapu", vpTitle: "Frère",
-    meetingDay: "", meetingTime: "", memberCount: 12, reportStatus: 'À jour' 
+    meetingDay: "", meetingTime: "", memberCount: 12, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-3', number: 3, name: "INTERPRÉTARIAT", category: 'Opérations', 
+  {
+    id: 'dept-3', number: 3, name: "INTERPRÉTARIAT", category: 'Opérations',
     leaderName: "Jean-Didier Bikakala", leaderTitle: "Berger", vpName: "Guy Gwamonzi", vpTitle: "Frère",
-    meetingDay: "", meetingTime: "", memberCount: 10, reportStatus: 'En retard' 
+    meetingDay: "", meetingTime: "", memberCount: 10, reportStatus: 'En retard'
   },
-  { 
-    id: 'dept-4', number: 4, name: "FINANCES", category: 'Administration', 
+  {
+    id: 'dept-4', number: 4, name: "FINANCES", category: 'Administration',
     leaderName: "Paul Kembe", leaderTitle: "Berger", vpName: "Eulalie Shimata", vpTitle: "Sœur",
-    meetingDay: "Mardi", meetingTime: "10:00", memberCount: 8, reportStatus: 'À jour' 
+    meetingDay: "Mardi", meetingTime: "10:00", memberCount: 8, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-5', number: 5, name: "EVANGÉLISATION", category: 'Spiritualité', 
+  {
+    id: 'dept-5', number: 5, name: "EVANGÉLISATION", category: 'Spiritualité',
     leaderName: "Dimitri Mukuna", leaderTitle: "Berger", vpName: "Michel Ngotizo", vpTitle: "Frère",
-    meetingDay: "Samedi", meetingTime: "15:00", memberCount: 25, reportStatus: 'À jour' 
+    meetingDay: "Samedi", meetingTime: "15:00", memberCount: 25, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-6', number: 6, name: "DÉVOTION MATINALE", category: 'Spiritualité', 
+  {
+    id: 'dept-6', number: 6, name: "DÉVOTION MATINALE", category: 'Spiritualité',
     leaderName: "Denis Ngoie", leaderTitle: "Pasteur", vpName: "Bruno Tshitende", vpTitle: "Berger",
-    meetingDay: "Lundi à Samedi", meetingTime: "08:30", memberCount: 40, reportStatus: 'À jour' 
+    meetingDay: "Lundi à Samedi", meetingTime: "08:30", memberCount: 40, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-7', number: 7, name: "PROTOCOLES", category: 'Opérations', 
+  {
+    id: 'dept-7', number: 7, name: "PROTOCOLES", category: 'Opérations',
     leaderName: "Yann Bilolo", leaderTitle: "Berger", vpName: "Scheila", vpTitle: "Sœur", secondVpName: "Huguette Bilonda", secondVpTitle: "Sœur",
-    meetingDay: "Samedi", meetingTime: "13:00", memberCount: 35, reportStatus: 'À jour' 
+    meetingDay: "Samedi", meetingTime: "13:00", memberCount: 35, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-8', number: 8, name: "JVI", category: 'Jeunesse', 
+  {
+    id: 'dept-8', number: 8, name: "JVI", category: 'Jeunesse',
     leaderName: "Direction JVI", leaderTitle: "", vpName: "Jean-Rene Lumbu", vpTitle: "2ème VP",
-    meetingDay: "Dimanche", meetingTime: "16:00", memberCount: 60, reportStatus: 'À jour' 
+    meetingDay: "Dimanche", meetingTime: "16:00", memberCount: 60, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-9', number: 9, name: "ACCUEIL", category: 'Opérations', 
+  {
+    id: 'dept-9', number: 9, name: "ACCUEIL", category: 'Opérations',
     leaderName: "Papy Kongolo", leaderTitle: "Berger",
-    meetingDay: "Mardi", meetingTime: "17:00", memberCount: 20, reportStatus: 'À jour' 
+    meetingDay: "Mardi", meetingTime: "17:00", memberCount: 20, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-10', number: 10, name: "PRESSE", category: 'Opérations', 
+  {
+    id: 'dept-10', number: 10, name: "PRESSE", category: 'Opérations',
     leaderName: "Israel Sendwe", leaderTitle: "Berger",
-    meetingDay: "", meetingTime: "", memberCount: 10, reportStatus: 'À jour' 
+    meetingDay: "", meetingTime: "", memberCount: 10, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-11', number: 11, name: "INTERCESSION", category: 'Spiritualité', 
+  {
+    id: 'dept-11', number: 11, name: "INTERCESSION", category: 'Spiritualité',
     leaderName: "Sentinelles", leaderTitle: "Resp.",
-    meetingDay: "Lundi et Jeudi", meetingTime: "21:00", memberCount: 22, reportStatus: 'À jour' 
+    meetingDay: "Lundi et Jeudi", meetingTime: "21:00", memberCount: 22, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-12', number: 12, name: "LOUANGE", category: 'Culte', 
+  {
+    id: 'dept-12', number: 12, name: "LOUANGE", category: 'Culte',
     leaderName: "Luc Mulamba", leaderTitle: "Berger", vpName: "Marc Assani", vpTitle: "Frère",
-    meetingDay: "Lundi, Jeudi, Samedi", meetingTime: "17:00", memberCount: 45, reportStatus: 'À jour' 
+    meetingDay: "Lundi, Jeudi, Samedi", meetingTime: "17:00", memberCount: 45, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-13', number: 13, name: "SŒURS", category: 'Social', 
+  {
+    id: 'dept-13', number: 13, name: "SŒURS", category: 'Social',
     leaderName: "Louise Mwadi", leaderTitle: "Bergère",
-    meetingDay: "Mardi", meetingTime: "14:00", memberCount: 70, reportStatus: 'À jour' 
+    meetingDay: "Mardi", meetingTime: "14:00", memberCount: 70, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-14', number: 14, name: "HOMMES ADULTES", category: 'Social', 
+  {
+    id: 'dept-14', number: 14, name: "HOMMES ADULTES", category: 'Social',
     leaderName: "Dieudonné Mujanewa", leaderTitle: "",
-    meetingDay: "Mardi", meetingTime: "17:00", memberCount: 40, reportStatus: 'À jour' 
+    meetingDay: "Mardi", meetingTime: "17:00", memberCount: 40, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-15', number: 15, name: "DÉCORATION", category: 'Opérations', 
+  {
+    id: 'dept-15', number: 15, name: "DÉCORATION", category: 'Opérations',
     leaderName: "Benita Muikewu", leaderTitle: "Sœur", vpName: "Thallycia Kayembe", vpTitle: "Sœur", secondVpName: "Marthia Kapinga", secondVpTitle: "Sœur",
-    meetingDay: "", meetingTime: "", memberCount: 15, reportStatus: 'En retard' 
+    meetingDay: "", meetingTime: "", memberCount: 15, reportStatus: 'En retard'
   },
-  { 
-    id: 'dept-16', number: 16, name: "SOCIAL", category: 'Social', 
+  {
+    id: 'dept-16', number: 16, name: "SOCIAL", category: 'Social',
     leaderName: "Annie Mambo", leaderTitle: "Pasteure", vpName: "Ami Kabongo", vpTitle: "Berger",
-    meetingDay: "", meetingTime: "", memberCount: 18, reportStatus: 'À jour' 
+    meetingDay: "", meetingTime: "", memberCount: 18, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-17', number: 17, name: "ECOLE DE DIMANCHE", category: 'Formation', 
+  {
+    id: 'dept-17', number: 17, name: "ECOLE DE DIMANCHE", category: 'Formation',
     leaderName: "Dora Nanga", leaderTitle: "Sœur", vpName: "Myschael Ntumba", vpTitle: "Berger", secondVpName: "Sylvain Losala", secondVpTitle: "2ème VP",
-    meetingDay: "Mardi", meetingTime: "17:00", memberCount: 55, reportStatus: 'À jour' 
+    meetingDay: "Mardi", meetingTime: "17:00", memberCount: 55, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-18', number: 18, name: "BAPTÊME ET SAINTE-CÈNE", category: 'Culte', 
+  {
+    id: 'dept-18', number: 18, name: "BAPTÊME ET SAINTE-CÈNE", category: 'Culte',
     leaderName: "Baudoin Tshuikamba", leaderTitle: "",
-    meetingDay: "", meetingTime: "", memberCount: 8, reportStatus: 'À jour' 
+    meetingDay: "", meetingTime: "", memberCount: 8, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-19', number: 19, name: "SÉCURITÉ", category: 'Opérations', 
+  {
+    id: 'dept-19', number: 19, name: "SÉCURITÉ", category: 'Opérations',
     leaderName: "Augustin Malela", leaderTitle: "Berger", vpName: "Raphael Kapiamba", vpTitle: "Berger",
-    meetingDay: "Samedi", meetingTime: "16:00", memberCount: 25, reportStatus: 'À jour' 
+    meetingDay: "Samedi", meetingTime: "16:00", memberCount: 25, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-20', number: 20, name: "TRANSPORT", category: 'Logistique', 
+  {
+    id: 'dept-20', number: 20, name: "TRANSPORT", category: 'Logistique',
     leaderName: "Devos Sanduku", leaderTitle: "Berger", vpName: "Toupemuni", vpTitle: "Frère",
-    meetingDay: "", meetingTime: "", memberCount: 10, reportStatus: 'À jour' 
+    meetingDay: "", meetingTime: "", memberCount: 10, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-21', number: 21, name: "SANTÉ", category: 'Social', 
+  {
+    id: 'dept-21', number: 21, name: "SANTÉ", category: 'Social',
     leaderName: "Francky", leaderTitle: "Frère",
-    meetingDay: "", meetingTime: "", memberCount: 6, reportStatus: 'À jour' 
+    meetingDay: "", meetingTime: "", memberCount: 6, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-22', number: 22, name: "FIANÇAILLES", category: 'Famille', 
+  {
+    id: 'dept-22', number: 22, name: "FIANÇAILLES", category: 'Famille',
     leaderName: "Direction Pastorale", leaderTitle: "",
-    meetingDay: "Jeudi", meetingTime: "17:00", memberCount: 5, reportStatus: 'À jour' 
+    meetingDay: "Jeudi", meetingTime: "17:00", memberCount: 5, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-23', number: 23, name: "PARTENARIAT", category: 'Administration', 
+  {
+    id: 'dept-23', number: 23, name: "PARTENARIAT", category: 'Administration',
     leaderName: "Berry Biboy", leaderTitle: "Frère", vpName: "Clementine Bomeki", vpTitle: "Bergère", secondVpName: "Zacharie Amisi", secondVpTitle: "Berger",
-    meetingDay: "", meetingTime: "", memberCount: 12, reportStatus: 'À jour' 
+    meetingDay: "", meetingTime: "", memberCount: 12, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-24', number: 24, name: "HYGIÈNE ET DÉCORATION", category: 'Opérations', 
+  {
+    id: 'dept-24', number: 24, name: "HYGIÈNE ET DÉCORATION", category: 'Opérations',
     leaderName: "Claudine Kabedi", leaderTitle: "Bergère",
-    meetingDay: "", meetingTime: "", memberCount: 15, reportStatus: 'À jour' 
+    meetingDay: "", meetingTime: "", memberCount: 15, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-25', number: 25, name: "FORMATION ET CAPACITÉS", category: 'Formation', 
+  {
+    id: 'dept-25', number: 25, name: "FORMATION ET CAPACITÉS", category: 'Formation',
     leaderName: "Jean-Didier Bikakala", leaderTitle: "Berger", vpName: "Bellange Kisala", vpTitle: "Sœur",
-    meetingDay: "", meetingTime: "", memberCount: 20, reportStatus: 'À jour' 
+    meetingDay: "", meetingTime: "", memberCount: 20, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-26', number: 26, name: "EVÉNEMENTIEL", category: 'Opérations', 
+  {
+    id: 'dept-26', number: 26, name: "EVÉNEMENTIEL", category: 'Opérations',
     leaderName: "TBA", leaderTitle: "",
-    meetingDay: "", meetingTime: "", memberCount: 8, reportStatus: 'À jour' 
+    meetingDay: "", meetingTime: "", memberCount: 8, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-27', number: 27, name: "CELLULES DE MAISONS", category: 'Spiritualité', 
+  {
+    id: 'dept-27', number: 27, name: "CELLULES DE MAISONS", category: 'Spiritualité',
     leaderName: "Willy Muka", leaderTitle: "Berger", vpName: "Mardoche Madi", vpTitle: "Berger", secondVpName: "Luc Mwepu", secondVpTitle: "Frère",
-    meetingDay: "", meetingTime: "", memberCount: 120, reportStatus: 'À jour' 
+    meetingDay: "", meetingTime: "", memberCount: 120, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-28', number: 28, name: "CÉNACLE LECTURE BIBLE", category: 'Formation', 
+  {
+    id: 'dept-28', number: 28, name: "CÉNACLE LECTURE BIBLE", category: 'Formation',
     leaderName: "Joel Lumbala", leaderTitle: "Frère", vpName: "Emmanuel Kanku", vpTitle: "Frère",
-    meetingDay: "Mercredi", meetingTime: "15:00", memberCount: 25, reportStatus: 'À jour' 
+    meetingDay: "Mercredi", meetingTime: "15:00", memberCount: 25, reportStatus: 'À jour'
   },
-  { 
-    id: 'dept-29', number: 29, name: "CONSTRUCTION", category: 'Logistique', 
+  {
+    id: 'dept-29', number: 29, name: "CONSTRUCTION", category: 'Logistique',
     leaderName: "Papy Kongolo", leaderTitle: "Berger", vpName: "Baudoin Tshuikamba", vpTitle: "", secondVpName: "Pierre", secondVpTitle: "Frère",
-    meetingDay: "", meetingTime: "", memberCount: 15, reportStatus: 'À jour' 
+    meetingDay: "", meetingTime: "", memberCount: 15, reportStatus: 'À jour'
   }
 ];
 
@@ -182,16 +182,9 @@ export const mockEvents: Event[] = [
 ];
 
 // DEPRECATED: Mock finance records - Use real Firestore data from /finances collection instead
-export const mockFinanceRecords: FinanceRecord[] = [
-  { id: 'f1', type: 'Offrande', amount: 450000, currency: 'CDF', date: '2024-03-10', serviceName: '1er Culte (Dim)', recordedBy: 'Admin' },
-  { id: 'f2', type: 'Dîme', amount: 250, currency: 'USD', date: '2024-03-10', memberName: 'Paul Kembe', serviceName: '2ème Culte (Dim)', recordedBy: 'Admin' },
-  { id: 'f3', type: 'Dépense', amount: 120, currency: 'USD', date: '2024-03-11', notes: 'Maintenance Sonorisation', recordedBy: 'Admin', isApproved: true },
-  { id: 'f4', type: 'Action de grâce', amount: 50000, currency: 'CDF', date: '2024-03-12', memberName: 'Sœur Dora', serviceName: 'Culte Mercredi', recordedBy: 'Admin' },
-];
+export const mockFinanceRecords: FinanceRecord[] = [];
 
-export const mockAttendance: AttendanceRecord[] = [
-  { id: 'a1', date: '2024-03-10', sessionName: '1er Culte (Dim)', menCount: 150, womenCount: 210, childrenCount: 95, totalCount: 455 },
-];
+export const mockAttendance: AttendanceRecord[] = [];
 
 // DEPRECATED: Use real Firestore data from /announcements collection
 // This mock data is kept for reference only and should not be used in production

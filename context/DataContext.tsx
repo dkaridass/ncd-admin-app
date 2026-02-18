@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
-import { Member, Event, FinanceRecord, AttendanceRecord, Department, Announcement, Resource, Task, PrayerRequest, User, AppRole, Permission, DepartmentReport, DepartmentChatMessage, DailyRhema, WeeklyService, AnnualEvent } from '../types';
+import { Member, Event, FinanceRecord, AttendanceRecord, Department, Announcement, Resource, Task, PrayerRequest, User, AppRole, Permission, DepartmentReport, DepartmentChatMessage, DailyRhema, WeeklyService, AnnualEvent, MessageTemplate, CommunicationMessage } from '../types';
 import { api } from '../services/api'; // Assuming you keep api wrapper or import services directly
 import { membersService } from '../services/membersService';
 import { financeService } from '../services/financeService';
@@ -12,7 +12,7 @@ import { attendanceService } from '../services/attendanceService';
 import { reportsService } from '../services/reportsService';
 import { auth, db } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { collection, onSnapshot, doc, updateDoc } from 'firebase/firestore';
+import { collection, onSnapshot, doc, updateDoc, addDoc, deleteDoc } from 'firebase/firestore';
 
 export const ROLE_PERMISSIONS: Record<AppRole, Permission[]> = {
   SUPER_ADMIN: [
@@ -80,6 +80,7 @@ interface DataContextType {
   dailyRhema: DailyRhema | null;
   weeklyServices: WeeklyService[];
   annualProgramme: AnnualEvent[];
+  templates: MessageTemplate[];
   isLoading: boolean;
   error: string | null;
   addMember: (member: Member) => Promise<void>;
@@ -100,10 +101,20 @@ interface DataContextType {
   deleteDepartment: (id: string) => Promise<void>;
   addDepartmentReport: (report: DepartmentReport) => Promise<void>;
   updateReportStatus: (id: string, status: DepartmentReport['status'], feedback?: string) => Promise<void>;
+  updateDepartmentReport: (id: string, updates: Partial<DepartmentReport>) => Promise<void>;
   deleteDepartmentReport: (id: string, storagePath?: string) => Promise<void>;
   addChatMessage: (msg: DepartmentChatMessage) => Promise<void>;
   updateTask: (id: string, status: Task['status']) => Promise<void>;
-  updateUserRole: (userId: string, newRole: AppRole) => Promise<void>; // Admin function to change user roles
+  updateAttendance: (id: string, updates: Partial<AttendanceRecord>) => Promise<void>;
+  deleteAttendance: (id: string) => Promise<void>;
+  updateFinanceRecord: (id: string, updates: Partial<FinanceRecord>) => Promise<void>;
+  updateUserRole: (userId: string, newRole: AppRole) => Promise<void>;
+
+  // Announcement / Template Methods
+  deleteAnnouncement: (id: string) => Promise<void>;
+  addTemplate: (template: MessageTemplate) => Promise<void>;
+  deleteTemplate: (id: string) => Promise<void>;
+
   exportData: () => string;
   importData: (json: string) => boolean;
   resetDatabase: () => void;
@@ -140,6 +151,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [dailyRhema, setDailyRhema] = useState<DailyRhema | null>(null);
   const [weeklyServices, setWeeklyServices] = useState<WeeklyService[]>([]);
   const [annualProgramme, setAnnualProgramme] = useState<AnnualEvent[]>([]);
+  const [templates, setTemplates] = useState<MessageTemplate[]>([]);
 
   // Monitor Auth State - Single Source of Truth with Real-Time Profile Updates
   useEffect(() => {
@@ -420,6 +432,31 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return () => unsubscribe();
   }, [currentUser]);
 
+  // Templates - Real-time Listener
+  useEffect(() => {
+    if (!currentUser) {
+      setTemplates([]);
+      return;
+    }
+
+    const q = collection(db, 'messageTemplates');
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const tpls = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        } as MessageTemplate));
+        setTemplates(tpls);
+      },
+      (err) => {
+        console.error("Templates listener error:", err);
+      }
+    );
+
+    return () => unsubscribe();
+  }, [currentUser]);
+
   // Define hasPermission early so it can be used in useEffect hooks
   const hasPermission = useCallback((permission: Permission): boolean => {
     if (!currentUser) return false;
@@ -629,8 +666,56 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     } catch (e) { setError("Erreur suppression rapport"); throw e; }
   };
 
-  // ... (Other missing functions implementation if needed, but sticking to Reports for now)
-  const addAnnouncement = async (a: Announcement) => { };
+  const updateDepartmentReport = async (id: string, updates: Partial<DepartmentReport>) => {
+    try {
+      await reportsService.update(id, updates);
+    } catch (e) { setError("Erreur maj rapport"); throw e; }
+  };
+
+  const updateAttendance = async (id: string, updates: Partial<AttendanceRecord>) => {
+    try {
+      await attendanceService.update(id, updates);
+    } catch (e) { setError("Erreur maj présence"); throw e; }
+  };
+
+  const deleteAttendance = async (id: string) => {
+    try {
+      await attendanceService.delete(id);
+    } catch (e) { setError("Erreur suppression présence"); throw e; }
+  };
+
+  const updateFinanceRecord = async (id: string, updates: Partial<FinanceRecord>) => {
+    try {
+      await financeService.update(id, updates);
+    } catch (e) { setError("Erreur maj finance"); throw e; }
+  };
+
+  // Announcement Actions
+  const addAnnouncement = async (a: Announcement) => {
+    try {
+      await addDoc(collection(db, 'announcements'), a);
+    } catch (e) { setError("Erreur ajout annonce"); throw e; }
+  };
+
+  const deleteAnnouncement = async (id: string) => {
+    try {
+      await deleteDoc(doc(db, 'announcements', id));
+    } catch (e) { setError("Erreur suppression annonce"); throw e; }
+  };
+
+  // Template Actions
+  const addTemplate = async (t: MessageTemplate) => {
+    try {
+      await addDoc(collection(db, 'messageTemplates'), t);
+    } catch (e) { setError("Erreur ajout modèle"); throw e; }
+  };
+
+  const deleteTemplate = async (id: string) => {
+    try {
+      await deleteDoc(doc(db, 'messageTemplates', id));
+    } catch (e) { setError("Erreur suppression modèle"); throw e; }
+  };
+
   const addResource = async (r: Resource) => { };
   const addTask = async (t: Task) => { };
   const updateTask = async (id: string, s: Task['status']) => { };
@@ -684,9 +769,15 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       dailyRhema,
       weeklyServices: weeklyServices || [],
       annualProgramme: annualProgramme || [],
+      active: true,
+      templates: templates || [],
       isLoading, error,
-      addMember, updateMember, deleteMember, addAttendance, addFinanceRecord, approveFinanceRecord, deleteFinanceRecord, addAnnouncement, addResource, addTask, addPrayerRequest, addEvent, toggleRsvp,
-      addDepartment, updateDepartment, deleteDepartment, addDepartmentReport, updateReportStatus, deleteDepartmentReport, addChatMessage, updateTask, updateUserRole,
+      addMember, updateMember, deleteMember, addAttendance, deleteAttendance, addFinanceRecord, approveFinanceRecord, deleteFinanceRecord,
+      addAnnouncement, deleteAnnouncement,
+      addTemplate, deleteTemplate,
+      addResource, addTask, addPrayerRequest, addEvent, toggleRsvp,
+      addDepartment, updateDepartment, deleteDepartment, addDepartmentReport, updateReportStatus, updateDepartmentReport, deleteDepartmentReport, addChatMessage, updateTask, updateUserRole,
+      updateAttendance, updateFinanceRecord,
       exportData, importData, resetDatabase
     }}>
       {children}

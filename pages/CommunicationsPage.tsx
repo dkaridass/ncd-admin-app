@@ -5,13 +5,15 @@ import PermissionGuard from '../components/auth/PermissionGuard';
 import MessageComposer from '../components/communications/MessageComposer';
 import RecipientSelector from '../components/communications/RecipientSelector';
 import MessageHistory from '../components/communications/MessageHistory';
+import AnnouncementsTab from '../components/communications/AnnouncementsTab';
+import TemplatesTab from '../components/communications/TemplatesTab';
 import { CommunicationMessage, MessageType } from '../types';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
 const CommunicationsPage: React.FC = () => {
     const { members, departments, currentUser } = useData();
-    const [activeTab, setActiveTab] = useState<'send' | 'history'>('send');
+    const [activeTab, setActiveTab] = useState<'send' | 'history' | 'announcements' | 'templates'>('send');
     const [selectedRecipients, setSelectedRecipients] = useState<string[]>([]);
     const [messages, setMessages] = useState<CommunicationMessage[]>([]);
     const [isSending, setIsSending] = useState(false);
@@ -100,17 +102,20 @@ const CommunicationsPage: React.FC = () => {
                     }
                 >
                     {/* Tabs */}
-                    <div className="flex gap-3 mb-8">
+                    {/* Tabs */}
+                    <div className="flex gap-3 mb-8 overflow-x-auto pb-2">
                         {[
-                            { id: 'send' as const, label: '📤 Envoyer un Message', icon: '📤' },
-                            { id: 'history' as const, label: '📋 Historique', icon: '📋' },
+                            { id: 'send' as const, label: '📤 Envoyer' },
+                            { id: 'history' as const, label: '📋 Historique' },
+                            { id: 'announcements' as const, label: '📢 Annonces' },
+                            { id: 'templates' as const, label: '📝 Modèles' },
                         ].map((tab) => (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`flex-1 py-4 px-6 rounded-2xl text-sm font-bold uppercase tracking-widest transition-all ${activeTab === tab.id
-                                        ? 'bg-primary text-white shadow-lg'
-                                        : 'bg-white border-2 border-slate-200 text-slate-600 hover:border-primary/30'
+                                className={`flex-1 min-w-[120px] py-4 px-6 rounded-2xl text-sm font-bold uppercase tracking-widest transition-all ${activeTab === tab.id
+                                    ? 'bg-primary text-white shadow-lg'
+                                    : 'bg-white border-2 border-slate-200 text-slate-600 hover:border-primary/30'
                                     }`}
                             >
                                 {tab.label}
@@ -119,9 +124,8 @@ const CommunicationsPage: React.FC = () => {
                     </div>
 
                     {/* Tab Content */}
-                    {activeTab === 'send' ? (
+                    {activeTab === 'send' && (
                         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-                            {/* Left: Recipient Selector */}
                             <div className="lg:col-span-2">
                                 <RecipientSelector
                                     members={members}
@@ -129,15 +133,11 @@ const CommunicationsPage: React.FC = () => {
                                     onSelectionChange={setSelectedRecipients}
                                 />
                             </div>
-
-                            {/* Right: Message Composer */}
                             <div className="lg:col-span-3">
                                 <MessageComposer
                                     onSend={handleSendMessage}
                                     isLoading={isSending}
                                 />
-
-                                {/* Info Banner */}
                                 <div className="mt-6 p-6 bg-blue-50 border-2 border-blue-200 rounded-2xl">
                                     <div className="flex items-start gap-4">
                                         <span className="text-2xl">ℹ️</span>
@@ -152,9 +152,11 @@ const CommunicationsPage: React.FC = () => {
                                 </div>
                             </div>
                         </div>
-                    ) : (
-                        <MessageHistory messages={messages} />
                     )}
+
+                    {activeTab === 'history' && <MessageHistory messages={messages} />}
+                    {activeTab === 'announcements' && <AnnouncementsTab />}
+                    {activeTab === 'templates' && <TemplatesTab />}
                 </PermissionGuard>
             </div>
         </PageTransition>

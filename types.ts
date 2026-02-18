@@ -297,6 +297,8 @@ export interface Announcement {
   id: string;
   title: string;
   content: string; // Short text or rich text
+  date?: string; // Display date
+  author?: string; // Display author
   category: 'Général' | 'Jeûne & Prière' | 'Finances' | 'Jeunesse' | 'Formation' | 'Événement' | 'Autre';
   target: 'Toute l\'Assemblée' | 'Départements' | 'Jeunes' | 'Femmes' | 'Hommes' | 'Leaders' | 'Bénévoles';
   startDate: string; // ISO date string - when announcement becomes visible
@@ -306,6 +308,7 @@ export interface Announcement {
   createdByName?: string; // User name for display
   isActive: boolean; // Whether announcement is currently active
   isArchived?: boolean; // Whether announcement is archived
+  readCount?: number;
 }
 
 export interface Resource {
