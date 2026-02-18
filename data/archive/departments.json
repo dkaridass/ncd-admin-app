@@ -1,0 +1,179 @@
+{
+    "departments": [
+        {
+            "number": 1,
+            "name": "CORPS DES PREDICATEURS",
+            "meetingDay": "JEUDI",
+            "meetingTime": "17H00",
+            "category": "Spiritualité"
+        },
+        {
+            "number": 2,
+            "name": "TECHNIQUE",
+            "category": "Technique"
+        },
+        {
+            "number": 3,
+            "name": "INTERPRETARIAT",
+            "category": "Culte"
+        },
+        {
+            "number": 4,
+            "name": "FINANCES",
+            "meetingDay": "MARDI",
+            "meetingTime": "10H00",
+            "category": "Administration"
+        },
+        {
+            "number": 5,
+            "name": "EVANGELISATION",
+            "meetingDay": "SAMEDI",
+            "meetingTime": "15H00",
+            "category": "Spiritualité"
+        },
+        {
+            "number": 6,
+            "name": "DEVOTION MATINALE",
+            "meetingDay": "LUNDI A SAMEDI",
+            "meetingTime": "08H30",
+            "category": "Spiritualité"
+        },
+        {
+            "number": 7,
+            "name": "PROTOCOLES",
+            "meetingDay": "SAMEDI",
+            "meetingTime": "13H00",
+            "category": "Culte"
+        },
+        {
+            "number": 8,
+            "name": "JVI",
+            "meetingDay": "DIMANCHE",
+            "meetingTime": "16H00",
+            "category": "Jeunesse"
+        },
+        {
+            "number": 9,
+            "name": "ACCUEIL",
+            "meetingDay": "MARDI",
+            "meetingTime": "17H00",
+            "category": "Culte"
+        },
+        {
+            "number": 10,
+            "name": "PRESSE",
+            "category": "Opérations"
+        },
+        {
+            "number": 11,
+            "name": "INTERCESSION",
+            "meetingDay": "LUNDI ET JEUDI",
+            "meetingTime": "21H00",
+            "category": "Spiritualité"
+        },
+        {
+            "number": 12,
+            "name": "LOUANGE",
+            "meetingDay": "LUNDI, JEUDI, SAMEDI",
+            "meetingTime": "17H00",
+            "category": "Culte"
+        },
+        {
+            "number": 13,
+            "name": "SŒURS",
+            "meetingDay": "MARDI",
+            "meetingTime": "14H00",
+            "category": "Famille"
+        },
+        {
+            "number": 14,
+            "name": "HOMMES ADULTES",
+            "meetingDay": "MARDI",
+            "meetingTime": "17H00",
+            "category": "Famille"
+        },
+        {
+            "number": 15,
+            "name": "DECORATION",
+            "category": "Logistique"
+        },
+        {
+            "number": 16,
+            "name": "SOCIAL",
+            "category": "Social"
+        },
+        {
+            "number": 17,
+            "name": "ECOLE DE DIMANCHE",
+            "meetingDay": "MARDI",
+            "meetingTime": "17H00",
+            "category": "Jeunesse"
+        },
+        {
+            "number": 18,
+            "name": "BAPTEME ET SAINTE-CENE",
+            "category": "Culte"
+        },
+        {
+            "number": 19,
+            "name": "SECURITE",
+            "meetingDay": "SAMEDI",
+            "meetingTime": "16H00",
+            "category": "Opérations"
+        },
+        {
+            "number": 20,
+            "name": "TRANSPORT",
+            "category": "Logistique"
+        },
+        {
+            "number": 21,
+            "name": "SANTE",
+            "category": "Social"
+        },
+        {
+            "number": 22,
+            "name": "FIANCAILLES",
+            "meetingDay": "JEUDI",
+            "meetingTime": "17H00",
+            "category": "Famille"
+        },
+        {
+            "number": 23,
+            "name": "PARTENARIAT",
+            "category": "Administration"
+        },
+        {
+            "number": 24,
+            "name": "HYGIENE ET DECORATION",
+            "category": "Logistique"
+        },
+        {
+            "number": 25,
+            "name": "FORMATION ET RENFORCEMENT DE CAPACITES",
+            "category": "Formation"
+        },
+        {
+            "number": 26,
+            "name": "EVENEMENTIEL",
+            "category": "Opérations"
+        },
+        {
+            "number": 27,
+            "name": "CELLULES DE MAISONS ET EXTENSIONS",
+            "category": "Spiritualité"
+        },
+        {
+            "number": 28,
+            "name": "CENACLE POUR LA LECTURE DE LA BIBLE",
+            "meetingDay": "MERCREDI",
+            "meetingTime": "15H00",
+            "category": "Spiritualité"
+        },
+        {
+            "number": 29,
+            "name": "CONSTRUCTION",
+            "category": "Logistique"
+        }
+    ]
+}

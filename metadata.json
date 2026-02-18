@@ -1,0 +1,8 @@
+{
+  "name": "NCD La Pentecôte Admin",
+  "description": "An administration app for NCD La Pentecôte church to manage members, events, finances, and communications. Led by Pastor Jean-Clément Diambilay in Lubumbashi.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

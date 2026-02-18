@@ -1,0 +1,184 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // --- Helper Functions ---
+    
+    // Check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Get the User Document to check roles (Cost: 1 Read per request context)
+    function getUserData() {
+      let userDoc = get(/databases/$(database)/documents/users/$(request.auth.uid));
+      return userDoc != null ? userDoc.data : {'role': 'VIEWER'};
+    }
+
+    // Role Check Helpers
+    function hasRole(role) {
+      return isAuthenticated() && getUserData().role == role;
+    }
+    
+    function isSuperAdmin() {
+      return hasRole('SUPER_ADMIN');
+    }
+    
+    function isPastor() {
+      return hasRole('PASTOR');
+    }
+    
+    function isFinanceAdmin() {
+      return hasRole('FINANCE_ADMIN');
+    }
+    
+    function isStaffAdmin() {
+      return hasRole('STAFF_ADMIN');
+    }
+    
+    function isDeptLeader() {
+      return hasRole('DEPT_LEADER');
+    }
+
+    function isSecretary() {
+      return hasRole('SECRETARY');
+    }
+
+    // --- Collection Rules ---
+
+    // 1. Users Collection (Profile Management)
+    match /users/{userId} {
+      // Admins, Pastors, and Staff can view all profiles. Users can view their own.
+      allow read: if isSuperAdmin() || isPastor() || isStaffAdmin() || request.auth.uid == userId;
+      // Users can modify their own profile; Admins can modify any
+      allow write: if isSuperAdmin() || request.auth.uid == userId;
+    }
+
+    // 2. Members Collection (Core Database - Soul Winning)
+    match /members/{memberId} {
+      // All authenticated users can view members (for ministry purposes)
+      allow read: if isAuthenticated(); 
+      // Only Staff/Admin/Pastor/Secretary can create/modify member records
+      allow create: if isSuperAdmin() || isPastor() || isStaffAdmin() || isSecretary();
+      allow update, delete: if isSuperAdmin() || isPastor() || isStaffAdmin() || isSecretary();
+    }
+
+    // 3. Departments (Structure of 29 Depts)
+    match /departments/{deptId} {
+      allow read: if isAuthenticated();
+      // Super Admin can write any department (needed for import script)
+      // Dept Leaders can only write their assigned department
+      allow write: if isSuperAdmin();
+      allow update: if isDeptLeader() && getUserData().departmentId == deptId;
+    }
+
+    // 4. Finance (Tithes/Offerings - Sensitive) - FIXED: collection name
+    match /finances/{financeId} {
+      // Only Finance Team and Super Admin can see/edit money
+      allow read, write: if isSuperAdmin() || isFinanceAdmin();
+    }
+
+    // 5. Events (Calendar) - ADDED: was missing
+    match /events/{eventId} {
+      allow read: if isAuthenticated();
+      // Staff, Pastors, and Super Admins can manage events
+      allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
+    }
+
+    // 6. Attendance (Reporting) - ADDED: was missing
+    match /attendance/{recordId} {
+      // All authenticated users can view attendance trends
+      allow read: if isAuthenticated();
+      // Only leadership can record attendance
+      allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
+    }
+
+    // 7. Prayer Requests (Intercession)
+    match /prayer_requests/{requestId} {
+      // Authors can read their own. Pastors/Admins can read all.
+      // If 'isPrivate' is true, only Pastor, Super Admin, and Author can read.
+      allow read: if isSuperAdmin() 
+                   || isPastor() 
+                   || request.auth.uid == resource.data.authorId 
+                   || (isAuthenticated() && resource.data.isPrivate == false);
+      allow create: if isAuthenticated();
+      // Authors can update/delete their own. Pastors and Admins can update/delete any.
+      allow update, delete: if isSuperAdmin() 
+                             || isPastor() 
+                             || request.auth.uid == resource.data.authorId;
+    }
+    
+    // 8. Announcements (Future - placeholder)
+    match /announcements/{announcementId} {
+      allow read: if isAuthenticated();
+      allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
+    }
+    
+    // 9. Resources (Future - placeholder)
+    match /resources/{resourceId} {
+      allow read: if isAuthenticated();
+      allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
+    }
+    
+    // 10. Tasks (Future - placeholder)
+    match /tasks/{taskId} {
+      allow read: if isAuthenticated();
+      allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
+    }
+    
+    // 11. Rhema (Daily Word - AI Generated)
+    match /rhema/{rhemaId} {
+      // All authenticated users can read daily rhema
+      allow read: if isAuthenticated();
+      // System (via service account) or Admin can write new rhema entries
+      allow write: if isAuthenticated();
+    }
+    
+    // 12. Reports (Generated Reports)
+    match /reports/{reportId} {
+      // All authenticated users can read reports
+      allow read: if isAuthenticated();
+      // Only leadership can create/manage reports
+      allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
+    }
+    
+    // 13. Department Reports (Monthly Department Reports)
+    match /departmentReports/{reportId} {
+      // All authenticated users can read department reports
+      allow read: if isAuthenticated();
+      // Department leaders can submit reports for their department
+      // Admins and Pastors can manage all reports
+      allow create: if isAuthenticated();
+      allow update, delete: if isSuperAdmin() || isPastor() || isStaffAdmin();
+    }
+
+    // 14. Weekly Services (Recurring Weekly Programme)
+    match /weeklyServices/{serviceId} {
+      // All authenticated users can view weekly services
+      allow read: if isAuthenticated();
+      // Only Admins and Pastors can manage weekly services
+      allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
+    }
+
+    // 15. Annual Programme (Annual Events)
+    match /annualProgramme/{eventId} {
+      // All authenticated users can view annual programme
+      allow read: if isAuthenticated();
+      // Only Admins and Pastors can manage annual programme
+      allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
+    }
+
+    // 16. App Settings (Global Configuration)
+    match /appSettings/{settingId} {
+      // All authenticated users can read settings (for display purposes)
+      allow read: if isAuthenticated();
+      // Only Super Admin can modify settings
+      allow write: if isSuperAdmin();
+    }
+    
+    // Default Deny All (Security: block any unspecified collections)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

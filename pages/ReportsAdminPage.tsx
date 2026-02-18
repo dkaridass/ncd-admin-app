@@ -1,0 +1,316 @@
+import React, { useState, useMemo } from 'react';
+import { useData } from '../context/DataContext';
+import { DepartmentReport } from '../types';
+import Button from '../components/ui/Button';
+import Badge from '../components/ui/Badge';
+import Card from '../components/ui/Card';
+import Modal from '../components/ui/Modal';
+import { FileTextIcon, CheckIcon, XIcon, FilterIcon, DownloadIcon, EyeIcon } from '../components/icons/Icons';
+import { showSuccess, showError } from '../utils/toast';
+
+const ReportsAdminPage: React.FC = () => {
+    const { departmentReports, departments, updateReportStatus, deleteDepartmentReport, isLoading, hasPermission } = useData();
+    const [filterStatus, setFilterStatus] = useState<'All' | 'En attente' | 'Approuvé' | 'Révisé'>('En attente');
+    const [selectedReports, setSelectedReports] = useState<string[]>([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [viewReport, setViewReport] = useState<DepartmentReport | null>(null);
+
+    // Filter reports
+    const filteredReports = useMemo(() => {
+        return departmentReports.filter(report => {
+            if (filterStatus !== 'All' && report.status !== filterStatus) return false;
+            return true;
+        });
+    }, [departmentReports, filterStatus]);
+
+    const getDepartmentName = (id: string) => {
+        return departments.find(d => d.id === id)?.name || 'Département Inconnu';
+    };
+
+    const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.checked) {
+            setSelectedReports(filteredReports.map(r => r.id));
+        } else {
+            setSelectedReports([]);
+        }
+    };
+
+    const handleSelectReport = (id: string) => {
+        setSelectedReports(prev =>
+            prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]
+        );
+    };
+
+    const handleBulkApprove = async () => {
+        if (!hasPermission('MANAGE_DEPARTMENT_REPORTS')) {
+            showError("Permissions insuffisantes pour approuver des rapports.");
+            return;
+        }
+        if (selectedReports.length === 0) return;
+        if (!window.confirm(`Voulez-vous vraiment approuver ${selectedReports.length} rapports ?`)) return;
+
+        setIsSubmitting(true);
+        try {
+            // Process sequentially to avoid overwhelming Firestore (though batch would be better)
+            // For now, simple loop is fine given implementation constraints
+            let successCount = 0;
+            for (const id of selectedReports) {
+                try {
+                    await updateReportStatus(id, 'Approuvé');
+                    successCount++;
+                } catch (err) {
+                    console.error(`Failed to approve ${id}`, err);
+                }
+            }
+            showSuccess(`${successCount} rapports approuvés avec succès`);
+            setSelectedReports([]);
+        } catch (error) {
+            showError("Erreur lors de l'approbation groupée");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleStatusUpdate = async (id: string, status: DepartmentReport['status']) => {
+        if (!hasPermission('MANAGE_DEPARTMENT_REPORTS')) {
+            showError("Permissions insuffisantes pour modifier le statut du rapport.");
+            return;
+        }
+        try {
+            await updateReportStatus(id, status);
+            showSuccess(`Rapport marqué comme ${status}`);
+            if (viewReport?.id === id) setViewReport(null);
+        } catch (error) {
+            showError("Erreur lors de la mise à jour");
+        }
+    };
+
+    return (
+        <div className="max-w-[1600px] mx-auto pb-12">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 animate-fade-in">
+                <div>
+                    <h1 className="text-3xl font-serif font-medium text-primary mb-1">Gestion des Rapports</h1>
+                    <p className="text-slate-500 text-sm">Superviser et valider les rapports des départements</p>
+                </div>
+                <div className="flex gap-3">
+                    {selectedReports.length > 0 && (
+                        <Button
+                            onClick={handleBulkApprove}
+                            isLoading={isSubmitting}
+                            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                        >
+                            <CheckIcon className="w-4 h-4 mr-2" />
+                            Approuver ({selectedReports.length})
+                        </Button>
+                    )}
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                {/* Filters Sidebar */}
+                <div className="lg:col-span-1 space-y-6">
+                    <Card className="p-6 rounded-3xl border border-slate-100 shadow-sm sticky top-24">
+                        <h3 className="text-xs font-black uppercase text-slate-400 tracking-widest mb-4 flex items-center gap-2">
+                            <FilterIcon className="w-3 h-3" /> Filtres
+                        </h3>
+                        <div className="space-y-2">
+                            {['All', 'En attente', 'Approuvé', 'Révisé', 'Archivé'].map((status) => (
+                                <button
+                                    key={status}
+                                    onClick={() => setFilterStatus(status as any)}
+                                    className={`w-full text-left px-4 py-3 rounded-xl text-sm font-bold transition-all flex justify-between items-center ${filterStatus === status
+                                        ? 'bg-primary text-white shadow-lg shadow-primary/30'
+                                        : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                                        }`}
+                                >
+                                    <span>{status === 'All' ? 'Tous les rapports' : status}</span>
+                                    <Badge className={`bg-white/20 text-current ${filterStatus === status ? 'text-white' : 'text-slate-500'}`}>
+                                        {departmentReports.filter(r => status === 'All' ? true : r.status === status).length}
+                                    </Badge>
+                                </button>
+                            ))}
+                        </div>
+                    </Card>
+                </div>
+
+                {/* Reports List */}
+                <div className="lg:col-span-3">
+                    <Card className="bg-white border border-slate-100 rounded-3xl shadow-sm overflow-hidden">
+                        <div className="overflow-x-auto">
+                            <table className="w-full">
+                                <thead className="bg-slate-50/50 border-b border-slate-100">
+                                    <tr>
+                                        <th className="px-6 py-4 text-left w-12">
+                                            <input
+                                                type="checkbox"
+                                                onChange={handleSelectAll}
+                                                checked={filteredReports.length > 0 && selectedReports.length === filteredReports.length}
+                                                className="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary"
+                                            />
+                                        </th>
+                                        <th className="px-6 py-4 text-left text-xs font-black uppercase text-slate-400 tracking-widest">Département</th>
+                                        <th className="px-6 py-4 text-left text-xs font-black uppercase text-slate-400 tracking-widest">Période</th>
+                                        <th className="px-6 py-4 text-left text-xs font-black uppercase text-slate-400 tracking-widest">Date Soumission</th>
+                                        <th className="px-6 py-4 text-left text-xs font-black uppercase text-slate-400 tracking-widest">Statut</th>
+                                        <th className="px-6 py-4 text-right text-xs font-black uppercase text-slate-400 tracking-widest">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100">
+                                    {isLoading ? (
+                                        <tr><td colSpan={6} className="px-6 py-12 text-center text-slate-400">Chargement...</td></tr>
+                                    ) : filteredReports.length === 0 ? (
+                                        <tr><td colSpan={6} className="px-6 py-12 text-center text-slate-400">Aucun rapport trouvé</td></tr>
+                                    ) : (
+                                        filteredReports.map((report) => (
+                                            <tr key={report.id} className="hover:bg-slate-50/50 transition-colors group">
+                                                <td className="px-6 py-4">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedReports.includes(report.id)}
+                                                        onChange={() => handleSelectReport(report.id)}
+                                                        className="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary"
+                                                    />
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="font-bold text-slate-700 text-sm">{getDepartmentName(report.departmentId)}</div>
+                                                </td>
+                                                <td className="px-6 py-4 text-sm text-slate-600 capitalize">
+                                                    {report.month} {report.year}
+                                                </td>
+                                                <td className="px-6 py-4 text-sm text-slate-500">
+                                                    {new Date(report.submittedAt).toLocaleDateString('fr-FR')}
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <Badge className={`
+                                                        ${report.status === 'Approuvé' ? 'bg-emerald-100 text-emerald-800' :
+                                                            report.status === 'Révisé' ? 'bg-red-100 text-red-800' :
+                                                                'bg-amber-100 text-amber-800'}
+                                                    `}>
+                                                        {report.status}
+                                                    </Badge>
+                                                </td>
+                                                <td className="px-6 py-4 text-right">
+                                                    <div className="flex justify-end gap-2">
+                                                        <button
+                                                            onClick={() => setViewReport(report)}
+                                                            className="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-primary/5 transition-colors"
+                                                            title="Voir détails"
+                                                        >
+                                                            <EyeIcon className="w-4 h-4" />
+                                                        </button>
+                                                        {report.fileUrl && (
+                                                            <a
+                                                                href={report.fileUrl}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="p-2 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                                                                title="Télécharger"
+                                                            >
+                                                                <DownloadIcon className="w-4 h-4" />
+                                                            </a>
+                                                        )}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </Card>
+                </div>
+            </div>
+
+            {/* View/Review Report Modal */}
+            <Modal isOpen={!!viewReport} onClose={() => setViewReport(null)} title={`Rapport - ${viewReport ? getDepartmentName(viewReport.departmentId) : ''}`}>
+                {viewReport && (
+                    <div className="space-y-6">
+                        <div className="flex justify-between items-start p-4 bg-slate-50 rounded-xl">
+                            <div>
+                                <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Période</p>
+                                <p className="font-bold text-lg capitalize">{viewReport.month} {viewReport.year}</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Soumis le</p>
+                                <p className="font-bold">{new Date(viewReport.submittedAt).toLocaleDateString('fr-FR', { dateStyle: 'long' })}</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Contenu</p>
+                            <div className="p-4 bg-white border border-slate-200 rounded-xl text-sm leading-relaxed text-slate-700 whitespace-pre-wrap">
+                                {viewReport.content}
+                            </div>
+                        </div>
+
+                        {viewReport.fileUrl && (
+                            <div>
+                                <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Pièce Jointe</p>
+                                <a
+                                    href={viewReport.fileUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-3 p-4 bg-blue-50 border border-blue-100 rounded-xl text-blue-700 hover:bg-blue-100 transition-colors group"
+                                >
+                                    <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-blue-500 shadow-sm">
+                                        <FileTextIcon className="w-5 h-5" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="font-bold text-sm">Voir le document joint</p>
+                                        <p className="text-xs opacity-70">Cliquez pour ouvrir</p>
+                                    </div>
+                                    <DownloadIcon className="w-4 h-4 opacity-50 group-hover:opacity-100" />
+                                </a>
+                            </div>
+                        )}
+
+                        <div className="flex gap-3 pt-4 border-t border-slate-100">
+                            <Button
+                                onClick={() => handleStatusUpdate(viewReport.id, 'Approuvé')}
+                                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-3"
+                            >
+                                <CheckIcon className="w-4 h-4 mr-2" />
+                                Approuver
+                            </Button>
+                            <Button
+                                onClick={() => handleStatusUpdate(viewReport.id, 'Révisé')}
+                                className="flex-1 bg-white border-2 border-red-100 text-red-600 hover:bg-red-50 hover:border-red-200 py-3"
+                            >
+                                <XIcon className="w-4 h-4 mr-2" />
+                                Demander Révision
+                            </Button>
+                        </div>
+                        <div className="pt-2">
+                            <Button
+                                onClick={() => {
+                                    if (window.confirm('Voulez-vous vraiment archiver ce rapport ?')) {
+                                        handleStatusUpdate(viewReport.id, 'Archivé');
+                                    }
+                                }}
+                                variant="ghost"
+                                className="w-full text-slate-400 hover:text-slate-600 py-2 text-xs"
+                            >
+                                Archiver ce rapport
+                            </Button>
+                            <Button
+                                onClick={async () => {
+                                    if (window.confirm('ATTENTION: Voulez-vous SUPPRIMER DÉFINITIVEMENT ce rapport ? Cette action est irréversible.')) {
+                                        await deleteDepartmentReport(viewReport.id, viewReport.storagePath);
+                                        showSuccess("Rapport supprimé définitivement");
+                                        setViewReport(null);
+                                    }
+                                }}
+                                variant="ghost"
+                                className="w-full text-red-300 hover:text-red-600 py-2 text-xs hover:bg-red-50 mt-1"
+                            >
+                                Supprimer définitivement
+                            </Button>
+                        </div>
+                    </div>
+                )}
+            </Modal>
+        </div>
+    );
+};
+
+export default ReportsAdminPage;

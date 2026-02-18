@@ -1,0 +1,453 @@
+{
+    "members": [
+        {
+            "number": 1,
+            "name": "DORA NANGA",
+            "role": "Sœur",
+            "responsibilities": [
+                "ECODIM"
+            ]
+        },
+        {
+            "number": 2,
+            "name": "MYSCHAEL NTUMBA",
+            "role": "Berger",
+            "responsibilities": [
+                "VP ECODIM",
+                "ACCUEIL",
+                "LOGEMENT",
+                "VOYAGE"
+            ],
+            "isLeader": true,
+            "leadershipLevel": "VP"
+        },
+        {
+            "number": 3,
+            "name": "PAPY KONGOLO",
+            "role": "Berger",
+            "responsibilities": [
+                "VP ACCUEIL",
+                "LOGEMENT",
+                "VOYAGE"
+            ],
+            "isLeader": true,
+            "leadershipLevel": "VP"
+        },
+        {
+            "number": 4,
+            "name": "ARMEL TSHIAMALA",
+            "role": "Sœur",
+            "responsibilities": [
+                "VP AIV"
+            ]
+        },
+        {
+            "number": 5,
+            "name": "BENITA MUJKEWU",
+            "role": "Sœur",
+            "responsibilities": [
+                "DECORATION"
+            ]
+        },
+        {
+            "number": 6,
+            "name": "THALLYCIA KAYEMBE",
+            "role": "Sœur",
+            "responsibilities": [
+                "VP DECORATION"
+            ]
+        },
+        {
+            "number": 7,
+            "name": "MARTHA KAPINGA",
+            "role": "Sœur",
+            "responsibilities": [
+                "2ème VP DECORATION"
+            ]
+        },
+        {
+            "number": 8,
+            "name": "JEAN-DIDIER BIAKALA",
+            "role": "Berger",
+            "responsibilities": [
+                "INTERPRETARIAT"
+            ]
+        },
+        {
+            "number": 9,
+            "name": "GUY GWAMONZI",
+            "role": "Frère",
+            "responsibilities": [
+                "VP INTERPRETARIAT"
+            ]
+        },
+        {
+            "number": 10,
+            "name": "LUC MULAMBA",
+            "role": "Berger",
+            "responsibilities": [
+                "GROUPE DE LOUANGE"
+            ]
+        },
+        {
+            "number": 11,
+            "name": "MARC ASSANI",
+            "role": "Frère",
+            "responsibilities": [
+                "LOUANGE JVI"
+            ]
+        },
+        {
+            "number": 12,
+            "name": "ISRAEL SENDWE",
+            "role": "Berger",
+            "responsibilities": [
+                "PRESSE"
+            ]
+        },
+        {
+            "number": 13,
+            "name": "YANN BILOLO",
+            "role": "Berger",
+            "responsibilities": [
+                "PROTOCOLE"
+            ]
+        },
+        {
+            "number": 14,
+            "name": "SCHEILA",
+            "role": "Sœur",
+            "responsibilities": [
+                "VP PROTOCOLE"
+            ]
+        },
+        {
+            "number": 15,
+            "name": "HUGUETTE BILONDA",
+            "role": "Sœur",
+            "responsibilities": [
+                "2ème VP PROTOCOLE"
+            ]
+        },
+        {
+            "number": 16,
+            "name": "AUGUSTIN MALELA",
+            "role": "Berger",
+            "responsibilities": [
+                "SECURITE"
+            ]
+        },
+        {
+            "number": 17,
+            "name": "RAPHAEL KAPIAMBA",
+            "role": "Berger",
+            "responsibilities": [
+                "VP SECURITE"
+            ]
+        },
+        {
+            "number": 18,
+            "name": "CHRISTIAN KITETE",
+            "role": "Pasteur",
+            "responsibilities": [
+                "ADMINISTRATION"
+            ],
+            "isLeader": true,
+            "leadershipLevel": "Pasteur"
+        },
+        {
+            "number": 19,
+            "name": "BOANERGES TSHEBWE",
+            "role": "Frère",
+            "responsibilities": [
+                "VP ADMINISTRATION"
+            ]
+        },
+        {
+            "number": 20,
+            "name": "DIMWI MUKUNA",
+            "role": "Berger",
+            "responsibilities": [
+                "EVANGELISATION"
+            ]
+        },
+        {
+            "number": 21,
+            "name": "MICHEL NGOTIZO",
+            "role": "Frère",
+            "responsibilities": [
+                "VP EVANGELISATION"
+            ]
+        },
+        {
+            "number": 22,
+            "name": "LOUISE MWADI",
+            "role": "Bergère",
+            "responsibilities": [
+                "SOEURS"
+            ]
+        },
+        {
+            "number": 23,
+            "name": "GRACE TSHILOMBO",
+            "role": "Frère",
+            "responsibilities": [
+                "TECHNIQUE"
+            ]
+        },
+        {
+            "number": 24,
+            "name": "EPHRAIM KALY NSAPU",
+            "role": "Frère",
+            "responsibilities": [
+                "VP TECHNIQUE"
+            ]
+        },
+        {
+            "number": 25,
+            "name": "DEVOS SANDUKU",
+            "role": "Berger",
+            "responsibilities": [
+                "TRANSPORT"
+            ]
+        },
+        {
+            "number": 26,
+            "name": "TOUPEMUNI",
+            "role": "Frère",
+            "responsibilities": [
+                "VP TRANSPORT"
+            ]
+        },
+        {
+            "number": 27,
+            "name": "FRANCKY",
+            "role": "Frère",
+            "responsibilities": [
+                "SANTE"
+            ]
+        },
+        {
+            "number": 28,
+            "name": "PAUL MATA",
+            "role": "Berger",
+            "responsibilities": [
+                "FINANCES"
+            ]
+        },
+        {
+            "number": 29,
+            "name": "EULALIE SHIMATA",
+            "role": "Sœur",
+            "responsibilities": [
+                "VP FINANCES"
+            ]
+        },
+        {
+            "number": 30,
+            "name": "BERRY BIBOV",
+            "role": "Frère",
+            "responsibilities": [
+                "PARTENARIAT"
+            ]
+        },
+        {
+            "number": 31,
+            "name": "CLEMENTINE BOMEKI",
+            "role": "Berger",
+            "responsibilities": [
+                "VP PARTENARIAT"
+            ]
+        },
+        {
+            "number": 32,
+            "name": "ZACHARIE AMISI",
+            "role": "Berger",
+            "responsibilities": [
+                "2ème VP PARTENARIAT"
+            ]
+        },
+        {
+            "number": 33,
+            "name": "PAPY KONGOLO",
+            "role": "Berger",
+            "responsibilities": [
+                "CONSTRUCTION",
+                "FORMATION ET RENFORCEMENT DE CAPACITES",
+                "2ème VP FAMILLES, FIANCAILLES MARIAGE"
+            ]
+        },
+        {
+            "number": 34,
+            "name": "JEAN-DIDIER BIAKALA",
+            "role": "Berger",
+            "responsibilities": [
+                "FAMILLES, FIANCAILLES MARIAGE"
+            ]
+        },
+        {
+            "number": 35,
+            "name": "BELLANGE KISALA",
+            "role": "Sœur",
+            "responsibilities": [
+                "VP FORMATION ET RENFORCEMENT DES CAPACITES"
+            ]
+        },
+        {
+            "number": 36,
+            "name": "WILLY MUKA",
+            "role": "Berger",
+            "responsibilities": [
+                "CELLULES DE MAISONS ET EXTENSIONS"
+            ]
+        },
+        {
+            "number": 37,
+            "name": "MARDOCHE MADI",
+            "role": "Berger",
+            "responsibilities": [
+                "VP CELLULES DE MAISONS ET EXTENSIONS"
+            ],
+            "isLeader": true,
+            "leadershipLevel": "VP"
+        },
+        {
+            "number": 38,
+            "name": "LUC MWEPU",
+            "role": "Frère",
+            "responsibilities": [
+                "2ème VP CELLULES DE MAISONS ET EXTENSIONS"
+            ]
+        },
+        {
+            "number": 39,
+            "name": "JOEL LUMBALA",
+            "role": "Frère",
+            "responsibilities": [
+                "CENACLE POUR LA LECTURE DE LA BIBLE"
+            ]
+        },
+        {
+            "number": 40,
+            "name": "EMMANUEL KANKU",
+            "role": "Frère",
+            "responsibilities": [
+                "VP CENACLE POUR LA LECTURE DE LA BIBLE"
+            ]
+        },
+        {
+            "number": 41,
+            "name": "DENIS NGOIE",
+            "role": "Pasteur",
+            "responsibilities": [
+                "DEVOTION MATINALE"
+            ],
+            "isLeader": true,
+            "leadershipLevel": "Pasteur"
+        },
+        {
+            "number": 42,
+            "name": "BRUNO TSHITENDE",
+            "role": "Berger",
+            "responsibilities": [
+                "VP DEVOTION MATINALE"
+            ],
+            "isLeader": true,
+            "leadershipLevel": "VP"
+        },
+        {
+            "number": 46,
+            "name": "SYLVAIN LOSALA",
+            "role": "Berger",
+            "responsibilities": [
+                "2ème VP ECODIM"
+            ]
+        },
+        {
+            "number": 47,
+            "name": "BAMBINI TONGIMBA",
+            "role": "Berger",
+            "responsibilities": [
+                "SAINTE-CENE, VP CONSTRUCTION"
+            ]
+        },
+        {
+            "number": 49,
+            "name": "BLEUDONNIE MUYAKENA",
+            "role": "Berger",
+            "responsibilities": [
+                "2ème VP HOMMES ADULTES"
+            ]
+        },
+        {
+            "number": 50,
+            "name": "OLIVIER SENGA",
+            "role": "Pasteur",
+            "responsibilities": [
+                "PASTEUR RESIDENT"
+            ],
+            "isLeader": true,
+            "leadershipLevel": "Pasteur"
+        },
+        {
+            "number": 51,
+            "name": "JEAN-LUC MUYA",
+            "role": "Berger",
+            "responsibilities": []
+        },
+        {
+            "number": 52,
+            "name": "JEAN-RENE LUMBU",
+            "role": "Berger",
+            "responsibilities": [
+                "2ème VP JVI"
+            ]
+        },
+        {
+            "number": 53,
+            "name": "ANNICK MAMBO",
+            "role": "Pasteure",
+            "responsibilities": [
+                "SOCIAL"
+            ],
+            "isLeader": true,
+            "leadershipLevel": "Pasteur"
+        },
+        {
+            "number": 54,
+            "name": "AMI KABONGO",
+            "role": "Berger",
+            "responsibilities": [
+                "VP SOCIAL"
+            ]
+        },
+        {
+            "number": 55,
+            "name": "CLAUDINE KABEDI",
+            "role": "Bergère",
+            "responsibilities": [
+                "HYGIENE ET ENTRETIEN"
+            ]
+        },
+        {
+            "number": 56,
+            "name": "SAMY MAKENGU",
+            "role": "Pasteur",
+            "responsibilities": [
+                "CORPS DES PREDICATEURS"
+            ],
+            "isLeader": true,
+            "leadershipLevel": "Pasteur"
+        },
+        {
+            "number": 57,
+            "name": "OLIVIER SENGA",
+            "role": "Pasteur",
+            "responsibilities": [
+                "VP CORPS DE PREDICATEURS"
+            ],
+            "isLeader": true,
+            "leadershipLevel": "VP"
+        }
+    ]
+}

@@ -1,0 +1,130 @@
+import { aiService } from './aiService';
+
+import { db } from '../firebase';
+import { collection, getDocs, query, where, limit, addDoc, orderBy } from 'firebase/firestore';
+import { DailyRhema } from '../types';
+
+const COLLECTION_NAME = 'rhema';
+
+export const rhemaService = {
+    // Generate a new Rhema for a specific date using Groq
+    generateDailyRhema: async (dateStr: string): Promise<DailyRhema | null> => {
+        try {
+            console.log(`🚀 Generating Rhema for ${dateStr} via Groq...`);
+            
+            // Check if Groq is configured
+            if (!aiService.isConfigured()) {
+                console.warn('⚠️ Groq API key not configured, falling back to Bible API');
+                return await rhemaService.generateFallbackRhema(dateStr);
+            }
+
+            const data = await aiService.generateDailyRhema(dateStr);
+
+            if (!data) {
+                throw new Error("Failed to generate Rhema");
+            }
+
+            const newRhema: Omit<DailyRhema, 'id'> = {
+                date: dateStr,
+                content: data.content,
+                reference: data.reference,
+                theme: data.theme,
+                author: data.author || 'Inspiration Divine'
+            };
+
+            // Save to Firestore
+            const savedRhema = await rhemaService.add(newRhema);
+            return savedRhema;
+
+        } catch (error) {
+            console.error("Error generating Rhema:", error);
+            
+            // FALLBACK: Use Bible API when Groq fails
+            console.log("📖 Groq failed, falling back to Bible API...");
+            return await rhemaService.generateFallbackRhema(dateStr);
+        }
+    },
+
+    /**
+     * Generate a Rhema using Bible API as fallback
+     * Used when Groq API fails or quota is exceeded
+     */
+    generateFallbackRhema: async (dateStr: string): Promise<DailyRhema | null> => {
+        try {
+            const { getRandomFrenchVerse } = await import('../data/frenchBibleVerses');
+            const verse = getRandomFrenchVerse();
+
+            if (!verse) {
+                console.error("French verse selection failed");
+                return null;
+            }
+
+            const newRhema: Omit<DailyRhema, 'id'> = {
+                date: dateStr,
+                content: verse.text,
+                reference: verse.referenceFr,  // French reference
+                theme: verse.theme,
+                author: "Parole de Dieu (Louis Segond)"
+            };
+
+            // Save to Firestore
+            const savedRhema = await rhemaService.add(newRhema);
+            console.log("✅ Rhéma en français créé avec succès:", verse.referenceFr);
+            return savedRhema;
+
+        } catch (error) {
+            console.error("Erreur génération Rhéma fallback:", error);
+            return null;
+        }
+    },
+
+    // Get Rhema for a specific date, or the latest available if not found
+    getForDate: async (dateStr: string): Promise<DailyRhema | null> => {
+        try {
+            // 1. Try exact match
+            const q = query(
+                collection(db, COLLECTION_NAME),
+                where('date', '==', dateStr),
+                limit(1)
+            );
+
+            const snapshot = await getDocs(q);
+
+            if (!snapshot.empty) {
+                const doc = snapshot.docs[0];
+                return { id: doc.id, ...doc.data() } as DailyRhema;
+            }
+
+            // 2. Fallback: Get most recent one
+            console.log(`No Rhema found for ${dateStr}, fetching latest fallback.`);
+            const fallbackQ = query(
+                collection(db, COLLECTION_NAME),
+                orderBy('date', 'desc'),
+                limit(1)
+            );
+
+            const fallbackSnapshot = await getDocs(fallbackQ);
+
+            if (!fallbackSnapshot.empty) {
+                const doc = fallbackSnapshot.docs[0];
+                return { id: doc.id, ...doc.data() } as DailyRhema;
+            }
+
+            return null;
+        } catch (error) {
+            console.error("Error fetching daily rhema:", error);
+            return null;
+        }
+    },
+
+    // Add a new Rhema (for seeding or admin UI)
+    add: async (rhema: Omit<DailyRhema, 'id'>): Promise<DailyRhema> => {
+        try {
+            const docRef = await addDoc(collection(db, COLLECTION_NAME), rhema);
+            return { id: docRef.id, ...rhema } as DailyRhema;
+        } catch (error) {
+            console.error("Error adding rhema:", error);
+            throw error;
+        }
+    }
+};
