@@ -76,14 +76,14 @@ const callGroq = async (
     if (!response.ok) {
         const errorText = await response.text();
         console.error(`Groq API error (${response.status}):`, errorText);
-        
+
         if (response.status === 401 || response.status === 403) {
             throw new Error('Invalid or missing GROQ_API_KEY. Please configure in Settings > System.');
         }
         if (response.status === 429) {
             throw new Error('Groq API rate limit exceeded. Please try again later.');
         }
-        
+
         throw new Error(`Groq API error: ${response.status} - ${errorText}`);
     }
 
@@ -121,7 +121,7 @@ export const aiService = {
         }
     ): Promise<string> => {
         const language = context?.language || 'fr';
-        
+
         const systemPrompt = language === 'ln'
             ? `Yo ozali Mayele "Antigravité" mpo na Eglise NCD La Pentecôte.
 Mosala na yo ezali kosunga Apôtre Jean-Clément na gestion ya eglise.
@@ -153,7 +153,7 @@ Tu aides les admins/pasteurs avec :
 - Rédaction d'annonces, emails, templates SMS
 - Réponses simples basées sur les concepts de l'app (pas de données privées sauf si explicitement demandé)`;
 
-        const contextInfo = context?.membersCount 
+        const contextInfo = context?.membersCount
             ? `\n\nContexte: ${context.membersCount} membres enregistrés${context.recentEvents?.length ? `, ${context.recentEvents.length} événements récents` : ''}.`
             : '';
 
@@ -296,7 +296,7 @@ Règles:
      */
     summarizeFinanceNotes: async (notes: string[]): Promise<string> => {
         const notesText = notes.join('\n- ');
-        
+
         const systemPrompt = `Tu es un assistant financier pour l'église NCD La Pentecôte.
 Résume les notes et commentaires financiers suivants de manière concise.
 
@@ -322,7 +322,7 @@ Règles:
         requests: Array<{ content: string; category?: string }>,
         options?: { includeNames?: boolean }
     ): Promise<string> => {
-        const requestsText = requests.map((req, idx) => 
+        const requestsText = requests.map((req, idx) =>
             `${idx + 1}. ${req.category ? `[${req.category}] ` : ''}${req.content}`
         ).join('\n');
 
@@ -425,5 +425,106 @@ Règles Strictes:
 
         const cleanContent = response.replace(/```json/g, '').replace(/```/g, '').trim();
         return JSON.parse(cleanContent);
+    },
+
+    /**
+     * Generate Sermon Plan
+     * Generates a structured sermon outline using Groq JSON mode
+     */
+    generateSermonPlan: async (topic: string): Promise<{
+        theme: string;
+        scripture: string;
+        introduction: string;
+        points: string[];
+        conclusion: string;
+        rawText: string;
+    }> => {
+        const systemPrompt = `Tu es un pasteur expérimenté et théologien de l'église "NCD La Pentecôte".
+Le thème de l'année 2026 est "Focus sur Jésus".
+
+Génère un plan de sermon détaillé, biblique et inspirant basé sur le sujet fourni.
+
+Règles Strictes:
+1. Fournis une structure claire (Introduction, Points principaux, Conclusion).
+2. Fournis des références bibliques précises.
+3. Le plan doit être profondément centré sur Christ.
+4. Format JSON UNIQUEMENT avec ces champs exacts:
+{
+  "theme": "Le grand titre accrocheur",
+  "scripture": "Le ou les versets de base (ex: Jean 3:16)",
+  "introduction": "Un paragraphe d'introduction pour capter l'attention",
+  "points": ["Point 1 (avec explication)", "Point 2 (avec explication)", "Point 3 (avec explication)"],
+  "conclusion": "L'appel final ou l'application pratique",
+  "rawText": "Une version texte brut complète si nécessaire"
+}`;
+
+        const response = await callGroq([
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: `Sujet du sermon à préparer : "${topic}"` }
+        ], {
+            response_format: { type: 'json_object' },
+            max_tokens: 1500,
+            temperature: 0.7
+        });
+
+        const cleanContent = response.replace(/```json/g, '').replace(/```/g, '').trim();
+        return JSON.parse(cleanContent);
+    },
+
+    /**
+     * Generate Pastoral Briefing
+     * Generates a structured church overview report using Groq JSON mode
+     */
+    generatePastoralBriefing: async (contextData: Partial<{
+        membersCount: number;
+        recentEvents: string[];
+        financeSummary?: string;
+    }>): Promise<{
+        overview: string;
+        keyMetrics: Record<string, string | number>;
+        urgentTasks: string[];
+        upcomingEvents: string[];
+        prayerFocus: string[];
+    }> => {
+        const systemPrompt = `Tu es "L'Intelligence Visionnaire", l'assistant exécutif de l'Apôtre.
+Ton rôle est de préparer le "Briefing Pastoral" quotidien de l'église.
+
+Consignes obligatoires:
+1. Rédige un aperçu (overview) motivant et pastoral de 2-3 phrases.
+2. Identifie 2 à 3 tâches urgentes (urgentTasks).
+3. Enumère 2 à 3 événements imminents ou focus (upcomingEvents).
+4. Propose 2 ou 3 points de prière précis (prayerFocus).
+5. Retourne STRICTEMENT un objet JSON valide.
+
+Format JSON requis:
+{
+  "overview": "Texte...",
+  "keyMetrics": {
+    "Membres": 320,
+    "Nouveaux": 5
+  },
+  "urgentTasks": ["Tâche 1", "Tâche 2"],
+  "upcomingEvents": ["Événement 1", "Événement 2"],
+  "prayerFocus": ["Sujet 1", "Sujet 2"]
+}`;
+
+        const response = await callGroq([
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: `Contexte actuel de l'église: ${JSON.stringify(contextData)}\n\nGénère le briefing pastoral.` }
+        ], {
+            response_format: { type: 'json_object' },
+            max_tokens: 800
+        });
+
+        const cleanContent = response.replace(/```json/g, '').replace(/```/g, '').trim();
+        const jsonData = JSON.parse(cleanContent);
+
+        return {
+            overview: jsonData.overview || "Bienvenue dans le briefing.",
+            keyMetrics: jsonData.keyMetrics || { "Membres": contextData.membersCount || 0 },
+            urgentTasks: Array.isArray(jsonData.urgentTasks) ? jsonData.urgentTasks : [],
+            upcomingEvents: Array.isArray(jsonData.upcomingEvents) ? jsonData.upcomingEvents : [],
+            prayerFocus: Array.isArray(jsonData.prayerFocus) ? jsonData.prayerFocus : []
+        };
     }
 };

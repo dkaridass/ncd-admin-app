@@ -79,13 +79,33 @@ export const financeService = {
         }
     },
 
-    // Approve transaction (for admins)
-    approve: async (id: string): Promise<void> => {
+    // Approve transaction (Maker/Checker flow)
+    approve: async (id: string, approvedBy: string): Promise<void> => {
         try {
             const docRef = doc(db, COLLECTION_NAME, id);
-            await updateDoc(docRef, { isApproved: true });
+            await updateDoc(docRef, {
+                isApproved: true,
+                approvedBy: approvedBy,
+                approvedAt: new Date().toISOString()
+            });
+            console.log("Finance record approved:", id, "by", approvedBy);
         } catch (error) {
             console.error("Error approving finance record:", error);
+            throw error;
+        }
+    },
+
+    // Reject transaction (Maker/Checker flow)
+    reject: async (id: string, rejectedBy: string, reason: string): Promise<void> => {
+        try {
+            const docRef = doc(db, COLLECTION_NAME, id);
+            await updateDoc(docRef, {
+                isApproved: false,
+                rejectedReason: `[${rejectedBy}] ${reason}`
+            });
+            console.log("Finance record rejected:", id, "reason:", reason);
+        } catch (error) {
+            console.error("Error rejecting finance record:", error);
             throw error;
         }
     },

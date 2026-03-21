@@ -126,14 +126,14 @@ const AssistantPage: React.FC = () => {
     <PageTransition>
       <div className="flex flex-col lg:flex-row h-[calc(100vh-160px)] gap-6 md:gap-10">
         <div className="w-full lg:w-80 flex flex-col gap-6 shrink-0">
-          <Card className="border-none bg-primary text-white p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] shadow-premium relative overflow-hidden">
+          <Card className="border-none bg-primary text-white p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] shadow-premium dark:shadow-none relative overflow-hidden">
             <h3 className="text-[10px] font-black uppercase tracking-[0.4em] mb-8 text-secondary opacity-80">Intelligence de Vision</h3>
             <div className="space-y-4">
               {quickActions.map((action, i) => (
                 <button 
                   key={i}
                   onClick={() => setInput(action.prompt)}
-                  className="w-full flex items-center p-4 bg-white/5 hover:bg-white/10 rounded-2xl transition-all text-left border border-white/5 group"
+                  className="w-full flex items-center p-4 bg-card dark:bg-card-dark hover:bg-card dark:bg-card-dark rounded-2xl transition-all text-left border border-white/5 group"
                 >
                   <action.icon className="w-4 h-4 text-secondary mr-4" />
                   <span className="text-[9px] font-black uppercase tracking-[0.2em]">{action.label}</span>
@@ -149,7 +149,7 @@ const AssistantPage: React.FC = () => {
         </div>
 
         <div className="flex-1 flex flex-col min-w-0">
-          <Card className="flex-1 flex flex-col border-none shadow-premium rounded-[2.5rem] md:rounded-[4rem] overflow-hidden bg-white relative border border-slate-50">
+          <Card className="flex-1 flex flex-col border-none shadow-premium dark:shadow-none rounded-[2.5rem] md:rounded-[4rem] overflow-hidden bg-card dark:bg-card-dark relative border border-slate-50">
             <div className="flex-1 overflow-y-auto p-6 md:p-12 space-y-10 scroll-smooth z-10 custom-scrollbar">
               <AnimatePresence>
                 {messages.map((msg) => (
@@ -160,13 +160,7 @@ const AssistantPage: React.FC = () => {
                     className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div className={`flex flex-col max-w-[90%] lg:max-w-[70%] ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
-                      <div className={`px-6 py-4 md:px-10 md:py-7 rounded-[2rem] md:rounded-[3rem] text-sm md:text-base leading-relaxed whitespace-pre-wrap ${
-                        msg.role === 'user' 
-                        ? 'bg-primary text-white rounded-tr-none font-bold' 
-                        : msg.isVerse 
-                          ? 'bg-indigo-50 text-primary border-2 border-indigo-100 rounded-tl-none font-serif italic text-lg md:text-xl'
-                          : 'bg-slate-50 text-slate-800 border-2 border-slate-100 rounded-tl-none font-medium'
-                      }`}>
+                      <div className={`px-6 py-4 md:px-10 md:py-7 rounded-[2rem] md:rounded-[3rem] text-sm md:text-base leading-relaxed whitespace-pre-wrap ${ msg.role === 'user' ? 'bg-primary text-white rounded-tr-none font-bold' : msg.isVerse ? 'bg-indigo-50 text-primary border-2 border-indigo-100 rounded-tl-none font-serif italic text-lg md:text-xl' : 'bg-slate-50 dark:bg-white/[0.02] text-slate-800 dark:text-white border-2 border-slate-100 dark:border-dark rounded-tl-none font-medium' }`}>
                         {msg.text}
                       </div>
                       <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest mt-2 px-2">
@@ -178,7 +172,7 @@ const AssistantPage: React.FC = () => {
               </AnimatePresence>
               {isTyping && (
                 <div className="flex justify-start">
-                  <div className="bg-slate-50 px-6 py-4 rounded-full flex gap-2 border border-slate-100">
+                  <div className="bg-slate-50 dark:bg-white/[0.02] px-6 py-4 rounded-full flex gap-2 border border-slate-100 dark:border-dark">
                     <div className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-levitate"></div>
                     <div className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-levitate [animation-delay:0.2s]"></div>
                     <div className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-levitate [animation-delay:0.4s]"></div>
@@ -188,17 +182,17 @@ const AssistantPage: React.FC = () => {
               <div ref={scrollRef} />
             </div>
 
-            <div className="p-4 md:p-8 bg-white border-t border-slate-50 z-10">
+            <div className="p-4 md:p-8 bg-card dark:bg-card-dark border-t border-slate-50 z-10">
               <form onSubmit={handleSendMessage} className="flex gap-2">
                 <input 
                   type="text" 
-                  className="flex-1 px-6 py-4 md:py-6 border-none rounded-full bg-slate-50 text-primary font-bold placeholder-slate-300 focus:ring-8 focus:ring-primary/5 transition-all text-xs md:text-sm"
+                  className="flex-1 px-6 py-4 md:py-6 border-none rounded-full bg-slate-50 dark:bg-white/[0.02] text-primary dark:text-white font-bold placeholder-slate-300 focus:ring-8 focus:ring-primary/5 transition-all text-xs md:text-sm"
                   placeholder="Posez votre question à l'IA Antigravité..."
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   disabled={isTyping}
                 />
-                <Button type="submit" className="rounded-full px-6 md:px-12 py-4 md:py-6 bg-primary text-white shadow-premium hover:scale-105 transition-transform" disabled={isTyping}>
+                <Button type="submit" className="rounded-full px-6 md:px-12 py-4 md:py-6 bg-primary text-white shadow-premium dark:shadow-none hover:scale-105 transition-transform" disabled={isTyping}>
                   <SparklesIcon className="w-5 h-5" />
                 </Button>
               </form>

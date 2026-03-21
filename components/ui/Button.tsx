@@ -8,22 +8,22 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({ 
-  children, 
-  variant = 'primary', 
-  size = 'md', 
-  className = '', 
+const Button: React.FC<ButtonProps> = ({
+  children,
+  variant = 'primary',
+  size = 'md',
+  className = '',
   isLoading = false,
-  ...props 
+  ...props
 }) => {
   const baseClasses = 'inline-flex items-center justify-center font-black uppercase tracking-widest transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-current transform active:scale-95 focus:outline-none';
 
   const variantClasses = {
-    primary: 'bg-primary text-white hover:bg-primary-light shadow-premium focus:ring-4 focus:ring-primary/20',
-    secondary: 'bg-secondary text-primary hover:bg-secondary-light shadow-premium focus:ring-4 focus:ring-secondary/20',
-    danger: 'bg-red-600 text-white hover:bg-red-700 shadow-premium focus:ring-4 focus:ring-red-300',
-    ghost: 'bg-transparent text-slate-700 hover:bg-slate-100 hover:text-primary border border-transparent hover:border-slate-200 focus:ring-2 focus:ring-slate-300',
-    white: 'bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-900 shadow-sm border-2 border-slate-200 hover:border-primary/30 focus:ring-4 focus:ring-primary/10',
+    primary: 'bg-primary dark:bg-primary-light text-white hover:bg-primary-light dark:hover:bg-primary-accent shadow-premium dark:shadow-glow-gold focus:ring-4 focus:ring-primary/20',
+    secondary: 'bg-secondary text-white hover:bg-secondary-light shadow-premium dark:shadow-glow-danger focus:ring-4 focus:ring-secondary/20',
+    danger: 'bg-red-600 dark:bg-red-900/40 text-white hover:bg-red-700 dark:hover:bg-red-900/60 shadow-premium dark:shadow-glow-danger dark:border dark:border-red-500/30 focus:ring-4 focus:ring-red-300',
+    ghost: 'bg-transparent text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-primary dark:hover:text-white border border-transparent focus:ring-2 focus:ring-slate-300',
+    white: 'bg-white dark:bg-card-dark text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-card-hover hover:text-slate-900 dark:hover:text-white shadow-sm dark:shadow-none border border-slate-200 dark:border-dark hover:border-primary/30 dark:hover:border-darkHighlight focus:ring-4 focus:ring-primary/10',
   };
 
   const sizeClasses = {

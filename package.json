@@ -13,13 +13,17 @@
   },
   "dependencies": {
     "@google/genai": "^1.32.0",
+    "@supabase/supabase-js": "^2.99.3",
+    "date-fns": "^4.1.0",
     "firebase": "^12.8.0",
     "framer-motion": "^11.0.8",
+    "i18next": "^25.8.11",
     "jspdf": "^4.0.0",
     "jspdf-autotable": "^5.0.7",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hot-toast": "^2.6.0",
+    "react-i18next": "^16.5.4",
     "react-router-dom": "^7.9.5",
     "recharts": "^3.3.0",
     "xlsx": "^0.18.5"

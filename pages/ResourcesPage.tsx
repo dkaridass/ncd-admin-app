@@ -6,6 +6,8 @@ import Button from '../components/ui/Button';
 import Badge from '../components/ui/Badge';
 import Modal from '../components/ui/Modal';
 import Input from '../components/ui/Input';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
+import { useConfirm } from '../hooks/useConfirm';
 import PageTransition from '../components/layout/PageTransition';
 import PermissionGuard from '../components/auth/PermissionGuard';
 import { FileTextIcon, PlusCircleIcon, PencilIcon, TrashIcon, FilterIcon, DownloadIcon } from '../components/icons/Icons';
@@ -20,6 +22,7 @@ const ResourcesPage: React.FC = () => {
     const [activeCategoryFilter, setActiveCategoryFilter] = useState<Resource['category'] | 'TOUS'>('TOUS');
     const [activeTypeFilter, setActiveTypeFilter] = useState<Resource['type'] | 'TOUS'>('TOUS');
     const [searchTerm, setSearchTerm] = useState('');
+    const { confirmState, confirm, cancelConfirm } = useConfirm();
 
     const [formData, setFormData] = useState<Omit<Resource, 'id' | 'createdAt' | 'createdBy' | 'createdByName' | 'downloadCount'>>({
         title: '',
@@ -45,7 +48,7 @@ const ResourcesPage: React.FC = () => {
             return matchesCategory && matchesType && matchesSearch;
         });
     }, [resources, activeCategoryFilter, activeTypeFilter, searchTerm]);
-    
+
     const getTypeColor = (type: Resource['type']) => {
         const colors: Record<Resource['type'], string> = {
             'PDF': 'bg-red-500',
@@ -108,7 +111,13 @@ const ResourcesPage: React.FC = () => {
     };
 
     const handleDelete = async (id: string) => {
-        if (window.confirm('Êtes-vous sûr de vouloir supprimer cette ressource ?')) {
+        const accepted = await confirm({
+            title: 'Supprimer cette ressource ?',
+            message: 'Cette ressource sera définitivement supprimée. Cette action est irréversible.',
+            confirmLabel: 'Supprimer',
+            variant: 'danger',
+        });
+        if (accepted) {
             try {
                 await deleteResource(id);
             } catch (error) {
@@ -123,7 +132,7 @@ const ResourcesPage: React.FC = () => {
         try {
             // Track download
             await incrementResourceDownload(resource.id);
-            
+
             // Open/download the file
             const url = resource.fileUrl || resource.storagePath;
             if (url) {
@@ -156,15 +165,15 @@ const ResourcesPage: React.FC = () => {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
                     <div>
-                        <h2 className="text-3xl md:text-5xl font-extrabold text-primary font-display tracking-tight leading-none mb-1 uppercase italic">
+                        <h2 className="text-3xl md:text-5xl font-extrabold text-primary dark:text-white font-display tracking-tight leading-none mb-1 uppercase italic">
                             Ressources
                         </h2>
-                        <p className="text-slate-500 font-medium italic opacity-80 uppercase tracking-widest text-[9px]">
+                        <p className="text-slate-500 dark:text-slate-400 font-medium italic opacity-80 uppercase tracking-widest text-[9px]">
                             Documents • Médias • Formations • NCD La Pentecôte
                         </p>
                     </div>
                     <PermissionGuard permission="MANAGE_RESOURCES" fallback={null}>
-                        <Button onClick={() => handleOpenModal()} className="shadow-md">
+                        <Button onClick={() => handleOpenModal()} className="shadow-md dark:shadow-none">
                             <PlusCircleIcon className="w-5 h-5 mr-2" />
                             Ajouter Ressource
                         </Button>
@@ -185,17 +194,13 @@ const ResourcesPage: React.FC = () => {
                     <div className="flex flex-wrap gap-3">
                         <div className="flex items-center gap-2">
                             <FilterIcon className="w-4 h-4 text-slate-400" />
-                            <span className="text-xs font-bold text-slate-500 uppercase">Catégorie:</span>
+                            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Catégorie:</span>
                         </div>
                         {['TOUS', ...categories].map((cat) => (
                             <button
                                 key={cat}
                                 onClick={() => setActiveCategoryFilter(cat as any)}
-                                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                                    activeCategoryFilter === cat
-                                        ? 'bg-primary text-white shadow-md'
-                                        : 'bg-white border-2 border-slate-200 text-slate-700 hover:border-primary/50'
-                                }`}
+                                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeCategoryFilter === cat ? 'bg-primary text-white shadow-md dark:shadow-none' : 'bg-card dark:bg-card-dark border-2 border-slate-200 dark:border-dark text-slate-700 dark:text-white hover:border-primary/50'}`}
                             >
                                 {cat}
                             </button>
@@ -205,17 +210,13 @@ const ResourcesPage: React.FC = () => {
                     <div className="flex flex-wrap gap-3">
                         <div className="flex items-center gap-2">
                             <FilterIcon className="w-4 h-4 text-slate-400" />
-                            <span className="text-xs font-bold text-slate-500 uppercase">Type:</span>
+                            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Type:</span>
                         </div>
                         {['TOUS', ...types].map((type) => (
                             <button
                                 key={type}
                                 onClick={() => setActiveTypeFilter(type as any)}
-                                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                                    activeTypeFilter === type
-                                        ? 'bg-primary text-white shadow-md'
-                                        : 'bg-white border-2 border-slate-200 text-slate-700 hover:border-primary/50'
-                                }`}
+                                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeTypeFilter === type ? 'bg-primary text-white shadow-md dark:shadow-none' : 'bg-card dark:bg-card-dark border-2 border-slate-200 dark:border-dark text-slate-700 dark:text-white hover:border-primary/50'}`}
                             >
                                 {type}
                             </button>
@@ -235,22 +236,22 @@ const ResourcesPage: React.FC = () => {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {filteredResources.map((resource) => (
-                            <Card key={resource.id} className="p-6 hover:shadow-lg transition-all duration-300 group">
+                            <Card key={resource.id} className="p-6 hover:shadow-lg dark:shadow-none transition-all duration-300 group">
                                 <div className="flex items-start justify-between mb-4">
-                                    <div className="p-3 bg-indigo-50 rounded-xl group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                                        <FileTextIcon className="w-8 h-8 text-primary group-hover:text-white transition-colors duration-300" />
+                                    <div className="p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                                        <FileTextIcon className="w-8 h-8 text-primary dark:text-white group-hover:text-white transition-colors duration-300" />
                                     </div>
                                     <Badge className={getTypeColor(resource.type)}>
                                         {resource.type}
                                     </Badge>
                                 </div>
 
-                                <h4 className="font-bold text-lg text-slate-900 mb-2 line-clamp-2">{resource.title}</h4>
+                                <h4 className="font-bold text-lg text-slate-900 dark:text-white mb-2 line-clamp-2">{resource.title}</h4>
                                 {resource.description && (
-                                    <p className="text-sm text-slate-600 mb-4 line-clamp-2">{resource.description}</p>
+                                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-4 line-clamp-2">{resource.description}</p>
                                 )}
 
-                                <div className="space-y-2 mb-4 text-xs text-slate-500">
+                                <div className="space-y-2 mb-4 text-xs text-slate-500 dark:text-slate-400">
                                     <p><strong>Catégorie:</strong> {resource.category}</p>
                                     <p><strong>Ajouté le:</strong> {new Date(resource.createdAt).toLocaleDateString('fr-FR')}</p>
                                     {resource.createdByName && (
@@ -261,7 +262,7 @@ const ResourcesPage: React.FC = () => {
                                     )}
                                 </div>
 
-                                <div className="flex gap-2 pt-4 border-t border-slate-100">
+                                <div className="flex gap-2 pt-4 border-t border-slate-100 dark:border-dark">
                                     <Button
                                         variant="ghost"
                                         size="sm"
@@ -330,7 +331,7 @@ const ResourcesPage: React.FC = () => {
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                 rows={3}
-                                className="block w-full px-4 py-3 border-2 border-slate-100 rounded-xl bg-white text-slate-900 placeholder-slate-300 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm"
+                                className="block w-full px-4 py-3 border-2 border-slate-100 dark:border-dark rounded-xl bg-card dark:bg-card-dark text-slate-900 dark:text-white placeholder-slate-300 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
                                 placeholder="Description de la ressource..."
                             />
                         </div>
@@ -343,7 +344,7 @@ const ResourcesPage: React.FC = () => {
                                 <select
                                     value={formData.type}
                                     onChange={(e) => setFormData({ ...formData, type: e.target.value as Resource['type'] })}
-                                    className="block w-full px-4 py-3 border-2 border-slate-100 rounded-xl bg-white text-slate-900 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm"
+                                    className="block w-full px-4 py-3 border-2 border-slate-100 dark:border-dark rounded-xl bg-card dark:bg-card-dark text-slate-900 dark:text-white focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
                                 >
                                     {types.map((type) => (
                                         <option key={type} value={type}>{type}</option>
@@ -358,7 +359,7 @@ const ResourcesPage: React.FC = () => {
                                 <select
                                     value={formData.category}
                                     onChange={(e) => setFormData({ ...formData, category: e.target.value as Resource['category'] })}
-                                    className="block w-full px-4 py-3 border-2 border-slate-100 rounded-xl bg-white text-slate-900 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm"
+                                    className="block w-full px-4 py-3 border-2 border-slate-100 dark:border-dark rounded-xl bg-card dark:bg-card-dark text-slate-900 dark:text-white focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
                                 >
                                     {categories.map((cat) => (
                                         <option key={cat} value={cat}>{cat}</option>
@@ -381,13 +382,13 @@ const ResourcesPage: React.FC = () => {
                                     type="checkbox"
                                     checked={formData.isActive}
                                     onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                                    className="w-5 h-5 text-primary border-slate-200 rounded focus:ring-primary"
+                                    className="w-5 h-5 text-primary dark:text-white border-slate-200 dark:border-dark rounded focus:ring-primary"
                                 />
-                                <span className="text-sm font-bold text-slate-700">Active</span>
+                                <span className="text-sm font-bold text-slate-700 dark:text-white">Active</span>
                             </label>
                         </div>
 
-                        <div className="flex justify-end gap-4 pt-4 border-t border-slate-100">
+                        <div className="flex justify-end gap-4 pt-4 border-t border-slate-100 dark:border-dark">
                             <Button type="button" variant="ghost" onClick={handleCloseModal}>
                                 Annuler
                             </Button>
@@ -398,6 +399,7 @@ const ResourcesPage: React.FC = () => {
                     </form>
                 </Modal>
             </div>
+            <ConfirmDialog {...confirmState} onCancel={cancelConfirm} />
         </PageTransition>
     );
 };

@@ -68,11 +68,11 @@ const AnnouncementDrawer: React.FC<AnnouncementDrawerProps> = ({ isOpen, onClose
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
                         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                        className="fixed inset-y-0 right-0 w-full md:w-[600px] bg-white shadow-2xl z-50 overflow-y-auto flex flex-col"
+                        className="fixed inset-y-0 right-0 w-full md:w-[600px] bg-card dark:bg-card-dark shadow-2xl dark:shadow-none z-50 overflow-y-auto flex flex-col"
                     >
-                        <div className="flex items-center justify-between p-8 border-b border-slate-100">
+                        <div className="flex items-center justify-between p-8 border-b border-slate-100 dark:border-dark">
                             <div>
-                                <h2 className="text-2xl font-display font-bold text-slate-900">Nouvelle Annonce</h2>
+                                <h2 className="text-2xl font-display font-bold text-slate-900 dark:text-white">Nouvelle Annonce</h2>
                                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2">Communication Officielle</p>
                             </div>
                             <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
@@ -101,7 +101,7 @@ const AnnouncementDrawer: React.FC<AnnouncementDrawerProps> = ({ isOpen, onClose
                                         variant="secondary"
                                         onClick={handleGenerateDraft}
                                         disabled={isGenerating || !formData.title}
-                                        className="bg-indigo-50 text-indigo-600 hover:bg-indigo-100 border-none scale-90 origin-right"
+                                        className="bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-100 border-none scale-90 origin-right"
                                     >
                                         <SparklesIcon className="w-3 h-3 mr-2" />
                                         {isGenerating ? "Rédaction..." : "Générer avec IA"}
@@ -113,13 +113,13 @@ const AnnouncementDrawer: React.FC<AnnouncementDrawerProps> = ({ isOpen, onClose
                                     onChange={handleInputChange}
                                     required
                                     placeholder="Rédigez votre annonce ici..."
-                                    className="flex-1 w-full p-6 border-2 border-slate-100 rounded-2xl text-sm leading-loose text-slate-600 placeholder-slate-300 outline-none focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all resize-none"
+                                    className="flex-1 w-full p-6 border-2 border-slate-100 dark:border-dark rounded-2xl text-sm leading-loose text-slate-600 dark:text-slate-400 placeholder-slate-300 outline-none focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all resize-none"
                                 />
                             </div>
 
-                            <div className="pt-6 border-t border-slate-100 flex gap-4">
+                            <div className="pt-6 border-t border-slate-100 dark:border-dark flex gap-4">
                                 <Button type="button" variant="ghost" onClick={onClose} className="flex-1">Parent</Button>
-                                <Button type="submit" className="flex-[2] shadow-xl shadow-primary/20">
+                                <Button type="submit" className="flex-[2] shadow-xl dark:shadow-none shadow-primary dark:shadow-none/20">
                                     <SendIcon className="w-4 h-4 mr-2" />
                                     Publier Maintenant
                                 </Button>

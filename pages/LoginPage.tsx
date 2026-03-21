@@ -82,7 +82,7 @@ const LoginPage: React.FC = () => {
   if (checkingKey) {
     return (
       <div className="min-h-screen bg-primary-dark flex flex-col items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary-accent"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary dark:border-white/20-accent"></div>
       </div>
     );
   }
@@ -98,7 +98,7 @@ const LoginPage: React.FC = () => {
 
         {/* Header Section */}
         <div className="text-center mb-10">
-          <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-sm border border-white/10 shadow-xl ring-1 ring-white/5">
+          <div className="w-16 h-16 bg-card dark:bg-card-dark rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-sm border border-white/10 shadow-xl dark:shadow-none ring-1 ring-white/5">
             <ShieldIcon className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white font-display tracking-tight mb-2">
@@ -110,11 +110,11 @@ const LoginPage: React.FC = () => {
         </div>
 
         {/* Login Card */}
-        <div className="w-full bg-white rounded-2xl shadow-premium overflow-hidden">
+        <div className="w-full bg-card dark:bg-card-dark rounded-2xl shadow-premium dark:shadow-none overflow-hidden">
           <div className="p-8">
             {!hasApiKey && (window as any).aistudio ? (
               <div className="space-y-6">
-                <div className="p-4 bg-amber-50 rounded-xl border border-amber-100 flex gap-3">
+                <div className="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-100 flex gap-3">
                   <div className="flex-shrink-0">
                     <svg className="h-5 w-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -129,7 +129,7 @@ const LoginPage: React.FC = () => {
                 </div>
                 <button
                   onClick={handleSelectKey}
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary-accent hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-accent transition-colors"
+                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm dark:shadow-none text-sm font-medium text-white bg-primary-accent hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-accent transition-colors"
                 >
                   Connecter API Key
                 </button>
@@ -138,7 +138,7 @@ const LoginPage: React.FC = () => {
               <form onSubmit={handleSubmit} className="space-y-5">
                 {/* Email Field */}
                 <div className="space-y-1.5">
-                  <label htmlFor="email" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                  <label htmlFor="email" className="block text-xs font-semibold text-slate-700 dark:text-white uppercase tracking-wider">
                     Email Professionnel
                   </label>
                   <input
@@ -147,7 +147,7 @@ const LoginPage: React.FC = () => {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="appearance-none block w-full px-4 py-3 border border-slate-200 rounded-lg shadow-input placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-accent/20 focus:border-primary-accent transition-all text-sm font-medium text-slate-900 bg-white"
+                    className="appearance-none block w-full px-4 py-3 border border-slate-200 dark:border-dark rounded-lg shadow-input placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-accent/20 focus:border-primary-accent transition-all text-sm font-medium text-slate-900 dark:text-white bg-card dark:bg-card-dark"
                     placeholder="nom@ncd.cd"
                   />
                 </div>
@@ -155,7 +155,7 @@ const LoginPage: React.FC = () => {
                 {/* Password Field */}
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <label htmlFor="password" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                    <label htmlFor="password" className="block text-xs font-semibold text-slate-700 dark:text-white uppercase tracking-wider">
                       Mot de passe
                     </label>
                   </div>
@@ -165,7 +165,7 @@ const LoginPage: React.FC = () => {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="appearance-none block w-full px-4 py-3 border border-slate-200 rounded-lg shadow-input placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-accent/20 focus:border-primary-accent transition-all text-sm font-medium text-slate-900 bg-white"
+                    className="appearance-none block w-full px-4 py-3 border border-slate-200 dark:border-dark rounded-lg shadow-input placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-accent/20 focus:border-primary-accent transition-all text-sm font-medium text-slate-900 dark:text-white bg-card dark:bg-card-dark"
                     placeholder="••••••••"
                   />
                 </div>
@@ -179,14 +179,14 @@ const LoginPage: React.FC = () => {
                       type="checkbox"
                       checked={rememberMe}
                       onChange={(e) => setRememberMe(e.target.checked)}
-                      className="h-4 w-4 text-primary-accent focus:ring-primary-accent border-slate-300 rounded cursor-pointer"
+                      className="h-4 w-4 text-primary dark:text-indigo-400 focus:ring-primary-accent border-slate-300 rounded cursor-pointer"
                     />
-                    <label htmlFor="remember-me" className="ml-2 block text-sm text-slate-600 cursor-pointer select-none">
+                    <label htmlFor="remember-me" className="ml-2 block text-sm text-slate-600 dark:text-slate-400 cursor-pointer select-none">
                       Se souvenir de moi
                     </label>
                   </div>
                   <div className="text-sm">
-                    <a href="#" className="font-medium text-primary-accent hover:text-blue-700 transition-colors">
+                    <a href="#" className="font-medium text-primary dark:text-indigo-300 hover:text-blue-700 dark:hover:text-indigo-200 transition-colors">
                       Mot de passe oublié ?
                     </a>
                   </div>
@@ -201,7 +201,7 @@ const LoginPage: React.FC = () => {
 
                 {/* Error Message */}
                 {error && (
-                  <div className="p-3 bg-red-50 border border-red-100 rounded-lg flex items-start gap-2 animate-shake">
+                  <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-100 rounded-lg flex items-start gap-2 animate-shake">
                     <svg className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                     </svg>
@@ -212,7 +212,7 @@ const LoginPage: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-soft text-sm font-semibold text-white bg-primary-accent hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-accent disabled:opacity-70 disabled:cursor-not-allowed transition-all transform active:scale-[0.98]"
+                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-soft dark:shadow-none text-sm font-semibold text-white bg-primary-accent hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-accent disabled:opacity-70 disabled:cursor-not-allowed transition-all transform active:scale-[0.98]"
                 >
                   {isLoading ? (
                     <div className="flex items-center">
@@ -229,22 +229,22 @@ const LoginPage: React.FC = () => {
               </form>
             )}
           </div>
-          <div className="px-8 py-4 bg-slate-50 border-t border-slate-100 text-center flex justify-between items-center">
+          <div className="px-8 py-4 bg-slate-50 dark:bg-white/[0.02] border-t border-slate-100 dark:border-dark text-center flex justify-between items-center">
             <button
               type="button"
               onClick={() => { setIsSignup(!isSignup); setError(null); }}
-              className="text-xs font-medium text-primary-accent hover:text-blue-700 transition-colors"
+              className="text-xs font-medium text-primary dark:text-indigo-300 hover:text-blue-700 dark:hover:text-indigo-200 transition-colors"
             >
               {isSignup ? "Déjà un compte ? Se connecter" : "Premier accès ? Créer un compte"}
             </button>
-            <p className="text-xs text-slate-500">
-              Besoin d'aide ? <a href="#" className="font-medium text-primary-accent hover:text-blue-700">Contacter le support</a>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Besoin d'aide ? <a href="#" className="font-medium text-primary dark:text-indigo-300 hover:text-blue-700 dark:hover:text-indigo-200">Contacter le support</a>
             </p>
           </div>
         </div>
 
         {/* Footer */}
-        <p className="mt-8 text-center text-xs text-slate-500 opacity-60 font-medium">
+        <p className="mt-8 text-center text-xs text-slate-500 dark:text-slate-400 opacity-60 font-medium">
           &copy; {new Date().getFullYear()} Nouvelle Cité de David. All rights reserved.
         </p>
       </div>

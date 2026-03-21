@@ -125,7 +125,7 @@ const ExportMenu: React.FC<Props> = ({ records, periodLabel, summary }) => {
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 type="button"
-                className="rounded-xl px-6 py-3 bg-white border-2 border-slate-200 text-slate-700 text-xs font-black uppercase tracking-widest hover:border-primary hover:text-primary hover:bg-primary/5 transition-all focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="rounded-xl px-6 py-3 bg-card dark:bg-card-dark border-2 border-slate-200 dark:border-dark text-slate-700 dark:text-white text-xs font-black uppercase tracking-widest hover:border-primary hover:text-primary hover:bg-primary/5 transition-all focus:outline-none focus:ring-2 focus:ring-primary/20"
             >
                 📥 Exporter
             </button>
@@ -136,34 +136,34 @@ const ExportMenu: React.FC<Props> = ({ records, periodLabel, summary }) => {
                         className="fixed inset-0 z-40"
                         onClick={() => setIsOpen(false)}
                     />
-                    <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-premium border border-slate-100 overflow-hidden z-50">
+                    <div className="absolute right-0 top-full mt-2 w-64 bg-card dark:bg-card-dark rounded-2xl shadow-premium dark:shadow-none border border-slate-100 dark:border-dark overflow-hidden z-50">
                         <div className="p-2">
                             <button
                                 onClick={exportToExcel}
-                                className="w-full text-left px-4 py-3 rounded-xl hover:bg-emerald-50 transition-colors group"
+                                className="w-full text-left px-4 py-3 rounded-xl hover:bg-emerald-50 dark:bg-emerald-900/20 transition-colors group"
                             >
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center group-hover:scale-110 transition-transform">
                                         <span className="text-lg">📊</span>
                                     </div>
                                     <div>
-                                        <p className="text-sm font-bold text-slate-800">Exporter en Excel</p>
-                                        <p className="text-xs text-slate-500">Format .xlsx</p>
+                                        <p className="text-sm font-bold text-slate-800 dark:text-white">Exporter en Excel</p>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400">Format .xlsx</p>
                                     </div>
                                 </div>
                             </button>
 
                             <button
                                 onClick={exportToPDF}
-                                className="w-full text-left px-4 py-3 rounded-xl hover:bg-red-50 transition-colors group mt-1"
+                                className="w-full text-left px-4 py-3 rounded-xl hover:bg-red-50 dark:bg-red-900/20 transition-colors group mt-1"
                             >
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center group-hover:scale-110 transition-transform">
                                         <span className="text-lg">📄</span>
                                     </div>
                                     <div>
-                                        <p className="text-sm font-bold text-slate-800">Exporter en PDF</p>
-                                        <p className="text-xs text-slate-500">Format imprimable</p>
+                                        <p className="text-sm font-bold text-slate-800 dark:text-white">Exporter en PDF</p>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400">Format imprimable</p>
                                     </div>
                                 </div>
                             </button>

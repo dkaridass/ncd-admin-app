@@ -1,5 +1,5 @@
 import { db } from '../firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where, orderBy, getDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where, orderBy, getDoc, writeBatch } from 'firebase/firestore';
 import { Member } from '../types';
 
 const COLLECTION_NAME = 'members';
@@ -43,19 +43,44 @@ export const membersService = {
         }
     },
 
+    // Add batch of members
+    addBatch: async (members: Omit<Member, 'id'>[]): Promise<Member[]> => {
+        try {
+            const addedMembers: Member[] = [];
+            const MAX_BATCH_SIZE = 500;
+
+            for (let i = 0; i < members.length; i += MAX_BATCH_SIZE) {
+                const batch = writeBatch(db);
+                const chunk = members.slice(i, i + MAX_BATCH_SIZE);
+
+                for (const member of chunk) {
+                    const docRef = doc(collection(db, COLLECTION_NAME));
+                    batch.set(docRef, member);
+                    addedMembers.push({ id: docRef.id, ...member } as Member);
+                }
+
+                await batch.commit();
+            }
+            return addedMembers;
+        } catch (error) {
+            console.error("Error adding members batch:", error);
+            throw error;
+        }
+    },
+
     // Update member
     update: async (id: string, updates: Partial<Member>): Promise<void> => {
         try {
             const docRef = doc(db, COLLECTION_NAME, id);
-            
+
             // Filter out undefined values - Firestore doesn't accept undefined
             const cleanUpdates: any = {};
-            
+
             // Process all keys, including those explicitly set to undefined
             for (const key in updates) {
                 if (updates.hasOwnProperty(key)) {
                     const value = (updates as any)[key];
-                    
+
                     // Special handling for departmentIds - always ensure it's an array
                     if (key === 'departmentIds') {
                         // If undefined or null, set to empty array
@@ -74,15 +99,15 @@ export const membersService = {
                     }
                 }
             }
-            
+
             // Double-check: if departmentIds was explicitly in updates but is undefined, set to empty array
             if ('departmentIds' in updates && (updates.departmentIds === undefined || updates.departmentIds === null)) {
                 cleanUpdates.departmentIds = [];
             }
-            
+
             console.log('🔧 Sanitized updates:', cleanUpdates);
             console.log('🔧 Original updates:', updates);
-            
+
             await updateDoc(docRef, cleanUpdates);
         } catch (error) {
             console.error("❌ Error updating member:", error);

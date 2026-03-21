@@ -41,8 +41,8 @@ const CategoryBreakdown: React.FC<Props> = ({ records, periodLabel }) => {
 
     if (categoryData.length === 0) {
         return (
-            <Card className="border-none shadow-soft rounded-2xl p-8">
-                <h3 className="text-lg font-bold text-slate-700 mb-4">Répartition par Catégorie</h3>
+            <Card className="border-none shadow-soft dark:shadow-none rounded-2xl p-8">
+                <h3 className="text-lg font-bold text-slate-700 dark:text-white mb-4">Répartition par Catégorie</h3>
                 <div className="flex flex-col items-center justify-center py-12 text-center">
                     <p className="text-sm text-slate-400">Aucune donnée pour cette période</p>
                 </div>
@@ -51,8 +51,8 @@ const CategoryBreakdown: React.FC<Props> = ({ records, periodLabel }) => {
     }
 
     return (
-        <Card className="border-none shadow-soft rounded-2xl p-8">
-            <h3 className="text-lg font-bold text-slate-700 mb-6">Répartition par Catégorie - {periodLabel}</h3>
+        <Card className="border-none shadow-soft dark:shadow-none rounded-2xl p-8">
+            <h3 className="text-lg font-bold text-slate-700 dark:text-white mb-6">Répartition par Catégorie - {periodLabel}</h3>
 
             <div className="h-[300px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
@@ -95,16 +95,16 @@ const CategoryBreakdown: React.FC<Props> = ({ records, periodLabel }) => {
             {/* Category List */}
             <div className="mt-6 space-y-2">
                 {categoryData.map((category, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
+                    <div key={index} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-white/[0.02] rounded-xl">
                         <div className="flex items-center gap-3">
                             <div
                                 className="w-4 h-4 rounded-full"
                                 style={{ backgroundColor: COLORS[category.name as keyof typeof COLORS] || '#94a3b8' }}
                             />
-                            <span className="text-sm font-bold text-slate-700">{category.name}</span>
+                            <span className="text-sm font-bold text-slate-700 dark:text-white">{category.name}</span>
                         </div>
                         <div className="flex items-center gap-4">
-                            <span className="text-sm font-bold text-primary">
+                            <span className="text-sm font-bold text-primary dark:text-white">
                                 ${category.value.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                             </span>
                             <span className="text-xs font-bold text-slate-400">

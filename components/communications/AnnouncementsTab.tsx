@@ -42,7 +42,7 @@ const AnnouncementsTab: React.FC = () => {
 
     if (selectedAnnouncement) {
         return (
-            <div className="bg-white rounded-2xl shadow-soft min-h-[600px] overflow-hidden relative">
+            <div className="bg-card dark:bg-card-dark rounded-2xl shadow-soft dark:shadow-none min-h-[600px] overflow-hidden relative">
                 <AnnouncementDetail
                     announcement={selectedAnnouncement}
                     onClose={() => setSelectedAnnouncement(null)}
@@ -55,8 +55,8 @@ const AnnouncementsTab: React.FC = () => {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h3 className="text-xl font-bold text-slate-800">Annonces Officielles</h3>
-                    <p className="text-slate-500 text-sm">Gérez les communications visibles par tous les membres.</p>
+                    <h3 className="text-xl font-bold text-slate-800 dark:text-white">Annonces Officielles</h3>
+                    <p className="text-slate-500 dark:text-slate-400 text-sm">Gérez les communications visibles par tous les membres.</p>
                 </div>
                 <Button onClick={() => setIsDrawerOpen(true)}>
                     <PlusIcon className="w-4 h-4 mr-2" />
@@ -75,32 +75,32 @@ const AnnouncementsTab: React.FC = () => {
                         <Card
                             key={announcement.id}
                             onClick={() => setSelectedAnnouncement(announcement)}
-                            className="cursor-pointer hover:shadow-lg transition-all group relative overflow-hidden border-2 border-transparent hover:border-primary/10"
+                            className="cursor-pointer hover:shadow-lg dark:shadow-none transition-all group relative overflow-hidden border-2 border-transparent hover:border-primary dark:border-white/20/10"
                         >
                             <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <button
                                     onClick={(e) => handleDelete(announcement.id, e)}
-                                    className="p-2 bg-white rounded-full shadow-md text-red-500 hover:bg-red-50"
+                                    className="p-2 bg-card dark:bg-card-dark rounded-full shadow-md dark:shadow-none text-red-500 hover:bg-red-50"
                                 >
                                     <TrashIcon className="w-4 h-4" />
                                 </button>
                             </div>
 
                             <div className="mb-4">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-primary bg-primary/10 px-2 py-1 rounded-md">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-primary dark:text-white bg-primary/10 px-2 py-1 rounded-md">
                                     Annonce
                                 </span>
                             </div>
 
-                            <h4 className="text-lg font-bold text-slate-800 mb-3 line-clamp-2 leading-tight">
+                            <h4 className="text-lg font-bold text-slate-800 dark:text-white mb-3 line-clamp-2 leading-tight">
                                 {announcement.title}
                             </h4>
 
-                            <p className="text-slate-500 text-sm line-clamp-3 mb-6">
+                            <p className="text-slate-500 dark:text-slate-400 text-sm line-clamp-3 mb-6">
                                 {announcement.content}
                             </p>
 
-                            <div className="flex items-center justify-between text-xs font-bold text-slate-400 border-t border-slate-100 pt-4">
+                            <div className="flex items-center justify-between text-xs font-bold text-slate-400 border-t border-slate-100 dark:border-dark pt-4">
                                 <div className="flex items-center gap-2">
                                     <CalendarIcon className="w-3 h-3" />
                                     {announcement.date}

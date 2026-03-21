@@ -44,7 +44,7 @@ const RevenueByServiceChart: React.FC = () => {
 
     if (financeRecords.length === 0) {
         return (
-            <div className="h-64 flex flex-col items-center justify-center text-slate-400 bg-slate-50/50 rounded-[2rem] border border-slate-100">
+            <div className="h-48 flex flex-col items-center justify-center text-slate-400 bg-slate-50 dark:bg-white/[0.02]/50 rounded-[2rem] border border-slate-100 dark:border-dark">
                 <p className="font-bold text-sm">Aucune donnée financière disponible</p>
                 <p className="text-xs mt-1">Les recettes par culte apparaîtront ici</p>
             </div>
@@ -54,9 +54,9 @@ const RevenueByServiceChart: React.FC = () => {
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
             return (
-                <div className="bg-white p-3 border border-slate-100 shadow-xl rounded-xl">
-                    <p className="text-xs font-bold text-slate-700 mb-1">{label}</p>
-                    <p className="text-sm font-black text-primary">
+                <div className="bg-white dark:bg-card-dark p-3 border border-slate-100 dark:border-white/5 shadow-xl dark:shadow-none rounded-xl">
+                    <p className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">{label}</p>
+                    <p className="text-sm font-black text-primary dark:text-gold">
                         {currency === 'USD' ? '$' : 'FC'} {payload[0].value.toLocaleString()}
                     </p>
                 </div>
@@ -66,43 +66,45 @@ const RevenueByServiceChart: React.FC = () => {
     };
 
     return (
-        <div className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100 h-full">
+        <div className="bg-card dark:bg-card-dark p-6 rounded-[2.5rem] shadow-sm dark:shadow-none border border-slate-100 dark:border-dark">
             <div className="flex justify-between items-center mb-6">
                 <div>
-                    <h3 className="text-[10px] font-black uppercase text-primary tracking-[0.3em]">Recettes per Culte</h3>
+                    <h3 className="text-[10px] font-black uppercase text-primary dark:text-white tracking-[0.3em]">Recettes</h3>
                     <p className="text-xs text-slate-400 mt-1">30 derniers jours</p>
                 </div>
                 <div className="flex bg-slate-100 rounded-lg p-1">
                     <button
                         onClick={() => setCurrency('USD')}
-                        className={`px-3 py-1 rounded-md text-[10px] font-bold transition-all ${currency === 'USD' ? 'bg-white text-primary shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                        className={`px-3 py-1 rounded-md text-[10px] font-bold transition-all ${currency === 'USD' ? 'bg-card dark:bg-card-dark text-primary shadow-sm dark:shadow-none' : 'text-slate-400 hover:text-slate-600 dark:text-slate-400'}`}
                     >
                         USD
                     </button>
                     <button
                         onClick={() => setCurrency('CDF')}
-                        className={`px-3 py-1 rounded-md text-[10px] font-bold transition-all ${currency === 'CDF' ? 'bg-white text-primary shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                        className={`px-3 py-1 rounded-md text-[10px] font-bold transition-all ${currency === 'CDF' ? 'bg-card dark:bg-card-dark text-primary shadow-sm dark:shadow-none' : 'text-slate-400 hover:text-slate-600 dark:text-slate-400'}`}
                     >
                         CDF
                     </button>
                 </div>
             </div>
 
-            <div className="h-[300px] w-full">
+            <div className="h-[200px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" className="text-slate-100 dark:text-white/5" />
                         <XAxis
                             dataKey="name"
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 600 }}
+                            tick={{ fill: 'currentColor', fontSize: 10, fontWeight: 600 }}
+                            className="text-slate-400 dark:text-slate-500"
                             dy={10}
                         />
                         <YAxis
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 600 }}
+                            tick={{ fill: 'currentColor', fontSize: 10, fontWeight: 600 }}
+                            className="text-slate-400 dark:text-slate-500"
                         />
                         <Tooltip content={<CustomTooltip />} />
                         <Bar dataKey="amount" radius={[4, 4, 0, 0]} maxBarSize={50}>

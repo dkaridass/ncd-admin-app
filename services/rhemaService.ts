@@ -11,7 +11,7 @@ export const rhemaService = {
     generateDailyRhema: async (dateStr: string): Promise<DailyRhema | null> => {
         try {
             console.log(`🚀 Generating Rhema for ${dateStr} via Groq...`);
-            
+
             // Check if Groq is configured
             if (!aiService.isConfigured()) {
                 console.warn('⚠️ Groq API key not configured, falling back to Bible API');
@@ -38,7 +38,7 @@ export const rhemaService = {
 
         } catch (error) {
             console.error("Error generating Rhema:", error);
-            
+
             // FALLBACK: Use Bible API when Groq fails
             console.log("📖 Groq failed, falling back to Bible API...");
             return await rhemaService.generateFallbackRhema(dateStr);
@@ -125,6 +125,45 @@ export const rhemaService = {
         } catch (error) {
             console.error("Error adding rhema:", error);
             throw error;
+        }
+    },
+
+    // Update an existing Rhema
+    update: async (id: string, updates: Partial<DailyRhema>): Promise<void> => {
+        try {
+            const { doc, updateDoc } = await import('firebase/firestore');
+            const docRef = doc(db, COLLECTION_NAME, id);
+            await updateDoc(docRef, updates);
+        } catch (error) {
+            console.error("Error updating rhema:", error);
+            throw error;
+        }
+    },
+
+    // Delete a Rhema
+    delete: async (id: string): Promise<void> => {
+        try {
+            const { doc, deleteDoc } = await import('firebase/firestore');
+            const docRef = doc(db, COLLECTION_NAME, id);
+            await deleteDoc(docRef);
+        } catch (error) {
+            console.error("Error deleting rhema:", error);
+            throw error;
+        }
+    },
+
+    // Get all Rhema (for Admin UI)
+    getAll: async (): Promise<DailyRhema[]> => {
+        try {
+            const q = query(
+                collection(db, COLLECTION_NAME),
+                orderBy('date', 'desc')
+            );
+            const snapshot = await getDocs(q);
+            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as DailyRhema));
+        } catch (error) {
+            console.error("Error fetching all rhema:", error);
+            return [];
         }
     }
 };

@@ -68,14 +68,14 @@ export const eventsService = {
 
     toggleRsvp: async (eventId: string, memberId: string, currentRsvps?: string[]): Promise<void> => {
         try {
+            // I7 fix: Use arrayUnion/arrayRemove for atomic operations
+            const { arrayUnion, arrayRemove } = await import('firebase/firestore');
             const rsvps = currentRsvps || [];
-            let newRsvps;
             if (rsvps.includes(memberId)) {
-                newRsvps = rsvps.filter(id => id !== memberId);
+                await updateDoc(doc(db, COLLECTION_NAME, eventId), { rsvps: arrayRemove(memberId) });
             } else {
-                newRsvps = [...rsvps, memberId];
+                await updateDoc(doc(db, COLLECTION_NAME, eventId), { rsvps: arrayUnion(memberId) });
             }
-            await updateDoc(doc(db, COLLECTION_NAME, eventId), { rsvps: newRsvps });
         } catch (error) {
             console.error("Error toggling RSVP:", error);
             throw error;

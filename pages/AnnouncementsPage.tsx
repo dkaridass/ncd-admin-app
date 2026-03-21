@@ -5,6 +5,8 @@ import Button from '../components/ui/Button';
 import Badge from '../components/ui/Badge';
 import Modal from '../components/ui/Modal';
 import Input from '../components/ui/Input';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
+import { useConfirm } from '../hooks/useConfirm';
 import PageTransition from '../components/layout/PageTransition';
 import PermissionGuard from '../components/auth/PermissionGuard';
 import { PlusCircleIcon, PencilIcon, TrashIcon, ArchiveIcon, FilterIcon, XCircleIcon } from '../components/icons/Icons';
@@ -19,6 +21,7 @@ const AnnouncementsPage: React.FC = () => {
     const [activeTargetFilter, setActiveTargetFilter] = useState<Announcement['target'] | 'TOUS'>('TOUS');
     const [showArchived, setShowArchived] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const { confirmState, confirm, cancelConfirm } = useConfirm();
 
     const [formData, setFormData] = useState<Omit<Announcement, 'id' | 'createdAt' | 'createdBy' | 'createdByName'>>({
         title: '',
@@ -112,7 +115,13 @@ const AnnouncementsPage: React.FC = () => {
     };
 
     const handleDelete = async (id: string) => {
-        if (window.confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?')) {
+        const accepted = await confirm({
+            title: 'Supprimer cette annonce ?',
+            message: 'Cette annonce sera définitivement supprimée. Cette action est irréversible.',
+            confirmLabel: 'Supprimer',
+            variant: 'danger',
+        });
+        if (accepted) {
             try {
                 await deleteAnnouncement(id);
             } catch (error) {
@@ -158,15 +167,15 @@ const AnnouncementsPage: React.FC = () => {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
                     <div>
-                        <h2 className="text-3xl md:text-5xl font-extrabold text-primary font-display tracking-tight leading-none mb-1 uppercase italic">
+                        <h2 className="text-3xl md:text-5xl font-extrabold text-primary dark:text-white font-display tracking-tight leading-none mb-1 uppercase italic">
                             Annonces
                         </h2>
-                        <p className="text-slate-500 font-medium italic opacity-80 uppercase tracking-widest text-[9px]">
+                        <p className="text-slate-500 dark:text-slate-400 font-medium italic opacity-80 uppercase tracking-widest text-[9px]">
                             Communications • Informations • NCD La Pentecôte
                         </p>
                     </div>
                     <PermissionGuard permission="MANAGE_ANNOUNCEMENTS" fallback={null}>
-                        <Button onClick={() => handleOpenModal()} className="shadow-md">
+                        <Button onClick={() => handleOpenModal()} className="shadow-md dark:shadow-none">
                             <PlusCircleIcon className="w-5 h-5 mr-2" />
                             Nouvelle Annonce
                         </Button>
@@ -196,17 +205,13 @@ const AnnouncementsPage: React.FC = () => {
                     <div className="flex flex-wrap gap-3">
                         <div className="flex items-center gap-2">
                             <FilterIcon className="w-4 h-4 text-slate-400" />
-                            <span className="text-xs font-bold text-slate-500 uppercase">Catégorie:</span>
+                            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Catégorie:</span>
                         </div>
                         {['TOUS', ...categories].map((cat) => (
                             <button
                                 key={cat}
                                 onClick={() => setActiveCategoryFilter(cat as any)}
-                                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                                    activeCategoryFilter === cat
-                                        ? 'bg-primary text-white shadow-md'
-                                        : 'bg-white border-2 border-slate-200 text-slate-700 hover:border-primary/50'
-                                }`}
+                                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeCategoryFilter === cat ? 'bg-primary text-white shadow-md dark:shadow-none' : 'bg-card dark:bg-card-dark border-2 border-slate-200 dark:border-dark text-slate-700 dark:text-white hover:border-primary/50'}`}
                             >
                                 {cat}
                             </button>
@@ -216,17 +221,13 @@ const AnnouncementsPage: React.FC = () => {
                     <div className="flex flex-wrap gap-3">
                         <div className="flex items-center gap-2">
                             <FilterIcon className="w-4 h-4 text-slate-400" />
-                            <span className="text-xs font-bold text-slate-500 uppercase">Public:</span>
+                            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Public:</span>
                         </div>
                         {['TOUS', ...targets].map((target) => (
                             <button
                                 key={target}
                                 onClick={() => setActiveTargetFilter(target as any)}
-                                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                                    activeTargetFilter === target
-                                        ? 'bg-primary text-white shadow-md'
-                                        : 'bg-white border-2 border-slate-200 text-slate-700 hover:border-primary/50'
-                                }`}
+                                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeTargetFilter === target ? 'bg-primary text-white shadow-md dark:shadow-none' : 'bg-card dark:bg-card-dark border-2 border-slate-200 dark:border-dark text-slate-700 dark:text-white hover:border-primary/50'}`}
                             >
                                 {target}
                             </button>
@@ -265,10 +266,10 @@ const AnnouncementsPage: React.FC = () => {
                                         )}
                                     </div>
 
-                                    <h3 className="text-lg font-bold text-slate-900 mb-2">{announcement.title}</h3>
-                                    <p className="text-sm text-slate-600 mb-4 line-clamp-3">{announcement.content}</p>
+                                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{announcement.title}</h3>
+                                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-4 line-clamp-3">{announcement.content}</p>
 
-                                    <div className="space-y-2 mb-4 text-xs text-slate-500">
+                                    <div className="space-y-2 mb-4 text-xs text-slate-500 dark:text-slate-400">
                                         <p><strong>Public:</strong> {announcement.target}</p>
                                         <p><strong>Début:</strong> {new Date(announcement.startDate).toLocaleDateString('fr-FR')}</p>
                                         {announcement.endDate && (
@@ -278,7 +279,7 @@ const AnnouncementsPage: React.FC = () => {
                                     </div>
 
                                     <PermissionGuard permission="MANAGE_ANNOUNCEMENTS" fallback={null}>
-                                        <div className="flex gap-2 pt-4 border-t border-slate-100">
+                                        <div className="flex gap-2 pt-4 border-t border-slate-100 dark:border-dark">
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
@@ -339,7 +340,7 @@ const AnnouncementsPage: React.FC = () => {
                                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                                 required
                                 rows={5}
-                                className="block w-full px-4 py-3 border-2 border-slate-100 rounded-xl bg-white text-slate-900 placeholder-slate-300 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm"
+                                className="block w-full px-4 py-3 border-2 border-slate-100 dark:border-dark rounded-xl bg-card dark:bg-card-dark text-slate-900 dark:text-white placeholder-slate-300 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
                                 placeholder="Détails de l'annonce..."
                             />
                         </div>
@@ -352,7 +353,7 @@ const AnnouncementsPage: React.FC = () => {
                                 <select
                                     value={formData.category}
                                     onChange={(e) => setFormData({ ...formData, category: e.target.value as Announcement['category'] })}
-                                    className="block w-full px-4 py-3 border-2 border-slate-100 rounded-xl bg-white text-slate-900 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm"
+                                    className="block w-full px-4 py-3 border-2 border-slate-100 dark:border-dark rounded-xl bg-card dark:bg-card-dark text-slate-900 dark:text-white focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
                                 >
                                     {categories.map((cat) => (
                                         <option key={cat} value={cat}>{cat}</option>
@@ -367,7 +368,7 @@ const AnnouncementsPage: React.FC = () => {
                                 <select
                                     value={formData.target}
                                     onChange={(e) => setFormData({ ...formData, target: e.target.value as Announcement['target'] })}
-                                    className="block w-full px-4 py-3 border-2 border-slate-100 rounded-xl bg-white text-slate-900 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm"
+                                    className="block w-full px-4 py-3 border-2 border-slate-100 dark:border-dark rounded-xl bg-card dark:bg-card-dark text-slate-900 dark:text-white focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
                                 >
                                     {targets.map((target) => (
                                         <option key={target} value={target}>{target}</option>
@@ -399,13 +400,13 @@ const AnnouncementsPage: React.FC = () => {
                                     type="checkbox"
                                     checked={formData.isActive}
                                     onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                                    className="w-5 h-5 text-primary border-slate-200 rounded focus:ring-primary"
+                                    className="w-5 h-5 text-primary dark:text-white border-slate-200 dark:border-dark rounded focus:ring-primary"
                                 />
-                                <span className="text-sm font-bold text-slate-700">Active</span>
+                                <span className="text-sm font-bold text-slate-700 dark:text-white">Active</span>
                             </label>
                         </div>
 
-                        <div className="flex justify-end gap-4 pt-4 border-t border-slate-100">
+                        <div className="flex justify-end gap-4 pt-4 border-t border-slate-100 dark:border-dark">
                             <Button type="button" variant="ghost" onClick={handleCloseModal}>
                                 Annuler
                             </Button>
@@ -416,6 +417,7 @@ const AnnouncementsPage: React.FC = () => {
                     </form>
                 </Modal>
             </div>
+            <ConfirmDialog {...confirmState} onCancel={cancelConfirm} />
         </PageTransition>
     );
 };

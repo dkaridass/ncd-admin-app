@@ -79,8 +79,8 @@ const TemplatesTab: React.FC = () => {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h3 className="text-xl font-bold text-slate-800">Modèles de Messages</h3>
-                    <p className="text-slate-500 text-sm">Créez des modèles pour vos communications récurrentes.</p>
+                    <h3 className="text-xl font-bold text-slate-800 dark:text-white">Modèles de Messages</h3>
+                    <p className="text-slate-500 dark:text-slate-400 text-sm">Créez des modèles pour vos communications récurrentes.</p>
                 </div>
                 <Button onClick={() => openModal()}>
                     <PlusIcon className="w-4 h-4 mr-2" />
@@ -96,18 +96,18 @@ const TemplatesTab: React.FC = () => {
                     </div>
                 ) : (
                     templates.map(template => (
-                        <Card key={template.id} className="relative group hover:shadow-lg transition-all border-l-4 border-l-primary/20">
+                        <Card key={template.id} className="relative group hover:shadow-lg dark:shadow-none transition-all border-l-4 border-l-primary/20">
                             <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button onClick={() => openModal(template)} className="p-1.5 hover:bg-slate-100 rounded text-slate-500">
+                                <button onClick={() => openModal(template)} className="p-1.5 hover:bg-slate-100 rounded text-slate-500 dark:text-slate-400">
                                     <EditIcon className="w-4 h-4" />
                                 </button>
-                                <button onClick={(e) => handleDelete(template.id, e)} className="p-1.5 hover:bg-red-50 rounded text-red-500">
+                                <button onClick={(e) => handleDelete(template.id, e)} className="p-1.5 hover:bg-red-50 dark:bg-red-900/20 rounded text-red-500">
                                     <TrashIcon className="w-4 h-4" />
                                 </button>
                             </div>
 
                             <div className="flex gap-2 mb-3">
-                                <span className="text-[10px] font-black uppercase tracking-widest bg-slate-100 text-slate-500 px-2 py-1 rounded">
+                                <span className="text-[10px] font-black uppercase tracking-widest bg-slate-100 text-slate-500 dark:text-slate-400 px-2 py-1 rounded">
                                     {template.category}
                                 </span>
                                 <span className="text-[10px] font-black uppercase tracking-widest bg-blue-50 text-blue-500 px-2 py-1 rounded">
@@ -115,13 +115,13 @@ const TemplatesTab: React.FC = () => {
                                 </span>
                             </div>
 
-                            <h4 className="text-lg font-bold text-slate-800 mb-2">{template.name}</h4>
+                            <h4 className="text-lg font-bold text-slate-800 dark:text-white mb-2">{template.name}</h4>
 
                             {template.subject && (
-                                <p className="text-xs font-bold text-slate-500 mb-2">Sujet: {template.subject}</p>
+                                <p className="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2">Sujet: {template.subject}</p>
                             )}
 
-                            <p className="text-sm text-slate-600 line-clamp-3 bg-slate-50 p-3 rounded-lg font-mono text-xs">
+                            <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-3 bg-slate-50 dark:bg-white/[0.02] p-3 rounded-lg font-mono text-xs">
                                 {template.content}
                             </p>
                         </Card>
@@ -144,9 +144,9 @@ const TemplatesTab: React.FC = () => {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-xs font-bold text-slate-500 mb-1">Catégorie</label>
+                            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Catégorie</label>
                             <select
-                                className="w-full p-3 border rounded-xl bg-white text-sm"
+                                className="w-full p-3 border rounded-xl bg-card dark:bg-card-dark text-sm"
                                 value={formData.category}
                                 onChange={e => setFormData(p => ({ ...p, category: e.target.value as any }))}
                             >
@@ -158,9 +158,9 @@ const TemplatesTab: React.FC = () => {
                             </select>
                         </div>
                         <div>
-                            <label className="block text-xs font-bold text-slate-500 mb-1">Type</label>
+                            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Type</label>
                             <select
-                                className="w-full p-3 border rounded-xl bg-white text-sm"
+                                className="w-full p-3 border rounded-xl bg-card dark:bg-card-dark text-sm"
                                 value={formData.type}
                                 onChange={e => setFormData(p => ({ ...p, type: e.target.value as any }))}
                             >
@@ -181,7 +181,7 @@ const TemplatesTab: React.FC = () => {
                     )}
 
                     <div>
-                        <label className="block text-xs font-bold text-slate-500 mb-1">Contenu</label>
+                        <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Contenu</label>
                         <textarea
                             className="w-full p-3 border rounded-xl h-32 text-sm"
                             value={formData.content || ''}

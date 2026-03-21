@@ -22,6 +22,7 @@ import SettingsPage from './pages/SettingsPage';
 import UsersPage from './pages/UsersPage';
 import HealthCheckPage from './pages/HealthCheckPage';
 import NotFoundPage from './pages/NotFoundPage';
+import DocumentsPage from './pages/DocumentsPage';
 import { useData } from './context/DataContext';
 import { DataProvider } from './context/DataContext';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
@@ -90,7 +91,14 @@ function AppContent() {
             }
           />
 
-          <Route path="/events" element={<EventsPage />} />
+          <Route
+            path="/events"
+            element={
+              <ProtectedRoute requiredPermission="MANAGE_EVENTS">
+                <EventsPage />
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/finances"
@@ -110,11 +118,46 @@ function AppContent() {
             }
           />
 
-          <Route path="/communications" element={<CommunicationsPage />} />
-          <Route path="/resources" element={<ResourcesPage />} />
-          <Route path="/volunteers" element={<VolunteersPage />} />
-          <Route path="/prayer-requests" element={<PrayerRequestsPage />} />
-          <Route path="/assistant" element={<AiAssistantPage />} />
+          <Route
+            path="/communications"
+            element={
+              <ProtectedRoute requiredPermission="SEND_MESSAGES">
+                <CommunicationsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/resources"
+            element={
+              <ProtectedRoute requiredPermission="VIEW_DEPARTMENTS">
+                <ResourcesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/volunteers"
+            element={
+              <ProtectedRoute requiredPermission="VIEW_DEPARTMENTS">
+                <VolunteersPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/prayer-requests"
+            element={
+              <ProtectedRoute requiredPermission="VIEW_PASTORAL_CARE">
+                <PrayerRequestsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/assistant"
+            element={
+              <ProtectedRoute requiredPermission="VIEW_PASTORAL_CARE">
+                <AiAssistantPage />
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/settings"
@@ -130,6 +173,15 @@ function AppContent() {
             element={
               <ProtectedRoute requiredPermission="MANAGE_ROLES">
                 <UsersPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/documents"
+            element={
+              <ProtectedRoute requiredPermission="MANAGE_SETTINGS">
+                <DocumentsPage />
               </ProtectedRoute>
             }
           />

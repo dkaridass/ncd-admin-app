@@ -5,11 +5,7 @@ import React from 'react';
  */
 const BalanceCardSkeleton: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div
-    className={`
-      flex-shrink-0 w-[85%] min-w-[280px] sm:w-[320px] sm:min-w-[320px]
-      rounded-3xl overflow-hidden bg-slate-200 animate-pulse
-      ${className}
-    `}
+    className={`flex-shrink-0 w-[85%] min-w-[280px] sm:w-[320px] sm:min-w-[320px] rounded-3xl overflow-hidden bg-slate-200 animate-pulse ${className}`}
     style={{ aspectRatio: '1.586 / 1' }}
   >
     <div className="h-full p-6 flex flex-col justify-between">

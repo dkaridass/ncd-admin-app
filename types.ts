@@ -35,13 +35,14 @@ export interface User {
   id: string;
   name: string;
   role: AppRole;
-  departmentId?: string;
+  departmentId?: string;         // Legacy: single department (backward compat)
+  departmentIds?: string[];      // Multi-department leadership support
   avatarUrl?: string;
   email?: string;
-  createdAt?: string;        // ISO date string
-  updatedAt?: string;        // ISO date string
-  isActive?: boolean;        // Whether user account is active (default: true)
-  lastLoginAt?: string;      // ISO date string - last login timestamp
+  createdAt?: string;            // ISO date string
+  updatedAt?: string;            // ISO date string
+  isActive?: boolean;            // Whether user account is active (default: true)
+  lastLoginAt?: string;          // ISO date string - last login timestamp
 }
 
 export interface Member {
@@ -57,11 +58,13 @@ export interface Member {
   commune?: string;
   reference?: string;
   civilState?: string;
+  weddingDate?: string;
   availableDate?: string;
   isDePassage?: boolean;
   isSansEglise?: boolean;
   isBaptised?: boolean;
   joinDate: string;
+  lastAttendedDate?: string; // Automatically or manually updated to track absenteeism
   role: ChurchRole;
   churchFunction?: ChurchFunction;
   ministry?: string;
@@ -157,8 +160,29 @@ export interface FinanceRecord {
   serviceName?: string;
   recordedBy: string;
   receiptUrl?: string;
-  isApproved?: boolean;
+  // Maker/Checker Workflow
+  isApproved: boolean;
+  approvedBy?: string;      // Name of the user who approved
+  approvedAt?: string;      // ISO date string
+  rejectedReason?: string;  // If rejected, the reason why
+  // Expense-specific fields (type === 'Dépense' only)
+  expenseCategory?: ExpenseCategory;
+  beneficiary?: string;        // Who received the payment
 }
+
+export type ExpenseCategory =
+  | 'Loyer & Local'
+  | 'Électricité & Eau'
+  | 'Sonorisation & Technique'
+  | 'Transport'
+  | 'Restauration'
+  | 'Aide aux membres'
+  | 'Évangélisation'
+  | 'Fournitures'
+  | 'Communication'
+  | 'Salaires & Indemnités'
+  | 'Maintenance'
+  | 'Autre';
 
 export type TransactionType = 'Dîme' | 'Offrande' | 'Action de grâce' | 'Offrande du prophète' | 'Dons' | 'Dépense' | 'Autre';
 export type ServiceSession = '1er Culte' | '2ème Culte' | '3ème Culte' | 'Culte Mercredi' | 'Culte Vendredi' | 'Séminaire' | 'Autre'; export type Currency = 'CDF' | 'USD';
@@ -244,11 +268,14 @@ export interface AttendanceRecord {
   id: string;
   date: string;
   sessionName: string;
+  serviceType: 'Ordinaire' | 'Spécial';       // Regular vs Special service
+  specialServiceName?: string;                  // e.g., "Noël 2026", "Pâques", "Convention"
   menCount: number;
   womenCount: number;
   childrenCount: number;
-  youthCount?: number; // New: Jeunes
-  visitorCount?: number; // New: Visiteurs
+  youthCount?: number; // Jeunes
+  visitorCount?: number; // Visiteurs
+  newConvertsCount?: number; // Nouvelles conversions (critical for special services)
   totalCount: number;
   notes?: string;
 }
@@ -408,3 +435,61 @@ export interface DailyRhema {
   author?: string; // Who added it
 }
 
+export interface FollowUp {
+  id: string;
+  memberId: string;
+  memberName: string;
+  reason: string; // e.g. "Absent 2 dimanches consécutifs"
+  assignedTo?: string; // Leader name or ID
+  status: 'À contacter' | 'Contacté' | 'Visite programmée' | 'Résolu';
+  createdAt: string;
+  resolvedAt?: string;
+  notes?: string;
+}
+
+export interface SermonContent {
+  theme: string;
+  scripture: string;
+  introduction: string;
+  points: string[];
+  conclusion: string;
+  rawText?: string;
+}
+
+export interface SermonPlan {
+  id: string;
+  title: string;
+  seriesId?: string;
+  datePreached?: string;
+  scriptureReferences: string[];
+  content: SermonContent;
+  status: 'DRAFT' | 'READY' | 'ARCHIVED';
+  createdAt: string;
+  updatedAt: string;
+  authorId?: string;
+}
+
+export interface BriefingContent {
+  overview: string;
+  keyMetrics: Record<string, string | number>;
+  urgentTasks: string[];
+  upcomingEvents: string[];
+  prayerFocus: string[];
+}
+
+export interface PastoralBriefing {
+  id: string;
+  date: string; // ISO date
+  generatedContent: BriefingContent;
+  status: 'DRAFT' | 'REVIEWED' | 'PUBLISHED';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ChurchDocument {
+  id?: string;
+  name: string;
+  url: string;
+  size: number;
+  uploadedAt: any; // Firestore timestamp or string
+}

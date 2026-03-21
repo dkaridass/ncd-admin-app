@@ -26,7 +26,7 @@ const AttendanceChart: React.FC = () => {
 
     if (attendance.length === 0) {
         return (
-            <div className="h-64 flex flex-col items-center justify-center text-slate-400 bg-slate-50/50 rounded-[2rem] border border-slate-100">
+            <div className="h-48 flex flex-col items-center justify-center text-slate-400 bg-slate-50 dark:bg-white/[0.02]/50 rounded-[2rem] border border-slate-100 dark:border-dark">
                 <p className="font-bold text-sm">Aucune donnée de présence disponible</p>
                 <p className="text-xs mt-1">Commencez par saisir les effectifs dans l'Agenda</p>
             </div>
@@ -36,16 +36,16 @@ const AttendanceChart: React.FC = () => {
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
             return (
-                <div className="bg-white p-4 border border-slate-100 shadow-xl rounded-2xl">
+                <div className="bg-card dark:bg-card-dark p-4 border border-slate-100 dark:border-dark shadow-xl dark:shadow-none rounded-2xl">
                     <p className="text-[10px] uppercase font-black text-slate-400 tracking-widest mb-2">{payload[0].payload.fullDate}</p>
-                    <p className="text-xs font-bold text-primary mb-3 border-b border-slate-100 pb-2">
+                    <p className="text-xs font-bold text-primary dark:text-white mb-3 border-b border-slate-100 dark:border-dark pb-2">
                         {payload[0].payload.session}
                     </p>
                     {payload.map((entry: any, index: number) => (
                         <div key={index} className="flex items-center gap-2 mb-1 last:mb-0">
                             <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
-                            <span className="text-xs font-medium text-slate-600 w-16">{entry.name}:</span>
-                            <span className="text-xs font-black text-slate-800">{entry.value}</span>
+                            <span className="text-xs font-medium text-slate-600 dark:text-slate-400 w-16">{entry.name}:</span>
+                            <span className="text-xs font-black text-slate-800 dark:text-white">{entry.value}</span>
                         </div>
                     ))}
                 </div>
@@ -55,21 +55,21 @@ const AttendanceChart: React.FC = () => {
     };
 
     return (
-        <div className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100 h-full">
+        <div className="bg-card dark:bg-card-dark p-6 rounded-[2.5rem] shadow-sm dark:shadow-none border border-slate-100 dark:border-dark">
             <div className="flex justify-between items-center mb-6">
                 <div>
-                    <h3 className="text-[10px] font-black uppercase text-primary tracking-[0.3em]">Évolution des Effectifs</h3>
+                    <h3 className="text-[10px] font-black uppercase text-primary dark:text-white tracking-[0.3em]">Effectifs</h3>
                     <p className="text-xs text-slate-400 mt-1">12 derniers cultes enregistrés</p>
                 </div>
                 <div className="flex gap-2">
-                    <div className="flex items-center gap-1.5 px-3 py-1 bg-indigo-50 rounded-full">
+                    <div className="flex items-center gap-1.5 px-3 py-1 bg-indigo-50 dark:bg-indigo-900/20 rounded-full">
                         <div className="w-2 h-2 rounded-full bg-indigo-500" />
-                        <span className="text-[9px] font-bold text-indigo-700 uppercase">Total</span>
+                        <span className="text-[9px] font-bold text-indigo-700 dark:text-indigo-200 uppercase">Total</span>
                     </div>
                 </div>
             </div>
 
-            <div className="h-[300px] w-full">
+            <div className="h-[200px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                         <defs>

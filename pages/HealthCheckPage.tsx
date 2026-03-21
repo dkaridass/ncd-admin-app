@@ -17,7 +17,9 @@ const HealthCheckPage: React.FC = () => {
         events,
         attendance,
         isLoading,
-        isAuthLoading
+        isAuthLoading,
+        totalMembersCount,
+        totalFinancesCount
     } = useData();
 
     const healthData = {
@@ -33,9 +35,11 @@ const HealthCheckPage: React.FC = () => {
         },
         dataLoaded: {
             isLoading: isLoading,
-            members: members.length,
+            membersInApp: members.length,
+            totalMembersCount: totalMembersCount,
             departments: departments.length,
-            finances: financeRecords.length,
+            financesInApp: financeRecords.length,
+            totalFinancesCount: totalFinancesCount,
             events: events.length,
             attendance: attendance.length
         },
@@ -66,10 +70,10 @@ const HealthCheckPage: React.FC = () => {
         <PageTransition>
             <div className="max-w-6xl mx-auto">
                 <div className="mb-8">
-                    <h1 className="text-4xl font-extrabold text-primary font-display mb-2">
+                    <h1 className="text-4xl font-extrabold text-primary dark:text-white font-display mb-2">
                         🏥 System Health Check
                     </h1>
-                    <p className="text-slate-500 text-sm">
+                    <p className="text-slate-500 dark:text-slate-400 text-sm">
                         Real-time system status and diagnostics
                     </p>
                 </div>
@@ -87,8 +91,8 @@ const HealthCheckPage: React.FC = () => {
                 {/* Health Data */}
                 <Card className="mb-6">
                     <div className="p-6">
-                        <h3 className="text-xl font-black text-primary mb-4">System State</h3>
-                        <pre className="bg-slate-50 p-4 rounded-xl overflow-auto text-xs font-mono">
+                        <h3 className="text-xl font-black text-primary dark:text-white mb-4">System State</h3>
+                        <pre className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-xl overflow-auto text-xs font-mono">
                             {JSON.stringify(healthData, null, 2)}
                         </pre>
                     </div>
@@ -98,7 +102,7 @@ const HealthCheckPage: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <Card>
                         <div className="p-6">
-                            <h3 className="text-lg font-black text-primary mb-4">✅ Quick Checks</h3>
+                            <h3 className="text-lg font-black text-primary dark:text-white mb-4">✅ Quick Checks</h3>
                             <div className="space-y-3">
                                 <CheckItem
                                     label="Firebase Connected"
@@ -130,11 +134,11 @@ const HealthCheckPage: React.FC = () => {
 
                     <Card>
                         <div className="p-6">
-                            <h3 className="text-lg font-black text-primary mb-4">📊 Data Summary</h3>
+                            <h3 className="text-lg font-black text-primary dark:text-white mb-4">📊 Data Summary</h3>
                             <div className="space-y-3">
-                                <DataStat label="Total Members" value={members.length} />
+                                <DataStat label="Total Members" value={totalMembersCount || 0} />
                                 <DataStat label="Departments" value={departments.length} />
-                                <DataStat label="Finance Records" value={financeRecords.length} />
+                                <DataStat label="Finance Records" value={totalFinancesCount || 0} />
                                 <DataStat label="Events" value={events.length} />
                                 <DataStat label="Attendance Records" value={attendance.length} />
                             </div>
@@ -238,9 +242,8 @@ const CleanupTool = () => {
 
 const CheckItem: React.FC<{ label: string; status: boolean }> = ({ label, status }) => (
     <div className="flex items-center justify-between">
-        <span className="text-sm font-bold text-slate-700">{label}</span>
-        <span className={`text-xs font-black px-3 py-1 rounded-full ${status ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-            }`}>
+        <span className="text-sm font-bold text-slate-700 dark:text-white">{label}</span>
+        <span className={`text-xs font-black px-3 py-1 rounded-full ${status ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
             {status ? '✓ PASS' : '✗ FAIL'}
         </span>
     </div>
@@ -248,8 +251,8 @@ const CheckItem: React.FC<{ label: string; status: boolean }> = ({ label, status
 
 const DataStat: React.FC<{ label: string; value: number }> = ({ label, value }) => (
     <div className="flex items-center justify-between">
-        <span className="text-sm font-bold text-slate-700">{label}</span>
-        <span className="text-lg font-black text-primary">{value}</span>
+        <span className="text-sm font-bold text-slate-700 dark:text-white">{label}</span>
+        <span className="text-lg font-black text-primary dark:text-white">{value}</span>
     </div>
 );
 

@@ -37,21 +37,18 @@ const MessageComposer: React.FC<Props> = ({ onSend, isLoading }) => {
     };
 
     return (
-        <Card className="border-none shadow-soft rounded-2xl p-8">
-            <h3 className="text-lg font-bold text-slate-700 mb-6">Composer un Message</h3>
+        <Card className="border-none shadow-soft dark:shadow-none rounded-2xl p-8">
+            <h3 className="text-lg font-bold text-slate-700 dark:text-white mb-6">Composer un Message</h3>
 
             {/* Message Type Selection */}
             <div className="mb-6">
-                <label className="block text-xs font-bold text-slate-600 mb-3">Type de Message</label>
+                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-3">Type de Message</label>
                 <div className="flex gap-3">
                     {(['SMS', 'EMAIL', 'BOTH'] as MessageType[]).map((type) => (
                         <button
                             key={type}
                             onClick={() => setMessageType(type)}
-                            className={`flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all ${messageType === type
-                                    ? 'bg-primary text-white shadow-md'
-                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                                }`}
+                            className={`flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all ${messageType === type ? 'bg-primary text-white shadow-md dark:shadow-none' : 'bg-slate-100 text-slate-600 dark:text-slate-400 hover:bg-slate-200' }`}
                         >
                             {type === 'SMS' ? '📱 SMS' : type === 'EMAIL' ? '📧 Email' : '📱📧 Les Deux'}
                         </button>
@@ -74,7 +71,7 @@ const MessageComposer: React.FC<Props> = ({ onSend, isLoading }) => {
 
             {/* Message Content */}
             <div className="mb-6">
-                <label className="block text-xs font-bold text-slate-600 mb-3">
+                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-3">
                     Message {messageType === 'SMS' || messageType === 'BOTH' ? '(SMS)' : ''}
                 </label>
                 <textarea
@@ -82,19 +79,19 @@ const MessageComposer: React.FC<Props> = ({ onSend, isLoading }) => {
                     onChange={(e) => setContent(e.target.value)}
                     placeholder="Écrivez votre message ici..."
                     rows={8}
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl bg-white text-sm font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-primary transition-all resize-none"
+                    className="w-full px-4 py-3 border-2 border-slate-200 dark:border-dark rounded-xl bg-card dark:bg-card-dark text-sm font-medium text-slate-800 dark:text-white placeholder-slate-400 outline-none focus:border-primary transition-all resize-none"
                 />
 
                 {/* Character Counter */}
                 <div className="flex items-center justify-between mt-3">
                     <div className="flex items-center gap-4">
-                        <span className="text-xs font-bold text-slate-500">
+                        <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
                             {charCount} caractères
                         </span>
                         {(messageType === 'SMS' || messageType === 'BOTH') && (
                             <>
                                 <span className="text-xs text-slate-300">•</span>
-                                <span className="text-xs font-bold text-slate-500">
+                                <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
                                     {smsCount} SMS
                                 </span>
                                 <span className="text-xs text-slate-300">•</span>

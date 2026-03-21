@@ -83,7 +83,7 @@ const PrayerRequestsPage: React.FC = () => {
           const isActuallyPrivate = req.isPrivate && !canSeePrivate;
 
           return (
-            <div key={req.id} className="bg-white rounded-2xl p-6 shadow-soft border border-gray-100 flex flex-col">
+            <div key={req.id} className="bg-card dark:bg-card-dark rounded-2xl p-6 shadow-soft dark:shadow-none border border-gray-100 flex flex-col">
               <div className="flex items-start mb-4">
                   <div className="p-3 bg-rose-50 rounded-xl mr-4">
                       <HeartIcon className="w-6 h-6 text-rose-500" />
@@ -95,17 +95,17 @@ const PrayerRequestsPage: React.FC = () => {
                           </Badge>
                           <span className="text-[10px] text-gray-400">{req.date}</span>
                       </div>
-                      <h4 className="text-sm font-bold text-slate-900 mt-1">{req.submittedBy}</h4>
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-white mt-1">{req.submittedBy}</h4>
                   </div>
               </div>
 
               <div className="flex-1 mb-6">
                   {isActuallyPrivate ? (
-                      <div className="bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200 text-center">
+                      <div className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-xl border border-dashed border-slate-200 dark:border-dark text-center">
                           <p className="text-xs text-slate-400 italic">Cette requête est privée. Seul le Pasteur Principal peut voir le contenu.</p>
                       </div>
                   ) : (
-                      <p className="text-slate-800 leading-relaxed italic">"{req.request}"</p>
+                      <p className="text-slate-800 dark:text-white leading-relaxed italic">"{req.request}"</p>
                   )}
               </div>
               
@@ -114,10 +114,10 @@ const PrayerRequestsPage: React.FC = () => {
                     <button 
                         onClick={() => handleGeneratePrayer(req.id, req.request)}
                         disabled={loadingId === req.id}
-                        className="flex items-center text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-600 hover:text-white transition-all disabled:opacity-50"
+                        className="flex items-center text-xs font-bold text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/20 px-3 py-1.5 rounded-lg hover:bg-indigo-600 hover:text-white transition-all disabled:opacity-50"
                     >
                         {loadingId === req.id ? (
-                            <svg className="animate-spin -ml-1 mr-1.5 h-3 w-3 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <svg className="animate-spin -ml-1 mr-1.5 h-3 w-3 text-indigo-600 dark:text-indigo-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
@@ -137,7 +137,7 @@ const PrayerRequestsPage: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
               <Input label="Votre Nom" value={formData.submittedBy} onChange={e => setFormData({...formData, submittedBy: e.target.value})} required />
               <textarea 
-                className="block w-full px-3 py-2 border border-slate-300 rounded-lg bg-white text-slate-900 text-sm focus:ring-2 focus:ring-primary"
+                className="block w-full px-3 py-2 border border-slate-300 rounded-lg bg-card dark:bg-card-dark text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-primary"
                 rows={4}
                 required
                 value={formData.request}
@@ -145,8 +145,8 @@ const PrayerRequestsPage: React.FC = () => {
                 placeholder="Votre sujet de prière..."
               />
               <div className="flex items-center space-x-2">
-                  <input type="checkbox" id="isPrivate" checked={formData.isPrivate} onChange={e => setFormData({...formData, isPrivate: e.target.checked})} className="rounded text-primary focus:ring-primary h-4 w-4" />
-                  <label htmlFor="isPrivate" className="text-sm text-slate-700">Requête Confidentielle</label>
+                  <input type="checkbox" id="isPrivate" checked={formData.isPrivate} onChange={e => setFormData({...formData, isPrivate: e.target.checked})} className="rounded text-primary dark:text-white focus:ring-primary h-4 w-4" />
+                  <label htmlFor="isPrivate" className="text-sm text-slate-700 dark:text-white">Requête Confidentielle</label>
               </div>
               <div className="flex justify-end space-x-2 pt-4 border-t">
                   <Button type="button" variant="ghost" onClick={() => setIsAddModalOpen(false)} disabled={isSubmitting}>Annuler</Button>
@@ -156,7 +156,7 @@ const PrayerRequestsPage: React.FC = () => {
       </Modal>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Prière de l'IA">
-          <div className="bg-slate-50 p-6 rounded-2xl border italic text-slate-800 leading-relaxed font-serif">
+          <div className="bg-slate-50 dark:bg-white/[0.02] p-6 rounded-2xl border italic text-slate-800 dark:text-white leading-relaxed font-serif">
               {generatedPrayer}
           </div>
           <div className="mt-6 flex justify-end">

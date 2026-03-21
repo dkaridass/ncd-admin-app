@@ -112,23 +112,23 @@ const EditServiceModal: React.FC<{
       <div className="space-y-8">
 
         {/* ATTENDANCE SECTION */}
-        <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+        <div className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-xl border border-slate-100 dark:border-dark">
           <h3 className="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Présences</h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-bold text-slate-500">Hommes</label>
+              <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Hommes</label>
               <input type="number" className="w-full p-2 border rounded-lg" value={attForm.men} onChange={e => setAttForm(p => ({ ...p, men: parseInt(e.target.value) || 0 }))} />
             </div>
             <div>
-              <label className="text-xs font-bold text-slate-500">Femmes</label>
+              <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Femmes</label>
               <input type="number" className="w-full p-2 border rounded-lg" value={attForm.women} onChange={e => setAttForm(p => ({ ...p, women: parseInt(e.target.value) || 0 }))} />
             </div>
             <div>
-              <label className="text-xs font-bold text-slate-500">Enfants</label>
+              <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Enfants</label>
               <input type="number" className="w-full p-2 border rounded-lg" value={attForm.children} onChange={e => setAttForm(p => ({ ...p, children: parseInt(e.target.value) || 0 }))} />
             </div>
             <div>
-              <label className="text-xs font-bold text-slate-500">Visiteurs</label>
+              <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Visiteurs</label>
               <input type="number" className="w-full p-2 border rounded-lg" value={attForm.visitors} onChange={e => setAttForm(p => ({ ...p, visitors: parseInt(e.target.value) || 0 }))} />
             </div>
           </div>
@@ -150,9 +150,9 @@ const EditServiceModal: React.FC<{
           <h3 className="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Finances ({currentFinances.length})</h3>
           <div className="space-y-2 max-h-60 overflow-y-auto">
             {currentFinances.map(record => (
-              <div key={record.id} className="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-lg shadow-sm">
+              <div key={record.id} className="flex items-center justify-between p-3 bg-card dark:bg-card-dark border border-slate-100 dark:border-dark rounded-lg shadow-sm dark:shadow-none">
                 <div className="flex-1">
-                  <p className="text-xs font-bold text-slate-700">{record.type} <span className="text-slate-400 font-normal">({record.method})</span></p>
+                  <p className="text-xs font-bold text-slate-700 dark:text-white">{record.type} <span className="text-slate-400 font-normal">({record.method})</span></p>
                   <p className="text-[10px] text-slate-400">{record.currency}</p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -169,7 +169,7 @@ const EditServiceModal: React.FC<{
                     onClick={() => {
                       if (confirm('Supprimer cette offrande ?')) deleteFinanceRecord(record.id);
                     }}
-                    className="p-2 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                    className="p-2 text-red-300 hover:text-red-500 hover:bg-red-50 dark:bg-red-900/20 rounded-lg transition-colors"
                   >
                     <TrashIcon className="w-4 h-4" />
                   </button>
@@ -353,10 +353,10 @@ const SundayOverviewPage: React.FC = () => {
       <div className="max-w-[1400px] mx-auto pb-12">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
           <div>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-primary font-display tracking-tight leading-none mb-1 uppercase italic">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-primary dark:text-white font-display tracking-tight leading-none mb-1 uppercase italic">
               Synthèse des Cultes
             </h2>
-            <p className="text-slate-500 font-medium italic opacity-80 uppercase tracking-widest text-[9px]">
+            <p className="text-slate-500 dark:text-slate-400 font-medium italic opacity-80 uppercase tracking-widest text-[9px]">
               Présence & Offrandes • Vue par Dimanche et par Culte
             </p>
 
@@ -373,19 +373,13 @@ const SundayOverviewPage: React.FC = () => {
           <div className="flex bg-slate-100 p-1 rounded-xl w-fit">
             <button
               onClick={() => setServiceFilter('ALL')}
-              className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${serviceFilter === 'ALL'
-                ? 'bg-white text-primary shadow-sm border border-primary/20'
-                : 'bg-transparent text-slate-600 hover:text-primary hover:bg-slate-50'
-                }`}
+              className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${serviceFilter === 'ALL' ? 'bg-card dark:bg-card-dark text-primary shadow-sm dark:shadow-none border border-primary dark:border-white/20/20' : 'bg-transparent text-slate-600 dark:text-slate-400 hover:text-primary hover:bg-slate-50' }`}
             >
               Tous
             </button>
             <button
               onClick={() => setServiceFilter('SUNDAY')}
-              className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${serviceFilter === 'SUNDAY'
-                ? 'bg-primary text-white shadow-sm'
-                : 'bg-transparent text-slate-600 hover:text-primary hover:bg-slate-50'
-                }`}
+              className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${serviceFilter === 'SUNDAY' ? 'bg-primary text-white shadow-sm dark:shadow-none' : 'bg-transparent text-slate-600 dark:text-slate-400 hover:text-primary hover:bg-slate-50 dark:bg-white/[0.02]' }`}
             >
               Dimanche
             </button>
@@ -393,7 +387,7 @@ const SundayOverviewPage: React.FC = () => {
         </div>
 
         {filteredSundays.length === 0 ? (
-          <div className="h-64 flex flex-col items-center justify-center text-slate-400 bg-slate-50/50 rounded-[2rem] border border-slate-100">
+          <div className="h-64 flex flex-col items-center justify-center text-slate-400 bg-slate-50 dark:bg-white/[0.02]/50 rounded-[2rem] border border-slate-100 dark:border-dark">
             <p className="font-bold text-sm">Aucune donnée disponible</p>
             <p className="text-xs mt-1">
               Les cultes apparaîtront ici dès que des présences et des offrandes seront saisies.
@@ -404,18 +398,18 @@ const SundayOverviewPage: React.FC = () => {
             {filteredSundays.map(sunday => (
               <Card
                 key={sunday.date}
-                className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden"
+                className="bg-card dark:bg-card-dark rounded-[2rem] border border-slate-100 dark:border-dark shadow-sm dark:shadow-none overflow-hidden"
               >
-                <div className="px-6 py-4 border-b border-slate-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-slate-50/60">
+                <div className="px-6 py-4 border-b border-slate-100 dark:border-dark flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-slate-50 dark:bg-white/[0.02]/60">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary dark:text-white">
                       <CalendarIcon className="w-5 h-5" />
                     </div>
                     <div>
                       <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">
                         {sunday.date}
                       </p>
-                      <p className="text-sm font-bold text-slate-800">
+                      <p className="text-sm font-bold text-slate-800 dark:text-white">
                         {sunday.label}
                       </p>
                     </div>
@@ -427,13 +421,13 @@ const SundayOverviewPage: React.FC = () => {
                         {sunday.totals.attendance.toLocaleString()} Présences
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-50 text-emerald-700">
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700">
                       <DollarSignIcon className="w-4 h-4" />
                       <span className="font-black uppercase tracking-widest">
                         FC {sunday.totals.offeringsCDF.toLocaleString()}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-50 text-amber-700">
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-50 dark:bg-amber-900/20 text-amber-700">
                       <DollarSignIcon className="w-4 h-4" />
                       <span className="font-black uppercase tracking-widest">
                         $ {sunday.totals.offeringsUSD.toLocaleString()}
@@ -446,16 +440,16 @@ const SundayOverviewPage: React.FC = () => {
                   {sunday.services.map(service => (
                     <div
                       key={service.serviceName}
-                      className="border border-slate-100 rounded-2xl p-4 bg-slate-50/40 group relative"
+                      className="border border-slate-100 dark:border-dark rounded-2xl p-4 bg-slate-50 dark:bg-white/[0.02]/40 group relative"
                     >
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-2">
-                          <p className="text-xs font-black uppercase tracking-widest text-primary">
+                          <p className="text-xs font-black uppercase tracking-widest text-primary dark:text-white">
                             {service.serviceName}
                           </p>
                           <button
                             onClick={() => setEditingService({ name: service.serviceName, date: sunday.date })}
-                            className="text-[9px] text-slate-400 hover:text-primary underline opacity-0 group-hover:opacity-100 transition-opacity"
+                            className="text-[9px] text-slate-400 hover:text-primary dark:text-white underline opacity-0 group-hover:opacity-100 transition-opacity"
                           >
                             Modifier
                           </button>
@@ -468,7 +462,7 @@ const SundayOverviewPage: React.FC = () => {
                       </div>
 
                       {service.attendance && (
-                        <div className="grid grid-cols-3 gap-2 mb-3 text-[10px] text-slate-500">
+                        <div className="grid grid-cols-3 gap-2 mb-3 text-[10px] text-slate-500 dark:text-slate-400">
                           <div className="flex flex-col">
                             <span className="font-black uppercase tracking-widest text-blue-500">
                               H
@@ -508,10 +502,10 @@ const SundayOverviewPage: React.FC = () => {
                                   key={type}
                                   className="flex items-center justify-between text-[11px]"
                                 >
-                                  <span className="font-semibold text-slate-600">
+                                  <span className="font-semibold text-slate-600 dark:text-slate-400">
                                     {type}
                                   </span>
-                                  <span className="text-[10px] font-black text-slate-500">
+                                  <span className="text-[10px] font-black text-slate-500 dark:text-slate-400">
                                     {amounts.CDF > 0 && (
                                       <span className="mr-2">
                                         FC {amounts.CDF.toLocaleString()}
@@ -531,11 +525,11 @@ const SundayOverviewPage: React.FC = () => {
 
                         {service.offerings.totals.CDF > 0 ||
                           service.offerings.totals.USD > 0 ? (
-                          <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between">
+                          <div className="mt-3 pt-2 border-t border-slate-100 dark:border-dark flex items-center justify-between">
                             <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
                               Total
                             </span>
-                            <span className="text-[11px] font-black text-primary">
+                            <span className="text-[11px] font-black text-primary dark:text-white">
                               {service.offerings.totals.CDF > 0 && (
                                 <span className="mr-2">
                                   FC {service.offerings.totals.CDF.toLocaleString()}

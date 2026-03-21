@@ -7,13 +7,14 @@ import RecipientSelector from '../components/communications/RecipientSelector';
 import MessageHistory from '../components/communications/MessageHistory';
 import AnnouncementsTab from '../components/communications/AnnouncementsTab';
 import TemplatesTab from '../components/communications/TemplatesTab';
+import DailyRhemaAdminTab from '../components/communications/DailyRhemaAdminTab';
 import { CommunicationMessage, MessageType } from '../types';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
 const CommunicationsPage: React.FC = () => {
     const { members, departments, currentUser } = useData();
-    const [activeTab, setActiveTab] = useState<'send' | 'history' | 'announcements' | 'templates'>('send');
+    const [activeTab, setActiveTab] = useState<'send' | 'history' | 'announcements' | 'templates' | 'verset'>('send');
     const [selectedRecipients, setSelectedRecipients] = useState<string[]>([]);
     const [messages, setMessages] = useState<CommunicationMessage[]>([]);
     const [isSending, setIsSending] = useState(false);
@@ -81,10 +82,10 @@ const CommunicationsPage: React.FC = () => {
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">
-                    <h2 className="text-3xl md:text-5xl font-extrabold text-primary font-display tracking-tight leading-none mb-1 uppercase italic">
+                    <h2 className="text-3xl md:text-5xl font-extrabold text-primary dark:text-white font-display tracking-tight leading-none mb-1 uppercase italic">
                         Centre de Communication
                     </h2>
-                    <p className="text-slate-500 font-medium italic opacity-80 uppercase tracking-widest text-[9px]">
+                    <p className="text-slate-500 dark:text-slate-400 font-medium italic opacity-80 uppercase tracking-widest text-[9px]">
                         Messages • Annonces • NCD La Pentecôte
                     </p>
                 </div>
@@ -109,14 +110,12 @@ const CommunicationsPage: React.FC = () => {
                             { id: 'history' as const, label: '📋 Historique' },
                             { id: 'announcements' as const, label: '📢 Annonces' },
                             { id: 'templates' as const, label: '📝 Modèles' },
+                            { id: 'verset' as const, label: '✨ Verset du Jour' },
                         ].map((tab) => (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`flex-1 min-w-[120px] py-4 px-6 rounded-2xl text-sm font-bold uppercase tracking-widest transition-all ${activeTab === tab.id
-                                    ? 'bg-primary text-white shadow-lg'
-                                    : 'bg-white border-2 border-slate-200 text-slate-600 hover:border-primary/30'
-                                    }`}
+                                className={`flex-1 min-w-[120px] py-4 px-6 rounded-2xl text-sm font-bold uppercase tracking-widest transition-all ${activeTab === tab.id ? 'bg-primary text-white shadow-lg dark:shadow-none' : 'bg-card dark:bg-card-dark border-2 border-slate-200 dark:border-dark text-slate-600 dark:text-slate-400 hover:border-primary/30'}`}
                             >
                                 {tab.label}
                             </button>
@@ -157,6 +156,7 @@ const CommunicationsPage: React.FC = () => {
                     {activeTab === 'history' && <MessageHistory messages={messages} />}
                     {activeTab === 'announcements' && <AnnouncementsTab />}
                     {activeTab === 'templates' && <TemplatesTab />}
+                    {activeTab === 'verset' && <DailyRhemaAdminTab />}
                 </PermissionGuard>
             </div>
         </PageTransition>

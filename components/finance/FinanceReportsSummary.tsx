@@ -60,12 +60,12 @@ const FinanceReportsSummary: React.FC<Props> = ({ summary, previousPeriod, perio
     return (
         <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-slate-700">Résumé - {periodLabel}</h3>
+                <h3 className="text-lg font-bold text-slate-700 dark:text-white">Résumé - {periodLabel}</h3>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {summaryCards.map((card, index) => (
-                    <Card key={index} className="border-none shadow-soft rounded-2xl p-6">
+                    <Card key={index} className="border-none shadow-soft dark:shadow-none rounded-2xl p-6">
                         <div className="flex items-center justify-between mb-4">
                             <p className="text-xs font-black text-slate-400 uppercase tracking-widest">
                                 {card.label}
@@ -78,12 +78,11 @@ const FinanceReportsSummary: React.FC<Props> = ({ summary, previousPeriod, perio
                         {/* USD Amount */}
                         <div className="mb-3">
                             <div className="flex items-baseline gap-2">
-                                <h3 className="text-3xl font-black text-primary">
+                                <h3 className="text-3xl font-black text-primary dark:text-white">
                                     {formatCurrency(card.usd, 'USD')}
                                 </h3>
                                 {card.trend !== 0 && (
-                                    <div className={`flex items-center text-xs font-bold ${card.trend > 0 ? 'text-emerald-600' : 'text-red-600'
-                                        }`}>
+                                    <div className={`flex items-center text-xs font-bold ${card.trend > 0 ? 'text-emerald-600' : 'text-red-600' }`}>
                                         <TrendingUpIcon
                                             className={`w-3 h-3 mr-1 ${card.trend < 0 ? 'transform rotate-180' : ''}`}
                                         />
@@ -95,8 +94,8 @@ const FinanceReportsSummary: React.FC<Props> = ({ summary, previousPeriod, perio
                         </div>
 
                         {/* CDF Amount */}
-                        <div className="pt-3 border-t border-slate-100">
-                            <p className="text-lg font-bold text-slate-600">
+                        <div className="pt-3 border-t border-slate-100 dark:border-dark">
+                            <p className="text-lg font-bold text-slate-600 dark:text-slate-400">
                                 {formatCurrency(card.cdf, 'CDF')}
                             </p>
                             <p className="text-xs text-slate-400 font-medium mt-1">Francs Congolais</p>

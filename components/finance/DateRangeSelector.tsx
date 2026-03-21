@@ -31,8 +31,8 @@ const DateRangeSelector: React.FC<Props> = ({
     return (
         <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
-                <CalendarIcon className="w-5 h-5 text-primary" />
-                <h3 className="text-lg font-bold text-slate-700">Période de Rapport</h3>
+                <CalendarIcon className="w-5 h-5 text-primary dark:text-white" />
+                <h3 className="text-lg font-bold text-slate-700 dark:text-white">Période de Rapport</h3>
             </div>
 
             {/* Preset Buttons */}
@@ -42,11 +42,7 @@ const DateRangeSelector: React.FC<Props> = ({
                         key={preset.value}
                         onClick={() => onPresetChange(preset.value)}
                         type="button"
-                        className={`px-6 py-3 rounded-xl text-sm font-bold transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${
-                            activePreset === preset.value
-                                ? 'bg-primary text-white shadow-md'
-                                : 'bg-white border-2 border-slate-200 text-slate-700 hover:border-primary/50 hover:text-primary hover:bg-slate-50'
-                        }`}
+                        className={`px-6 py-3 rounded-xl text-sm font-bold transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${ activePreset === preset.value ? 'bg-primary text-white shadow-md dark:shadow-none' : 'bg-card dark:bg-card-dark border-2 border-slate-200 dark:border-dark text-slate-700 dark:text-white hover:border-primary/50 hover:text-primary hover:bg-slate-50' }`}
                     >
                         {preset.label}
                     </button>
@@ -55,9 +51,9 @@ const DateRangeSelector: React.FC<Props> = ({
 
             {/* Custom Date Inputs */}
             {activePreset === 'custom' && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6 bg-slate-50 rounded-2xl border border-slate-100">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6 bg-slate-50 dark:bg-white/[0.02] rounded-2xl border border-slate-100 dark:border-dark">
                     <div>
-                        <label className="block text-xs font-bold text-slate-600 mb-2">Date de Début</label>
+                        <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-2">Date de Début</label>
                         <Input
                             type="date"
                             value={startDate}
@@ -66,7 +62,7 @@ const DateRangeSelector: React.FC<Props> = ({
                         />
                     </div>
                     <div>
-                        <label className="block text-xs font-bold text-slate-600 mb-2">Date de Fin</label>
+                        <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-2">Date de Fin</label>
                         <Input
                             type="date"
                             value={endDate}

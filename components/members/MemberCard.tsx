@@ -31,10 +31,10 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, onClick }) => {
     return (
         <div
             onClick={onClick}
-            className={`group relative bg-white rounded-xl p-6 border ${statusBorder} shadow-sm hover:shadow-premium hover:-translate-y-1 transition-all cursor-pointer overflow-hidden`}
+            className={`group relative bg-card dark:bg-card-dark rounded-xl p-6 border ${statusBorder} shadow-sm dark:shadow-none hover:shadow-premium dark:shadow-none hover:-translate-y-1 transition-all cursor-pointer overflow-hidden`}
         >
             {/* Background Decoration */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-bl-[4rem] -z-0 transition-transform group-hover:scale-110 group-hover:bg-primary/5" />
+            <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 dark:bg-white/[0.02] rounded-bl-[4rem] -z-0 transition-transform group-hover:scale-110 group-hover:bg-primary/5" />
 
             <div className="relative z-10 flex flex-col items-center text-center">
                 {/* Avatar */}
@@ -42,9 +42,9 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, onClick }) => {
                     <img
                         src={member.avatarUrl || `https://ui-avatars.com/api/?name=${member.name}&background=random`}
                         alt={member.name}
-                        className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg group-hover:shadow-primary/20 transition-all"
+                        className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg dark:shadow-none group-hover:shadow-primary dark:shadow-none/20 transition-all"
                     />
-                    <div className="absolute -bottom-2 -right-2 bg-white p-1.5 rounded-full shadow-sm">
+                    <div className="absolute -bottom-2 -right-2 bg-card dark:bg-card-dark p-1.5 rounded-full shadow-sm dark:shadow-none">
                         <Badge variant={member.gender === 'Homme' ? 'info' : 'warning'} className="text-[8px] px-2 py-0.5 uppercase">
                             {member.gender === 'Homme' ? 'M' : 'F'}
                         </Badge>
@@ -52,7 +52,7 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, onClick }) => {
                 </div>
 
                 {/* Info */}
-                <h3 className="text-lg font-bold text-slate-800 mb-1 group-hover:text-primary transition-colors line-clamp-1 w-full">
+                <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-1 group-hover:text-primary transition-colors line-clamp-1 w-full">
                     {member.name}
                 </h3>
                 {member.churchFunction && member.churchFunction !== 'Aucune' && (
@@ -66,7 +66,7 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, onClick }) => {
                 <div className="flex flex-col gap-1 items-center mb-6 w-full px-2">
                     {/* Role / Qualité */}
                     {member.role !== 'Fidèle' && (
-                        <span className="text-[9px] font-black text-primary uppercase tracking-widest bg-primary/5 px-3 py-1 rounded-full mb-1">
+                        <span className="text-[9px] font-black text-primary dark:text-white uppercase tracking-widest bg-primary/5 px-3 py-1 rounded-full mb-1">
                             {member.role}
                         </span>
                     )}
@@ -90,7 +90,7 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, onClick }) => {
                 <div className="w-full pt-4 border-t border-slate-50 flex justify-between items-center">
                     <div className="flex flex-col items-start">
                         <span className="text-[8px] font-black text-slate-300 uppercase tracking-widest mb-0.5">Contact</span>
-                        <span className="text-[10px] font-bold text-slate-600 flex items-center gap-1">
+                        <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 flex items-center gap-1">
                             <PhoneIcon className="w-3 h-3 text-slate-300" />
                             {member.phone || 'Non renseigné'}
                         </span>

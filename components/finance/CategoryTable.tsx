@@ -46,8 +46,8 @@ const CategoryTable: React.FC<Props> = ({ records, periodLabel, onCategoryFilter
 
     if (categoryData.length === 0) {
         return (
-            <Card className="border-none shadow-soft rounded-2xl p-8">
-                <h3 className="text-lg font-bold text-slate-700 mb-4">Analyse Détaillée par Catégorie</h3>
+            <Card className="border-none shadow-soft dark:shadow-none rounded-2xl p-8">
+                <h3 className="text-lg font-bold text-slate-700 dark:text-white mb-4">Analyse Détaillée par Catégorie</h3>
                 <div className="flex flex-col items-center justify-center py-12 text-center">
                     <p className="text-sm text-slate-400">Aucune donnée pour cette période</p>
                 </div>
@@ -56,15 +56,15 @@ const CategoryTable: React.FC<Props> = ({ records, periodLabel, onCategoryFilter
     }
 
     return (
-        <Card className="border-none shadow-soft rounded-2xl overflow-hidden">
+        <Card className="border-none shadow-soft dark:shadow-none rounded-2xl overflow-hidden">
             <div className="p-8 pb-0">
-                <h3 className="text-lg font-bold text-slate-700 mb-2">Analyse Détaillée par Catégorie</h3>
-                <p className="text-xs text-slate-500 mb-6">Cliquez sur une catégorie pour filtrer les transactions</p>
+                <h3 className="text-lg font-bold text-slate-700 dark:text-white mb-2">Analyse Détaillée par Catégorie</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">Cliquez sur une catégorie pour filtrer les transactions</p>
             </div>
 
             <div className="overflow-x-auto">
                 <table className="w-full">
-                    <thead className="bg-slate-50 border-y border-slate-100">
+                    <thead className="bg-slate-50 dark:bg-white/[0.02] border-y border-slate-100 dark:border-dark">
                         <tr>
                             <th className="px-8 py-4 text-left text-xs font-black text-slate-400 uppercase tracking-widest">
                                 Catégorie
@@ -88,17 +88,14 @@ const CategoryTable: React.FC<Props> = ({ records, periodLabel, onCategoryFilter
                             <tr
                                 key={index}
                                 onClick={() => onCategoryFilter?.(activeCategory === row.category ? null : row.category)}
-                                className={`transition-colors cursor-pointer ${activeCategory === row.category
-                                        ? 'bg-primary/5 border-l-4 border-l-primary'
-                                        : 'hover:bg-slate-50/50'
-                                    }`}
+                                className={`transition-colors cursor-pointer ${activeCategory === row.category ? 'bg-primary/5 border-l-4 border-l-primary' : 'hover:bg-slate-50 dark:bg-white/[0.02]/50' }`}
                             >
                                 <td className="px-8 py-4">
                                     <div className="flex items-center gap-3">
                                         {activeCategory === row.category && (
                                             <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                                         )}
-                                        <span className="text-sm font-bold text-slate-800">{row.category}</span>
+                                        <span className="text-sm font-bold text-slate-800 dark:text-white">{row.category}</span>
                                     </div>
                                 </td>
                                 <td className="px-4 py-4 text-right">
@@ -112,7 +109,7 @@ const CategoryTable: React.FC<Props> = ({ records, periodLabel, onCategoryFilter
                                     </span>
                                 </td>
                                 <td className="px-4 py-4 text-right">
-                                    <span className="text-sm font-bold text-primary">
+                                    <span className="text-sm font-bold text-primary dark:text-white">
                                         ${row.total.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                                     </span>
                                 </td>
@@ -124,7 +121,7 @@ const CategoryTable: React.FC<Props> = ({ records, periodLabel, onCategoryFilter
                                                 style={{ width: `${row.percentage}%` }}
                                             />
                                         </div>
-                                        <span className="text-sm font-black text-slate-600 min-w-[45px] text-right">
+                                        <span className="text-sm font-black text-slate-600 dark:text-slate-400 min-w-[45px] text-right">
                                             {row.percentage.toFixed(1)}%
                                         </span>
                                     </div>

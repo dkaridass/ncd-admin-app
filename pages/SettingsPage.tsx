@@ -4,6 +4,8 @@ import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Badge from '../components/ui/Badge';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
+import { useConfirm } from '../hooks/useConfirm';
 import PageTransition from '../components/layout/PageTransition';
 import { useData, ROLE_PERMISSIONS } from '../context/DataContext';
 import { api } from '../services/api';
@@ -14,6 +16,7 @@ import { ensureSuperAdminExists, isCurrentUserSuperAdminEmail } from '../utils/e
 import { seedDatabase } from '../utils/seedDatabase';
 import { loadRealChurchData } from '../utils/loadRealData';
 import { showSuccess, showError, showInfo } from '../utils/toast';
+import { useTranslation } from 'react-i18next';
 
 const PERMISSION_LABELS: Record<Permission, string> = {
   VIEW_MEMBERS: "Voir les Membres",
@@ -25,6 +28,7 @@ const PERMISSION_LABELS: Record<Permission, string> = {
   DELETE_FINANCES: "Supprimer les Finances",
   VIEW_PASTORAL_CARE: "Accès Pastoral",
   VIEW_PRIVATE_PRAYERS: "Requêtes Confidentielles",
+  VIEW_DEPARTMENTS: "Voir les Départements",
   MANAGE_DEPARTMENTS: "Gérer les Départements",
   MANAGE_SETTINGS: "Accès Paramètres",
   ACCESS_AI_CONFIG: "Configuration IA",
@@ -32,6 +36,8 @@ const PERMISSION_LABELS: Record<Permission, string> = {
   MANAGE_ANNOUNCEMENTS: "Gérer les Annonces",
   MANAGE_RESOURCES: "Gérer les Ressources",
   MANAGE_ROLES: "Gérer les Rôles & Sécurité",
+  MANAGE_EVENTS: "Gérer le Programme",
+  MANAGE_DEPARTMENT_REPORTS: "Gérer les Rapports",
   SEND_MESSAGES: "Envoyer des Messages",
   MANAGE_TEMPLATES: "Gérer les Modèles"
 };
@@ -40,6 +46,7 @@ const ROLE_LABELS: Record<AppRole, string> = {
   SUPER_ADMIN: "Pasteur Principal",
   PASTOR: "Pasteur Associé",
   STAFF_ADMIN: "Secrétariat / Admin",
+  SECRETARY: "Secrétaire",
   FINANCE_ADMIN: "Trésorerie",
   DEPT_LEADER: "Responsable Dept.",
   VOLUNTEER: "Bénévole",
@@ -51,14 +58,25 @@ const SettingsPage: React.FC = () => {
   const { currentUser, logout, exportData, importData, resetDatabase, isLoading, hasPermission } = useData();
   const [activeTab, setActiveTab] = useState<'church' | 'security' | 'system'>('church');
   const [health, setHealth] = useState<any>(null);
+  const { t, i18n } = useTranslation();
+  const { confirmState, confirm, cancelConfirm } = useConfirm();
+
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+    localStorage.setItem('ncd_lang', lng);
+  };
 
   // Church State
-  const [churchInfo, setChurchInfo] = useState({
-    name: 'NCD La Pentecôte',
-    city: 'Lubumbashi',
-    pastor: 'Dr Jean-Clément Diambilay',
-    email: 'contact@ncd.cd',
-    serviceTimes: 'Dimanche 8h00, 10h30 | Mercredi 17h00'
+  const [churchInfo, setChurchInfo] = useState(() => {
+    const saved = localStorage.getItem('ncd_church_info');
+    if (saved) return JSON.parse(saved);
+    return {
+      name: 'NCD La Pentecôte',
+      city: 'Lubumbashi',
+      pastor: 'Dr Jean-Clément Diambilay',
+      email: 'contact@ncd.cd',
+      serviceTimes: 'Dimanche 8h00, 10h30 | Mercredi 17h00 | Vendredi 17h00'
+    };
   });
 
   // AI Config State
@@ -106,8 +124,8 @@ const SettingsPage: React.FC = () => {
     <PageTransition>
       <div className="mb-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
-          <h2 className="text-4xl font-extrabold text-primary font-display tracking-tight leading-none">Paramètres</h2>
-          <p className="text-slate-500 font-medium mt-2">Gestion globale & Sécurité du Sanctuaire</p>
+          <h2 className="text-4xl font-extrabold text-primary dark:text-white font-display tracking-tight leading-none">Paramètres</h2>
+          <p className="text-slate-500 dark:text-slate-400 font-medium mt-2">Gestion globale & Sécurité du Sanctuaire</p>
         </div>
         <div className="flex bg-slate-100 p-1.5 rounded-2xl overflow-x-auto max-w-full">
           {[
@@ -118,7 +136,7 @@ const SettingsPage: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-6 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all whitespace-nowrap flex items-center ${activeTab === tab.id ? 'bg-white text-primary shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+              className={`px-6 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all whitespace-nowrap flex items-center ${activeTab === tab.id ? 'bg-card dark:bg-card-dark text-primary shadow-sm dark:shadow-none' : 'text-slate-400 hover:text-slate-600 dark:text-slate-400'}`}
             >
               {tab.icon}
               {tab.label}
@@ -131,18 +149,18 @@ const SettingsPage: React.FC = () => {
         <div className="lg:col-span-2 space-y-8">
 
           {activeTab === 'church' && (
-            <Card className="border-none shadow-premium rounded-[2.5rem] p-8" title="Identité de l'Église">
+            <Card className="border-none shadow-premium dark:shadow-none rounded-[2.5rem] p-8" title="Identité de l'Église">
               {/* Branding Mock */}
-              <div className="mb-8 flex flex-col md:flex-row items-center gap-8 bg-slate-50/50 p-6 rounded-[2rem] border border-slate-100">
-                <div className="w-24 h-24 rounded-full bg-white border-4 border-white shadow-lg flex items-center justify-center relative group cursor-pointer overflow-hidden">
-                  <span className="text-3xl font-display font-black text-primary">NCD</span>
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-[8px] font-black text-white uppercase tracking-widest text-center">Modifier<br />Logo</span>
+              <div className="mb-8 flex flex-col md:flex-row items-center gap-8 bg-slate-50 dark:bg-white/[0.02]/50 p-6 rounded-[2rem] border border-slate-100 dark:border-dark">
+                <div className="w-24 h-24 rounded-full bg-white border-[3px] border-slate-200 dark:border-dark shadow-lg dark:shadow-none flex items-center justify-center relative group cursor-pointer transition-all duration-300">
+                  <img src="/logo.png" alt="NCD Logo" className="w-14 h-14 object-contain" />
+                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-[9px] font-black text-white uppercase tracking-widest text-center">Modifier<br />Logo</span>
                   </div>
                 </div>
                 <div className="flex-1 text-center md:text-left">
-                  <h4 className="font-bold text-slate-800">Identité Visuelle</h4>
-                  <p className="text-xs text-slate-500 mt-1 mb-3">Ce logo apparaîtra sur tous les rapports officiels et l'interface.</p>
+                  <h4 className="font-bold text-slate-800 dark:text-white">Identité Visuelle</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-3">Ce logo apparaîtra sur tous les rapports officiels et l'interface.</p>
                   <Button size="sm" variant="secondary" className="text-[10px] rounded-xl">Téléverser une image</Button>
                 </div>
               </div>
@@ -155,19 +173,30 @@ const SettingsPage: React.FC = () => {
                 <div className="md:col-span-2">
                   <Input label="Horaires des Cultes (Texte libre)" value={churchInfo.serviceTimes} onChange={e => setChurchInfo({ ...churchInfo, serviceTimes: e.target.value })} className="rounded-2xl" />
                 </div>
+                <div className="md:col-span-2 mt-2 flex justify-end">
+                  <Button
+                    onClick={() => {
+                      localStorage.setItem('ncd_church_info', JSON.stringify(churchInfo));
+                      showSuccess('Paramètres sauvegardés avec succès');
+                    }}
+                    className="rounded-xl px-8"
+                  >
+                    Enregistrer les Modifications
+                  </Button>
+                </div>
               </div>
             </Card>
           )}
 
           {activeTab === 'security' && (
-            <Card className="border-none shadow-premium rounded-[2.5rem] p-8" noPadding title="Matrice des Rôles & Permissions">
+            <Card className="border-none shadow-premium dark:shadow-none rounded-[2.5rem] p-8" noPadding title="Matrice des Rôles & Permissions">
               <div className="overflow-x-auto custom-scrollbar pb-4">
                 <table className="min-w-full divide-y divide-slate-100">
                   <thead>
-                    <tr className="bg-slate-50/50">
-                      <th className="px-6 py-5 text-left text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-r border-slate-100 sticky left-0 bg-slate-50 z-20">Permission</th>
+                    <tr className="bg-slate-50 dark:bg-white/[0.02]/50">
+                      <th className="px-6 py-5 text-left text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-r border-slate-100 dark:border-dark sticky left-0 bg-slate-50 dark:bg-white/[0.02] z-20">Permission</th>
                       {allRoles.map(role => (
-                        <th key={role} className="px-4 py-5 text-center text-[9px] font-black text-primary uppercase tracking-tight whitespace-nowrap min-w-[100px]">
+                        <th key={role} className="px-4 py-5 text-center text-[9px] font-black text-primary dark:text-white uppercase tracking-tight whitespace-nowrap min-w-[100px]">
                           {ROLE_LABELS[role]}
                         </th>
                       ))}
@@ -175,8 +204,8 @@ const SettingsPage: React.FC = () => {
                   </thead>
                   <tbody className="divide-y divide-slate-50">
                     {allPermissions.map(perm => (
-                      <tr key={perm} className="hover:bg-slate-50/50 transition-colors group">
-                        <td className="px-6 py-4 text-[11px] font-bold text-slate-600 border-r border-slate-100 bg-white group-hover:bg-slate-50/50 sticky left-0 z-10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]">
+                      <tr key={perm} className="hover:bg-slate-50 dark:bg-white/[0.02]/50 transition-colors group">
+                        <td className="px-6 py-4 text-[11px] font-bold text-slate-600 dark:text-slate-400 border-r border-slate-100 dark:border-dark bg-card dark:bg-card-dark group-hover:bg-slate-50/50 sticky left-0 z-10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]">
                           {PERMISSION_LABELS[perm]}
                         </td>
                         {allRoles.map(role => {
@@ -185,7 +214,7 @@ const SettingsPage: React.FC = () => {
                             <td key={`${role}-${perm}`} className="px-4 py-4 text-center">
                               <div className="flex justify-center">
                                 {hasPerm ? (
-                                  <div className="w-5 h-5 rounded-md bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm border border-emerald-200">
+                                  <div className="w-5 h-5 rounded-md bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm dark:shadow-none border border-emerald-200">
                                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={4}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                                   </div>
                                 ) : (
@@ -204,10 +233,10 @@ const SettingsPage: React.FC = () => {
               {/* Super Admin Bootstrap - Only visible to admin@ncd.com */}
               {isCurrentUserSuperAdminEmail() && (
                 <div className="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 border-t border-indigo-100 flex items-start gap-4">
-                  <ShieldIcon className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" />
+                  <ShieldIcon className="w-5 h-5 text-indigo-600 dark:text-indigo-300 shrink-0 mt-0.5" />
                   <div className="flex-1">
-                    <p className="text-xs text-indigo-800 font-bold mb-1">Bootstrap Super Admin</p>
-                    <p className="text-[10px] text-indigo-700/70 leading-relaxed mb-3">
+                    <p className="text-xs text-indigo-800 dark:text-indigo-100 font-bold mb-1">Bootstrap Super Admin</p>
+                    <p className="text-[10px] text-indigo-700 dark:text-indigo-200/70 leading-relaxed mb-3">
                       Cliquez ici pour garantir que votre compte possède les privilèges SUPER_ADMIN dans la base de données. Utilisez cette fonction après votre première connexion ou en cas de problème d'accès.
                     </p>
                     <Button
@@ -234,7 +263,7 @@ const SettingsPage: React.FC = () => {
                 </div>
               )}
 
-              <div className="p-6 bg-amber-50 rounded-b-[2.5rem] border-t border-amber-100 flex items-start gap-4">
+              <div className="p-6 bg-amber-50 dark:bg-amber-900/20 rounded-b-[2.5rem] border-t border-amber-100 flex items-start gap-4">
                 <ShieldIcon className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                 <div>
                   <p className="text-xs text-amber-800 font-bold mb-1">Architecture de Sécurité Verrouillée</p>
@@ -248,15 +277,35 @@ const SettingsPage: React.FC = () => {
 
           {activeTab === 'system' && (
             <div className="space-y-8">
+              {/* Language Selection */}
+              <Card className="border-none shadow-premium dark:shadow-none rounded-[2.5rem] p-8" title="Langue de l'Interface">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mb-6 font-medium">Choisissez la langue d'affichage globale pour l'administration.</p>
+                <div className="flex flex-wrap gap-4">
+                  {[
+                    { code: 'fr', label: 'Français' },
+                    { code: 'en', label: 'English' },
+                    { code: 'ln', label: 'Lingala' }
+                  ].map(lang => (
+                    <button
+                      key={lang.code}
+                      onClick={() => changeLanguage(lang.code)}
+                      className={`px-8 py-3 rounded-2xl font-bold text-sm transition-all border ${i18n.language === lang.code ? 'bg-primary text-white border-primary shadow-md dark:shadow-none' : 'bg-card dark:bg-card-dark text-slate-600 dark:text-slate-400 border-slate-200 dark:border-dark hover:border-primary/30 hover:bg-slate-50'}`}
+                    >
+                      {lang.label}
+                    </button>
+                  ))}
+                </div>
+              </Card>
+
               {/* AI Configuration */}
-              <Card className="border-none shadow-premium rounded-[2.5rem] p-8" title="Configuration Assistant IA">
+              <Card className="border-none shadow-premium dark:shadow-none rounded-[2.5rem] p-8" title="Configuration Assistant IA">
                 <div className="flex items-start gap-6 bg-gradient-to-br from-indigo-50 to-purple-50 p-6 rounded-[2rem] border border-indigo-100 mb-8">
-                  <div className="w-12 h-12 rounded-2xl bg-white shadow-lg flex items-center justify-center text-indigo-600">
+                  <div className="w-12 h-12 rounded-2xl bg-card dark:bg-card-dark shadow-lg dark:shadow-none flex items-center justify-center text-indigo-600 dark:text-indigo-300">
                     <SparklesIcon className="w-6 h-6" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-indigo-900">Personnalité du Modèle</h4>
-                    <p className="text-xs text-indigo-700/70 mt-1">
+                    <h4 className="font-bold text-indigo-900 dark:text-white">Personnalité du Modèle</h4>
+                    <p className="text-xs text-indigo-700 dark:text-indigo-200/70 mt-1">
                       Ajustez le ton et le comportement de votre assistant virtuel pour qu'il corresponde à la culture de votre église.
                     </p>
                   </div>
@@ -267,15 +316,15 @@ const SettingsPage: React.FC = () => {
                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Tonalité des Réponses</label>
                     <div className="space-y-3">
                       {['Pastoral', 'Formel', 'Analytique'].map(tone => (
-                        <label key={tone} className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 cursor-pointer hover:bg-slate-50 transition-colors">
+                        <label key={tone} className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 dark:border-dark cursor-pointer hover:bg-slate-50 dark:bg-white/[0.02] transition-colors">
                           <input
                             type="radio"
                             name="tone"
-                            className="text-primary focus:ring-primary"
+                            className="text-primary dark:text-white focus:ring-primary"
                             checked={aiConfig.tone === tone}
                             onChange={() => setAiConfig({ ...aiConfig, tone })}
                           />
-                          <span className="text-xs font-bold text-slate-700">{tone}</span>
+                          <span className="text-xs font-bold text-slate-700 dark:text-white">{tone}</span>
                         </label>
                       ))}
                     </div>
@@ -286,7 +335,7 @@ const SettingsPage: React.FC = () => {
                     <select
                       value={aiConfig.formality}
                       onChange={(e) => setAiConfig({ ...aiConfig, formality: e.target.value })}
-                      className="w-full p-4 rounded-xl border border-slate-200 bg-white text-sm font-bold text-slate-700 outline-none focus:border-primary/30"
+                      className="w-full p-4 rounded-xl border border-slate-200 dark:border-dark bg-card dark:bg-card-dark text-sm font-bold text-slate-700 dark:text-white outline-none focus:border-primary/30"
                     >
                       <option>Soutenu</option>
                       <option>Courant</option>
@@ -306,11 +355,11 @@ const SettingsPage: React.FC = () => {
                             const newKey = e.target.value;
                             setAiConfig(prev => ({ ...prev }));
                           }}
-                          className="w-full p-4 rounded-xl border border-slate-200 bg-white text-xs font-mono text-slate-600 outline-none focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all"
+                          className="w-full p-4 rounded-xl border border-slate-200 dark:border-dark bg-card dark:bg-card-dark text-xs font-mono text-slate-600 dark:text-slate-400 outline-none focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all"
                         />
                       </div>
                       <p className="text-[9px] text-slate-400 font-medium mt-2">
-                        Nécessaire pour activer les fonctionnalités d'IA. <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" className="text-primary hover:underline">Obtenir une clé</a>
+                        Nécessaire pour activer les fonctionnalités d'IA. <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" className="text-primary dark:text-white hover:underline">Obtenir une clé</a>
                       </p>
                     </div>
 
@@ -319,7 +368,7 @@ const SettingsPage: React.FC = () => {
                       <textarea
                         value={aiConfig.systemPrompt}
                         onChange={(e) => setAiConfig({ ...aiConfig, systemPrompt: e.target.value })}
-                        className="w-full p-4 rounded-xl border border-slate-200 bg-white text-xs text-slate-600 leading-relaxed outline-none focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all text-justify"
+                        className="w-full p-4 rounded-xl border border-slate-200 dark:border-dark bg-card dark:bg-card-dark text-xs text-slate-600 dark:text-slate-400 leading-relaxed outline-none focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all text-justify"
                         rows={4}
                       />
                     </div>
@@ -327,20 +376,20 @@ const SettingsPage: React.FC = () => {
                 </div>
               </Card>
 
-              <Card className="border-none shadow-premium rounded-[2.5rem] p-8" title="Maintenance des Données">
+              <Card className="border-none shadow-premium dark:shadow-none rounded-[2.5rem] p-8" title="Maintenance des Données">
                 <div className="space-y-4 mt-2">
                   {/* Existing maintenance items kept concise */}
-                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-slate-50 rounded-[2rem] border border-slate-100 gap-4">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-slate-50 dark:bg-white/[0.02] rounded-[2rem] border border-slate-100 dark:border-dark gap-4">
                     <div>
-                      <p className="text-xs font-black text-primary uppercase tracking-widest">Sauvegarde .JSON</p>
-                      <p className="text-[10px] text-slate-500 font-bold mt-1">Export complet.</p>
+                      <p className="text-xs font-black text-primary dark:text-white uppercase tracking-widest">Sauvegarde .JSON</p>
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 font-bold mt-1">Export complet.</p>
                     </div>
                     <Button onClick={handleExport} variant="secondary" size="sm" className="rounded-xl px-6 text-[10px]">Exporter</Button>
                   </div>
-                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-slate-50 rounded-[2rem] border border-slate-100 gap-4">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-slate-50 dark:bg-white/[0.02] rounded-[2rem] border border-slate-100 dark:border-dark gap-4">
                     <div>
-                      <p className="text-xs font-black text-primary uppercase tracking-widest">Restauration</p>
-                      <p className="text-[10px] text-slate-500 font-bold mt-1">Import de sauvegarde.</p>
+                      <p className="text-xs font-black text-primary dark:text-white uppercase tracking-widest">Restauration</p>
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 font-bold mt-1">Import de sauvegarde.</p>
                     </div>
                     <div className="relative">
                       <input type="file" onChange={handleImport} className="absolute inset-0 opacity-0 cursor-pointer" accept=".json" />
@@ -356,7 +405,13 @@ const SettingsPage: React.FC = () => {
                     </div>
                     <Button
                       onClick={async () => {
-                        if (window.confirm('Remplacer les données de test par les données réelles de NCD?')) {
+                        const accepted = await confirm({
+                          title: 'Charger les données réelles ?',
+                          message: 'Les données de test seront remplacées par les 57 membres et 29 départements réels de NCD.',
+                          confirmLabel: 'Charger',
+                          variant: 'warning',
+                        });
+                        if (accepted) {
                           const result = await loadRealChurchData();
                           if (result.success) {
                             alert('✅ Données réelles chargées! Rechargez la page.');
@@ -473,9 +528,13 @@ const SettingsPage: React.FC = () => {
                       type="button"
                       onClick={async (e) => {
                         e.preventDefault();
-                        if (!window.confirm('Voulez-vous supprimer les départements en double? Seule la version la plus récente sera conservée.')) {
-                          return;
-                        }
+                        const accepted = await confirm({
+                          title: 'Nettoyer les doublons ?',
+                          message: 'Seule la version la plus récente de chaque département sera conservée.',
+                          confirmLabel: 'Nettoyer',
+                          variant: 'warning',
+                        });
+                        if (!accepted) return;
 
                         try {
                           const { removeDuplicateDepartments } = await import('../utils/cleanDuplicateDepartments');
@@ -507,9 +566,13 @@ const SettingsPage: React.FC = () => {
                       type="button"
                       onClick={async (e) => {
                         e.preventDefault();
-                        if (!window.confirm('Voulez-vous supprimer les membres en double? La version la plus complète sera conservée.')) {
-                          return;
-                        }
+                        const accepted = await confirm({
+                          title: 'Nettoyer les membres en double ?',
+                          message: 'La version la plus complète de chaque membre sera conservée.',
+                          confirmLabel: 'Nettoyer',
+                          variant: 'warning',
+                        });
+                        if (!accepted) return;
 
                         try {
                           const { removeDuplicateMembers } = await import('../utils/cleanDuplicateMembers');
@@ -539,7 +602,7 @@ const SettingsPage: React.FC = () => {
                   </div>
 
                   {/* Clean Old Members Button */}
-                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-red-50 rounded-[2rem] border border-red-200 gap-4 mt-2">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-red-50 dark:bg-red-900/20 rounded-[2rem] border border-red-200 gap-4 mt-2">
                     <div>
                       <p className="text-xs font-black text-red-700 uppercase tracking-widest">🗑️ Anciens Membres</p>
                       <p className="text-[10px] text-red-600 font-bold mt-1">Supprimer tous les membres de l'archive via ({(import.meta as any).env.VITE_FIREBASE_PROJECT_ID})</p>
@@ -548,9 +611,13 @@ const SettingsPage: React.FC = () => {
                       type="button"
                       onClick={async (e) => {
                         e.preventDefault();
-                        if (!window.confirm('ATTENTION: Voulez-vous supprimer TOUS les membres listés dans le fichier archive ? Cette action est irréversible.')) {
-                          return;
-                        }
+                        const accepted = await confirm({
+                          title: 'Supprimer les anciens membres ?',
+                          message: 'ATTENTION: TOUS les membres listés dans le fichier archive seront supprimés. Cette action est irréversible.',
+                          confirmLabel: 'Supprimer tout',
+                          variant: 'danger',
+                        });
+                        if (!accepted) return;
 
                         try {
                           const { cleanOldMembers } = await import('../utils/cleanOldMembers');
@@ -570,12 +637,12 @@ const SettingsPage: React.FC = () => {
                     </Button>
                   </div>
 
-                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-red-50/30 rounded-[2rem] border border-red-100 gap-4">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-red-50 dark:bg-red-900/20/30 rounded-[2rem] border border-red-100 gap-4">
                     <div>
                       <p className="text-xs font-black text-red-600 uppercase tracking-widest">Zone Danger</p>
                       <p className="text-[10px] text-red-400 font-bold mt-1">Réinitialisation usine.</p>
                     </div>
-                    <Button onClick={() => { if (window.confirm('Action Irréversible. Effacer tout?')) resetDatabase(); }} variant="danger" size="sm" className="rounded-xl px-6 text-[10px] bg-red-500">Reset</Button>
+                    <Button onClick={async () => { const accepted = await confirm({ title: 'Réinitialisation totale ?', message: 'CETTE ACTION EST IRRÉVERSIBLE. Toutes les données seront effacées définitivement.', confirmLabel: 'Tout effacer', variant: 'danger' }); if (accepted) resetDatabase(); }} variant="danger" size="sm" className="rounded-xl px-6 text-[10px] bg-red-500">Reset</Button>
                   </div>
 
                   <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-orange-50/30 rounded-[2rem] border border-orange-100 gap-4 mt-2">
@@ -585,7 +652,13 @@ const SettingsPage: React.FC = () => {
                     </div>
                     <Button
                       onClick={async () => {
-                        if (window.confirm('Voulez-vous vraiment supprimer TOUTES les données financières ?')) {
+                        const accepted = await confirm({
+                          title: 'Purger les finances ?',
+                          message: 'TOUTES les données financières seront supprimées définitivement.',
+                          confirmLabel: 'Purger',
+                          variant: 'danger',
+                        });
+                        if (accepted) {
                           const { clearFinances } = await import('../utils/cleanFinances');
                           const result = await clearFinances();
                           if (result.success) {
@@ -610,9 +683,9 @@ const SettingsPage: React.FC = () => {
         </div>
 
         <div className="space-y-8">
-          <Card className="border-none bg-primary text-white shadow-premium rounded-[2.5rem] p-8">
+          <Card className="border-none bg-primary text-white shadow-premium dark:shadow-none rounded-[2.5rem] p-8">
             <div className="text-center mb-8">
-              <div className="w-24 h-24 rounded-[2rem] mx-auto border-4 border-white/10 mb-4 shadow-2xl overflow-hidden relative">
+              <div className="w-24 h-24 rounded-[2rem] mx-auto border-4 border-white/10 mb-4 shadow-2xl dark:shadow-none overflow-hidden relative">
                 <img src={currentUser?.avatarUrl} className="w-full h-full object-cover" alt="Avatar" />
               </div>
               <h3 className="font-black text-xl font-display">{currentUser?.name}</h3>
@@ -623,17 +696,17 @@ const SettingsPage: React.FC = () => {
             </div>
           </Card>
 
-          <Card className="border-none shadow-premium rounded-[2.5rem] p-8" title="Santé Backend">
+          <Card className="border-none shadow-premium dark:shadow-none rounded-[2.5rem] p-8" title="Santé Backend">
             <div className="space-y-4 mt-4">
-              <div className="flex justify-between items-center p-4 bg-slate-50 rounded-2xl">
+              <div className="flex justify-between items-center p-4 bg-slate-50 dark:bg-white/[0.02] rounded-2xl">
                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Latence</span>
-                <span className="text-sm font-bold text-primary">{health?.latency || '--'}</span>
+                <span className="text-sm font-bold text-primary dark:text-white">{health?.latency || '--'}</span>
               </div>
-              <div className="flex justify-between items-center p-4 bg-slate-50 rounded-2xl">
+              <div className="flex justify-between items-center p-4 bg-slate-50 dark:bg-white/[0.02] rounded-2xl">
                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Sync</span>
                 <span className="text-sm font-bold text-green-500">{isLoading ? 'En cours...' : 'Terminé'}</span>
               </div>
-              <div className="pt-4 border-t border-slate-100">
+              <div className="pt-4 border-t border-slate-100 dark:border-dark">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-secondary/20 flex items-center justify-center text-secondary">
                     <SparklesIcon className="w-4 h-4" />
@@ -645,6 +718,7 @@ const SettingsPage: React.FC = () => {
           </Card>
         </div>
       </div>
+      <ConfirmDialog {...confirmState} onCancel={cancelConfirm} />
     </PageTransition>
   );
 };

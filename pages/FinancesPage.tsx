@@ -7,8 +7,8 @@ import Input from '../components/ui/Input';
 import Modal from '../components/ui/Modal';
 import PageTransition from '../components/layout/PageTransition';
 import PermissionGuard from '../components/auth/PermissionGuard';
-import { SparklesIcon, PlusCircleIcon, ShieldIcon, DollarSignIcon } from '../components/icons/Icons';
-import { TransactionType, Currency, FinanceRecord, FinanceAccount } from '../types';
+import { SparklesIcon, PlusCircleIcon, ShieldIcon, DollarSignIcon, TrendingUpIcon } from '../components/icons/Icons';
+import { TransactionType, Currency, FinanceRecord, FinanceAccount, ExpenseCategory } from '../types';
 import { motion, AnimatePresence } from 'framer-motion';
 import LedgerTable from '../components/finances/LedgerTable';
 import DateRangeSelector, { DateRangePreset } from '../components/finance/DateRangeSelector';
@@ -17,22 +17,33 @@ import RevenueChart from '../components/finance/RevenueChart';
 import CategoryBreakdown from '../components/finance/CategoryBreakdown';
 import CategoryTable from '../components/finance/CategoryTable';
 import ExportMenu from '../components/finance/ExportMenu';
+import WeeklyFinanceReport from '../components/finance/WeeklyFinanceReport';
 import ExchangeRateCard from '../components/finance/ExchangeRateCard';
 import AccountBalancesStrip from '../components/finance/AccountBalancesStrip';
 import ServiceSummary from '../components/finance/ServiceSummary';
+import PendingApprovalsTab from '../components/finance/PendingApprovalsTab';
 import { showSuccess, showError } from '../utils/toast';
+import { useSupabaseUpload } from '../hooks/useSupabaseUpload';
 
 const FinancesPage: React.FC = () => {
   const dataContext = useData();
   const financeRecords = dataContext.financeRecords || [];
-  const { addFinanceRecord, hasPermission, currentUser } = dataContext;
+  const { addFinanceRecord, approveFinanceRecord, rejectFinanceRecord, deleteFinanceRecord, hasPermission, currentUser } = dataContext;
+
+  // Determine if a user can auto-approve (SUPER_ADMIN or FINANCE_ADMIN bypass queue)
+  const canAutoApprove = currentUser?.role === 'SUPER_ADMIN' || currentUser?.role === 'FINANCE_ADMIN';
+  const pendingCount = financeRecords.filter(r => r.isApproved === false && !r.rejectedReason).length;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<TransactionType>('Dîme');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showWeeklyReport, setShowWeeklyReport] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeView, setActiveView] = useState<'ENTREES' | 'SORTIES' | 'TOUS'>('TOUS');
   const [activeCurrencyTab, setActiveCurrencyTab] = useState<'GLOBAL' | 'USD' | 'CDF'>('GLOBAL');
-  const [inputMode, setInputMode] = useState<'SINGLE' | 'BATCH' | 'REPORT'>('SINGLE');
+  const [inputMode, setInputMode] = useState<'SINGLE' | 'BATCH' | 'REPORT' | 'PENDING'>('SINGLE');
+
+  // Supabase Upload Hook
+  const { uploadFile, isUploading: isUploadingFile } = useSupabaseUpload();
 
   // Service Report State
   const [reportDate, setReportDate] = useState(new Date().toISOString().split('T')[0]);
@@ -84,13 +95,16 @@ const FinancesPage: React.FC = () => {
     account: 'Cash' as FinanceAccount,
     memberName: '',
     notes: '',
-    serviceName: '1er Culte'
+    serviceName: '1er Culte',
+    expenseCategory: '' as ExpenseCategory | '',
+    beneficiary: '',
+    receiptFile: null as File | null
   });
 
   const openModal = (type: TransactionType) => {
     setModalType(type);
     setIsModalOpen(true);
-    setFormData(prev => ({ ...prev, amount: '', currency: type === 'Dépense' ? 'USD' : 'CDF', memberName: '', notes: '' }));
+    setFormData(prev => ({ ...prev, amount: '', currency: type === 'Dépense' ? 'USD' : 'CDF', memberName: '', notes: '', expenseCategory: '', beneficiary: '', receiptFile: null }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -112,6 +126,18 @@ const FinancesPage: React.FC = () => {
         return;
       }
 
+      let receiptUrl = undefined;
+      if (modalType === 'Dépense' && formData.receiptFile) {
+        try {
+          const result = await uploadFile(formData.receiptFile, 'finances', ['image/jpeg', 'image/png', 'application/pdf'], 5);
+          receiptUrl = result.url;
+        } catch (uploadErr: any) {
+          showError(`Échec de l'upload du reçu: ${uploadErr.message}`);
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
       const newRecord: Omit<FinanceRecord, 'id'> = {
         type: modalType,
         amount: amount,
@@ -119,15 +145,18 @@ const FinancesPage: React.FC = () => {
         account: formData.account,
         date: formData.date,
         memberName: modalType !== 'Dépense' ? formData.memberName : undefined,
-        notes: modalType === 'Dépense' ? formData.notes : undefined,
+        notes: formData.notes || undefined,
         serviceName: (modalType === 'Offrande' || modalType === 'Action de grâce' || modalType === 'Offrande du prophète') ? formData.serviceName : undefined,
         recordedBy: currentUser?.name || 'Admin',
-        isApproved: modalType !== 'Dépense'
+        isApproved: canAutoApprove ? true : (modalType !== 'Dépense'),
+        expenseCategory: modalType === 'Dépense' && formData.expenseCategory ? formData.expenseCategory as ExpenseCategory : undefined,
+        beneficiary: modalType === 'Dépense' ? formData.beneficiary || undefined : undefined,
+        receiptUrl: receiptUrl
       };
 
       await addFinanceRecord(newRecord);
       setIsModalOpen(false);
-      setFormData(prev => ({ ...prev, amount: '', memberName: '', notes: '' }));
+      setFormData(prev => ({ ...prev, amount: '', memberName: '', notes: '', expenseCategory: '', beneficiary: '', receiptFile: null }));
       showSuccess(`✅ ${modalType} enregistré avec succès`);
     } catch (error: any) {
       console.error("Erreur enregistrement:", error);
@@ -361,6 +390,99 @@ const FinancesPage: React.FC = () => {
     USD_OUT: (financeRecords && Array.isArray(financeRecords) ? financeRecords : []).filter(r => r.currency === 'USD' && r.type === 'Dépense').reduce((acc, r) => acc + r.amount, 0),
   };
 
+  // specific totals for Vue Globale (Uses Date Range)
+  const vueGlobaleTotals = {
+    dimes: {
+      usd: periodRecords.filter(r => r.type === 'Dîme' && r.currency === 'USD').reduce((sum, r) => sum + r.amount, 0),
+      cdf: periodRecords.filter(r => r.type === 'Dîme' && r.currency === 'CDF').reduce((sum, r) => sum + r.amount, 0)
+    },
+    offrandes: {
+      usd: periodRecords.filter(r => ['Offrande', 'Offrande du prophète', 'Action de grâce', 'Dons'].includes(r.type) && r.currency === 'USD').reduce((sum, r) => sum + r.amount, 0),
+      cdf: periodRecords.filter(r => ['Offrande', 'Offrande du prophète', 'Action de grâce', 'Dons'].includes(r.type) && r.currency === 'CDF').reduce((sum, r) => sum + r.amount, 0)
+    },
+    sorties: {
+      usd: periodRecords.filter(r => r.type === 'Dépense' && r.currency === 'USD').reduce((sum, r) => sum + r.amount, 0),
+      cdf: periodRecords.filter(r => r.type === 'Dépense' && r.currency === 'CDF').reduce((sum, r) => sum + r.amount, 0)
+    }
+  };
+
+  const soldeCaisse = {
+    usd: (vueGlobaleTotals.dimes.usd + vueGlobaleTotals.offrandes.usd) - vueGlobaleTotals.sorties.usd,
+    cdf: (vueGlobaleTotals.dimes.cdf + vueGlobaleTotals.offrandes.cdf) - vueGlobaleTotals.sorties.cdf
+  };
+
+  // --- Trend Calculations ---
+  const getPreviousPeriodRange = (start: string, end: string) => {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const durationDays = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24);
+
+    // Previous end is the day before the current start
+    const prevEndDate = new Date(startDate);
+    prevEndDate.setDate(prevEndDate.getDate() - 1);
+
+    // Previous start is 'duration' days before previous end
+    const prevStartDate = new Date(prevEndDate);
+    prevStartDate.setDate(prevStartDate.getDate() - durationDays);
+
+    return {
+      start: prevStartDate.toISOString().split('T')[0],
+      end: prevEndDate.toISOString().split('T')[0]
+    };
+  };
+
+  const prevDateRange = getPreviousPeriodRange(dateRange.start, dateRange.end);
+  const prevPeriodRecords = (financeRecords && Array.isArray(financeRecords) ? financeRecords : []).filter(r =>
+    r.date >= prevDateRange.start && r.date <= prevDateRange.end
+  );
+
+  const prevVueGlobaleTotals = {
+    dimes: {
+      usd: prevPeriodRecords.filter(r => r.type === 'Dîme' && r.currency === 'USD').reduce((sum, r) => sum + r.amount, 0),
+      cdf: prevPeriodRecords.filter(r => r.type === 'Dîme' && r.currency === 'CDF').reduce((sum, r) => sum + r.amount, 0)
+    },
+    offrandes: {
+      usd: prevPeriodRecords.filter(r => ['Offrande', 'Offrande du prophète', 'Action de grâce', 'Dons'].includes(r.type) && r.currency === 'USD').reduce((sum, r) => sum + r.amount, 0),
+      cdf: prevPeriodRecords.filter(r => ['Offrande', 'Offrande du prophète', 'Action de grâce', 'Dons'].includes(r.type) && r.currency === 'CDF').reduce((sum, r) => sum + r.amount, 0)
+    },
+    sorties: {
+      usd: prevPeriodRecords.filter(r => r.type === 'Dépense' && r.currency === 'USD').reduce((sum, r) => sum + r.amount, 0),
+      cdf: prevPeriodRecords.filter(r => r.type === 'Dépense' && r.currency === 'CDF').reduce((sum, r) => sum + r.amount, 0)
+    }
+  };
+
+  const prevSoldeCaisse = {
+    usd: (prevVueGlobaleTotals.dimes.usd + prevVueGlobaleTotals.offrandes.usd) - prevVueGlobaleTotals.sorties.usd,
+    cdf: (prevVueGlobaleTotals.dimes.cdf + prevVueGlobaleTotals.offrandes.cdf) - prevVueGlobaleTotals.sorties.cdf
+  };
+
+  const calculateTrend = (current: number, previous: number) => {
+    if (previous === 0) return current > 0 ? 100 : 0;
+    return ((current - previous) / previous) * 100;
+  };
+
+  const trends = {
+    dimes: { usd: calculateTrend(vueGlobaleTotals.dimes.usd, prevVueGlobaleTotals.dimes.usd), cdf: calculateTrend(vueGlobaleTotals.dimes.cdf, prevVueGlobaleTotals.dimes.cdf) },
+    offrandes: { usd: calculateTrend(vueGlobaleTotals.offrandes.usd, prevVueGlobaleTotals.offrandes.usd), cdf: calculateTrend(vueGlobaleTotals.offrandes.cdf, prevVueGlobaleTotals.offrandes.cdf) },
+    sorties: { usd: calculateTrend(vueGlobaleTotals.sorties.usd, prevVueGlobaleTotals.sorties.usd), cdf: calculateTrend(vueGlobaleTotals.sorties.cdf, prevVueGlobaleTotals.sorties.cdf) },
+    solde: { usd: calculateTrend(soldeCaisse.usd, prevSoldeCaisse.usd), cdf: calculateTrend(soldeCaisse.cdf, prevSoldeCaisse.cdf) }
+  };
+
+  const TrendBadge = ({ value, inverted = false }: { value: number, inverted?: boolean }) => {
+    if (value === 0) return null;
+    let isPositive = value > 0;
+    if (inverted) isPositive = !isPositive; // For expenses, an increase is perceived as negative (red)
+
+    // For Solde Caisse on black bg, we need slightly different styles or just use transparent ones. 
+    // We'll keep standard styling since background will contrast for positive, and we can handle dark mode if needed.
+    return (
+      <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-black ${isPositive ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
+        <TrendingUpIcon className={`w-3 h-3 ${value < 0 ? 'rotate-180' : ''}`} />
+        {value > 0 ? '+' : ''}{value.toFixed(1)}%
+      </span>
+    );
+  };
+
   // Calculate Account Balances
   const accountBalances: Record<FinanceAccount, { cdf: number, usd: number }> = {
     'Rawbank': { cdf: 0, usd: 0 },
@@ -403,7 +525,10 @@ const FinancesPage: React.FC = () => {
           <h2 className="text-3xl md:text-5xl font-extrabold text-primary font-display tracking-tight leading-none mb-1 uppercase italic">Grand Livre</h2>
           <p className="text-slate-500 font-medium italic opacity-80 uppercase tracking-widest text-[9px]">Gestion Royale • NCD La Pentecôte</p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4">
+          <Button onClick={() => setShowWeeklyReport(true)} variant="secondary" className="rounded-xl text-[10px] uppercase font-black tracking-widest bg-white border-2 border-slate-200 text-slate-800 hover:border-slate-800">
+            Imprimer Rapport
+          </Button>
           <ExportMenu records={periodRecords} periodLabel={dateRange.label} summary={periodSummary} />
           <PermissionGuard permission="CREATE_FINANCES">
             <div className="flex bg-slate-100 p-1 rounded-xl">
@@ -425,12 +550,36 @@ const FinancesPage: React.FC = () => {
               >
                 Rapport Culte
               </button>
+              <button
+                onClick={() => setShowWeeklyReport(true)}
+                className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all bg-transparent text-slate-600 hover:text-blue-600 hover:bg-slate-50`}
+              >
+                Modèle Imprimable
+              </button>
+              {/* Pending Approvals Tab */}
+              <button
+                onClick={() => setInputMode('PENDING')}
+                className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all relative ${inputMode === 'PENDING' ? 'bg-amber-500 text-white shadow-sm' : 'bg-transparent text-slate-600 hover:text-amber-600 hover:bg-slate-50'}`}
+              >
+                Approbations
+                {pendingCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[8px] font-black rounded-full flex items-center justify-center">
+                    {pendingCount}
+                  </span>
+                )}
+              </button>
             </div>
             {inputMode === 'SINGLE' && (
-              <Button onClick={() => openModal('Offrande')} className="rounded-xl px-4 py-3 bg-primary text-white text-[10px] uppercase font-black tracking-widest shadow-lg hover:scale-105 transition-transform">
-                <PlusCircleIcon className="w-4 h-4 mr-2" />
-                Opération
-              </Button>
+              <div className="flex gap-2">
+                <Button onClick={() => openModal('Offrande')} className="rounded-xl px-4 py-3 bg-primary text-white text-[10px] uppercase font-black tracking-widest shadow-lg hover:scale-105 transition-transform">
+                  <PlusCircleIcon className="w-4 h-4 mr-2" />
+                  Entrée
+                </Button>
+                <Button onClick={() => openModal('Dépense')} className="rounded-xl px-4 py-3 bg-red-600 text-white text-[10px] uppercase font-black tracking-widest shadow-lg hover:scale-105 transition-transform">
+                  <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                  Sortie
+                </Button>
+              </div>
             )}
           </PermissionGuard>
         </div>
@@ -636,7 +785,7 @@ const FinancesPage: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                      {Object.entries(reportData).map(([category, data]) => (
+                      {Object.entries(reportData).map(([category, data]: [string, any]) => (
                         <tr key={category} className="group hover:bg-slate-50/50 transition-colors">
                           <td className="px-6 py-4 font-black text-slate-700 uppercase tracking-tight">{category}</td>
                           <td className="px-6 py-4">
@@ -683,6 +832,20 @@ const FinancesPage: React.FC = () => {
             {/* Live Preview of the Report Summary for this Day */}
             <ServiceSummary date={reportDate} records={financeRecords} />
           </motion.div>
+        ) : inputMode === 'PENDING' ? (
+          <motion.div
+            key="pending"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+          >
+            <PendingApprovalsTab
+              records={financeRecords}
+              onApprove={approveFinanceRecord}
+              onReject={rejectFinanceRecord}
+              onDelete={deleteFinanceRecord}
+            />
+          </motion.div>
         ) : (
           <motion.div
             key="ledger"
@@ -690,24 +853,60 @@ const FinancesPage: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            {/* Existing Stats Cards */}
+            {/* Specific VUE GLOBALE Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-              <Card className="bg-primary text-white p-8 rounded-[2rem] shadow-premium relative overflow-hidden text-center">
-                <p className="text-[8px] font-black opacity-60 uppercase tracking-[0.3em] mb-2">Entrées Francs</p>
-                <p className="text-2xl font-black font-display text-white">FC {totals.CDF_IN.toLocaleString()}</p>
+              <Card className="bg-white border-2 border-slate-100 p-6 rounded-3xl shadow-sm text-center">
+                <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest mb-3">Total Dîmes</p>
+                <div className="flex flex-col gap-1 items-center">
+                  <div className="flex items-center gap-2">
+                    <p className="text-xl font-black font-serif text-slate-800 tracking-tight">FC {vueGlobaleTotals.dimes.cdf.toLocaleString()}</p>
+                    <TrendBadge value={trends.dimes.cdf} />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-black font-serif text-emerald-700 tracking-tight">$ {vueGlobaleTotals.dimes.usd.toLocaleString()}</p>
+                    <TrendBadge value={trends.dimes.usd} />
+                  </div>
+                </div>
               </Card>
-              <Card className="bg-white border text-red-600 p-8 rounded-[2rem] shadow-sm text-center">
-                <p className="text-[8px] font-black opacity-60 uppercase tracking-[0.3em] mb-2">Sorties Francs</p>
-                <p className="text-2xl font-black font-display">FC {totals.CDF_OUT.toLocaleString()}</p>
+              <Card className="bg-white border-2 border-slate-100 p-6 rounded-3xl shadow-sm text-center">
+                <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest mb-3">Total Offrandes</p>
+                <div className="flex flex-col gap-1 items-center">
+                  <div className="flex items-center gap-2">
+                    <p className="text-xl font-black font-serif text-slate-800 tracking-tight">FC {vueGlobaleTotals.offrandes.cdf.toLocaleString()}</p>
+                    <TrendBadge value={trends.offrandes.cdf} />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-black font-serif text-emerald-700 tracking-tight">$ {vueGlobaleTotals.offrandes.usd.toLocaleString()}</p>
+                    <TrendBadge value={trends.offrandes.usd} />
+                  </div>
+                </div>
               </Card>
-              <Card className="bg-secondary text-primary p-8 rounded-[2rem] shadow-premium text-center">
-                <div className="absolute -right-4 -top-4 opacity-10 rotate-12"><DollarSignIcon className="w-20 h-20" /></div>
-                <p className="text-[8px] font-black opacity-60 uppercase tracking-[0.3em] mb-2">Entrées Dollars</p>
-                <p className="text-2xl font-black font-display">$ {totals.USD_IN.toLocaleString()}</p>
+              <Card className="bg-white border-2 border-slate-100 p-6 rounded-3xl shadow-sm text-center">
+                <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest mb-3">Total Sorties</p>
+                <div className="flex flex-col gap-1 items-center">
+                  <div className="flex items-center gap-2">
+                    <p className="text-xl font-black font-serif text-red-600 tracking-tight">FC {vueGlobaleTotals.sorties.cdf.toLocaleString()}</p>
+                    <TrendBadge value={trends.sorties.cdf} inverted />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-black font-serif text-red-700/80 tracking-tight">$ {vueGlobaleTotals.sorties.usd.toLocaleString()}</p>
+                    <TrendBadge value={trends.sorties.usd} inverted />
+                  </div>
+                </div>
               </Card>
-              <Card className="bg-white border text-red-600 p-8 rounded-[2rem] shadow-sm text-center">
-                <p className="text-[8px] font-black opacity-60 uppercase tracking-[0.3em] mb-2">Sorties Dollars</p>
-                <p className="text-2xl font-black font-display">$ {totals.USD_OUT.toLocaleString()}</p>
+              <Card className="bg-slate-900 border-2 border-slate-900 p-6 rounded-3xl shadow-lg text-center relative overflow-hidden">
+                <div className="absolute right-0 top-0 opacity-10 w-24 h-24 bg-white rounded-full blur-2xl"></div>
+                <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest mb-3 relative z-10">Solde Caisse</p>
+                <div className="flex flex-col gap-1 items-center relative z-10">
+                  <div className="flex items-center gap-2">
+                    <p className="text-xl font-black font-serif text-white tracking-tight">FC {soldeCaisse.cdf.toLocaleString()}</p>
+                    <TrendBadge value={trends.solde.cdf} />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-black font-serif text-emerald-400 tracking-tight">$ {soldeCaisse.usd.toLocaleString()}</p>
+                    <TrendBadge value={trends.solde.usd} />
+                  </div>
+                </div>
               </Card>
             </div>
 
@@ -725,8 +924,8 @@ const FinancesPage: React.FC = () => {
                       key={tab.id}
                       onClick={() => setActiveCurrencyTab(tab.id as any)}
                       className={`px-6 py-4 text-xs font-black uppercase tracking-widest border-b-2 transition-all ${activeCurrencyTab === tab.id
-                        ? 'border-primary text-primary bg-primary/5'
-                        : 'border-transparent text-slate-600 hover:text-primary hover:bg-slate-50'
+                        ? 'border-slate-900 text-slate-900 bg-slate-200/50'
+                        : 'border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50'
                         }`}
                     >
                       {tab.label}
@@ -741,7 +940,7 @@ const FinancesPage: React.FC = () => {
                       <button
                         key={view}
                         onClick={() => setActiveView(view as any)}
-                        className={`px-4 py-2 rounded-md text-[9px] font-black uppercase tracking-widest transition-all ${activeView === view ? 'bg-white text-primary shadow-sm border border-primary/20' : 'bg-transparent text-slate-600 hover:text-primary hover:bg-slate-50'}`}
+                        className={`px-4 py-2 rounded-md text-[9px] font-black uppercase tracking-widest transition-all ${activeView === view ? 'bg-white text-slate-900 shadow border border-slate-200' : 'bg-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50'}`}
                       >
                         {view}
                       </button>
@@ -815,32 +1014,78 @@ const FinancesPage: React.FC = () => {
 
           <div>
             {modalType === 'Dépense' ? (
-              <textarea
-                className="w-full px-8 py-6 border-2 border-slate-200 rounded-[2.5rem] bg-white text-sm font-bold text-slate-900 placeholder-slate-400 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition-all shadow-sm"
-                rows={3}
-                placeholder="Justificatif détaillé de la dépense..."
-                value={formData.notes}
-                onChange={e => setFormData({ ...formData, notes: e.target.value })}
-                required
-              />
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-[10px] font-black text-red-500 mb-2 uppercase tracking-widest">Catégorie de Dépense *</label>
+                  <select
+                    value={formData.expenseCategory}
+                    onChange={e => setFormData({ ...formData, expenseCategory: e.target.value as ExpenseCategory })}
+                    className="w-full px-5 py-4 border-2 border-red-200 rounded-2xl bg-red-50 font-black text-[11px] text-red-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition-all"
+                    required
+                  >
+                    <option value="">Sélectionner une catégorie...</option>
+                    {(['Loyer & Local', 'Électricité & Eau', 'Sonorisation & Technique', 'Transport', 'Restauration', 'Aide aux membres', 'Évangélisation', 'Fournitures', 'Communication', 'Salaires & Indemnités', 'Maintenance', 'Autre'] as ExpenseCategory[]).map(cat => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </select>
+                </div>
+                <Input
+                  label="Bénéficiaire"
+                  id="beneficiary"
+                  value={formData.beneficiary}
+                  onChange={e => setFormData({ ...formData, beneficiary: e.target.value })}
+                  placeholder="Qui a reçu le paiement..."
+                />
+                <textarea
+                  className="w-full px-8 py-6 border-2 border-slate-200 rounded-[2.5rem] bg-white text-sm font-bold text-slate-900 placeholder-slate-400 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition-all shadow-sm"
+                  rows={2}
+                  placeholder="Justificatif détaillé de la dépense..."
+                  value={formData.notes}
+                  onChange={e => setFormData({ ...formData, notes: e.target.value })}
+                  required
+                />
+                <div className="p-4 border-2 border-dashed border-slate-200 rounded-3xl text-center bg-slate-50/50 hover:bg-slate-50 transition-colors">
+                  <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest">Facture / Reçu (Optionnel)</label>
+                  <input
+                    type="file"
+                    accept=".pdf,image/jpeg,image/png"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files.length > 0) {
+                        setFormData({ ...formData, receiptFile: e.target.files[0] });
+                      }
+                    }}
+                    className="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+                  />
+                  {formData.receiptFile && <p className="mt-2 text-[10px] font-black text-emerald-600">{formData.receiptFile.name}</p>}
+                </div>
+              </div>
             ) : (
               <Input label="Nom de l'âme ou du Donateur" id="memberName" value={formData.memberName} onChange={e => setFormData({ ...formData, memberName: e.target.value })} placeholder="Identité..." />
             )}
           </div>
 
           <div className="flex flex-col-reverse md:flex-row justify-end gap-4 pt-8 border-t border-slate-100">
-            <Button type="button" variant="ghost" onClick={() => setIsModalOpen(false)} className="rounded-2xl px-10 text-[11px]">Annuler</Button>
+            <Button type="button" variant="ghost" onClick={() => setIsModalOpen(false)} className="rounded-2xl px-10 text-[11px]" disabled={isSubmitting || isUploadingFile}>Annuler</Button>
             <Button
               type="submit"
-              isLoading={isSubmitting}
-              disabled={isSubmitting}
+              isLoading={isSubmitting || isUploadingFile}
+              disabled={isSubmitting || isUploadingFile}
               className={`flex-1 py-5 rounded-[2rem] uppercase font-black tracking-widest text-[11px] text-white shadow-premium ${modalType === 'Dépense' ? 'bg-red-600' : 'bg-primary'}`}
             >
-              Confirmer l'Opération
+              {isUploadingFile ? "Upload du Reçu..." : "Confirmer l'Opération"}
             </Button>
           </div>
         </form>
       </Modal>
+
+      <AnimatePresence>
+        {showWeeklyReport && (
+          <WeeklyFinanceReport
+            records={financeRecords || []}
+            onClose={() => setShowWeeklyReport(false)}
+          />
+        )}
+      </AnimatePresence>
     </PageTransition >
   );
 };

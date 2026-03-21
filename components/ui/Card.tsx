@@ -16,11 +16,11 @@ const Card: React.FC<CardProps> = ({ children, className = '', title, actions, n
   return (
     <div
       onClick={onClick}
-      className={`${!hasBg ? 'bg-card' : ''} rounded-xl border border-slate-200 shadow-premium overflow-hidden transition-all duration-300 ${onClick ? 'cursor-pointer active:scale-[0.98]' : ''} ${className}`}
+      className={`${!hasBg ? 'bg-card dark:bg-card-dark' : ''} rounded-[2rem] border border-slate-200 dark:border-transparent dark:ring-1 dark:ring-white/5 shadow-premium dark:shadow-none overflow-hidden transition-all duration-300 ${onClick ? 'cursor-pointer active:scale-[0.98]' : ''} ${className}`}
     >
       {(title || actions) && (
-        <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-          {title && <h3 className="text-xs font-bold text-primary uppercase tracking-widest">{title}</h3>}
+        <div className="px-6 py-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-slate-50/50 dark:bg-transparent">
+          {title && <h3 className="text-xs font-bold text-primary dark:text-gold uppercase tracking-widest">{title}</h3>}
           {actions && <div className="flex items-center space-x-2">{actions}</div>}
         </div>
       )}

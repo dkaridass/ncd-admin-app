@@ -46,11 +46,11 @@ const ServiceSummary: React.FC<ServiceSummaryProps> = ({ date, records }) => {
     return (
         <div className="space-y-6 animate-fade-in">
             <div className="flex items-center justify-between">
-                <h3 className="text-xl font-black text-slate-700 uppercase tracking-tight">
+                <h3 className="text-xl font-black text-slate-700 dark:text-white uppercase tracking-tight">
                     Récapitulatif du {new Date(date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
                 </h3>
                 <div className="flex gap-4">
-                    <div className="px-6 py-3 bg-emerald-50 rounded-xl border border-emerald-100 flex flex-col items-end">
+                    <div className="px-6 py-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border border-emerald-100 flex flex-col items-end">
                         <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Total Jour (CDF)</span>
                         <span className="text-2xl font-black text-emerald-700 font-display">{grandTotalCDF.toLocaleString()} FC</span>
                     </div>
@@ -62,7 +62,7 @@ const ServiceSummary: React.FC<ServiceSummaryProps> = ({ date, records }) => {
             </div>
 
             {serviceStats.length === 0 ? (
-                <Card className="p-12 text-center border-2 border-dashed border-slate-200 bg-slate-50/50">
+                <Card className="p-12 text-center border-2 border-dashed border-slate-200 dark:border-dark bg-slate-50 dark:bg-white/[0.02]/50">
                     <p className="text-slate-400 font-bold">Aucune donnée enregistrée pour cette date.</p>
                 </Card>
             ) : (
@@ -80,17 +80,17 @@ const ServiceCard: React.FC<{ service: any }> = ({ service }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
-        <Card className="overflow-hidden border border-slate-100 hover:shadow-lg transition-all duration-300">
+        <Card className="overflow-hidden border border-slate-100 dark:border-dark hover:shadow-lg dark:shadow-none transition-all duration-300">
             <div
-                className="p-6 bg-white flex items-center justify-between cursor-pointer"
+                className="p-6 bg-card dark:bg-card-dark flex items-center justify-between cursor-pointer"
                 onClick={() => setIsExpanded(!isExpanded)}
             >
                 <div className="flex items-center gap-4">
-                    <div className={`p-3 rounded-xl ${service.name.includes('Culte') ? 'bg-primary/10 text-primary' : 'bg-slate-100 text-slate-500'}`}>
+                    <div className={`p-3 rounded-xl ${service.name.includes('Culte') ? 'bg-primary/10 text-primary' : 'bg-slate-100 text-slate-500 dark:text-slate-400'}`}>
                         <TrendingUpIcon className="w-6 h-6" />
                     </div>
                     <div>
-                        <h4 className="text-lg font-black text-slate-800 uppercase">{service.name}</h4>
+                        <h4 className="text-lg font-black text-slate-800 dark:text-white uppercase">{service.name}</h4>
                         <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{service.records.length} transactions</p>
                     </div>
                 </div>
@@ -98,11 +98,11 @@ const ServiceCard: React.FC<{ service: any }> = ({ service }) => {
                 <div className="flex items-center gap-8">
                     <div className="text-right">
                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total CDF</p>
-                        <p className="text-xl font-black text-slate-700">{service.totalCDF.toLocaleString()} FC</p>
+                        <p className="text-xl font-black text-slate-700 dark:text-white">{service.totalCDF.toLocaleString()} FC</p>
                     </div>
                     <div className="text-right">
                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total USD</p>
-                        <p className="text-xl font-black text-slate-700">${service.totalUSD.toLocaleString()}</p>
+                        <p className="text-xl font-black text-slate-700 dark:text-white">${service.totalUSD.toLocaleString()}</p>
                     </div>
                     <ChevronDownIcon className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
                 </div>
@@ -114,7 +114,7 @@ const ServiceCard: React.FC<{ service: any }> = ({ service }) => {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        className="border-t border-slate-100 bg-slate-50/50"
+                        className="border-t border-slate-100 dark:border-dark bg-slate-50 dark:bg-white/[0.02]/50"
                     >
                         <div className="p-6">
                             <table className="w-full">
@@ -127,12 +127,12 @@ const ServiceCard: React.FC<{ service: any }> = ({ service }) => {
                                 </thead>
                                 <tbody className="space-y-2">
                                     {Object.entries(service.byCategory).map(([category, amounts]: [string, any]) => (
-                                        <tr key={category} className="border-b border-slate-100 last:border-0 hover:bg-white/50 transition-colors">
-                                            <td className="py-3 font-bold text-slate-700 pl-2 border-l-2 border-primary/20">{category}</td>
-                                            <td className="py-3 text-right font-mono font-medium text-slate-600">
+                                        <tr key={category} className="border-b border-slate-100 dark:border-dark last:border-0 hover:bg-card dark:bg-card-dark transition-colors">
+                                            <td className="py-3 font-bold text-slate-700 dark:text-white pl-2 border-l-2 border-primary dark:border-white/20/20">{category}</td>
+                                            <td className="py-3 text-right font-mono font-medium text-slate-600 dark:text-slate-400">
                                                 {amounts.CDF > 0 ? `${amounts.CDF.toLocaleString()} FC` : '-'}
                                             </td>
-                                            <td className="py-3 text-right font-mono font-medium text-slate-600">
+                                            <td className="py-3 text-right font-mono font-medium text-slate-600 dark:text-slate-400">
                                                 {amounts.USD > 0 ? `$${amounts.USD.toLocaleString()}` : '-'}
                                             </td>
                                         </tr>

@@ -85,7 +85,7 @@ const VolunteersPage: React.FC = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
-            className="block w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-primary"
+            className="block w-full px-4 py-2 border border-gray-300 rounded-lg bg-card dark:bg-card-dark text-gray-900 focus:ring-2 focus:ring-primary"
           >
             <option value="Tous">Tous les statuts</option>
             <option value="Actif">Actif</option>
@@ -98,7 +98,7 @@ const VolunteersPage: React.FC = () => {
           <select
             value={departmentFilter}
             onChange={(e) => setDepartmentFilter(e.target.value)}
-            className="block w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-primary"
+            className="block w-full px-4 py-2 border border-gray-300 rounded-lg bg-card dark:bg-card-dark text-gray-900 focus:ring-2 focus:ring-primary"
           >
             <option value="Tous">Tous les départements</option>
             {departments.map(dept => (
@@ -139,12 +139,12 @@ const VolunteersPage: React.FC = () => {
                 {deptVolunteers.map(volunteer => (
                   <div
                     key={volunteer.id}
-                    className="p-4 bg-gray-50 rounded-xl border border-gray-200 hover:shadow-md transition-shadow cursor-pointer"
+                    className="p-4 bg-gray-50 rounded-xl border border-gray-200 hover:shadow-md dark:shadow-none transition-shadow cursor-pointer"
                     onClick={() => navigate(`/members?memberId=${volunteer.id}`)}
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 text-primary text-sm flex items-center justify-center font-bold mr-3">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 text-primary dark:text-white text-sm flex items-center justify-center font-bold mr-3">
                           {volunteer.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
@@ -190,12 +190,12 @@ const VolunteersPage: React.FC = () => {
           {filteredVolunteers.map(volunteer => (
             <Card
               key={volunteer.id}
-              className="p-4 cursor-pointer hover:shadow-md transition-shadow"
+              className="p-4 cursor-pointer hover:shadow-md dark:shadow-none transition-shadow"
               onClick={() => navigate(`/members?memberId=${volunteer.id}`)}
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 text-primary text-sm flex items-center justify-center font-bold mr-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 text-primary dark:text-white text-sm flex items-center justify-center font-bold mr-3">
                     {volunteer.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
