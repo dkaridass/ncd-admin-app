@@ -88,15 +88,15 @@ const LoginPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex w-full bg-white">
-      {/* LEFT PANE - Brand Side */}
-      <div className="hidden lg:flex w-1/2 bg-primary relative flex-col items-center justify-center overflow-hidden">
+    <div className="min-h-[100dvh] flex flex-col lg:flex-row w-full bg-white">
+      {/* BRAND PANE - Top on Mobile, Left on Desktop */}
+      <div className="w-full lg:w-1/2 bg-primary relative flex flex-col items-center justify-center overflow-hidden py-12 lg:py-0 min-h-[35vh] lg:min-h-0 shrink-0">
         {/* Subtle Graphic Overlay */}
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
 
-        <div className="relative z-10 flex flex-col items-center px-12 text-center text-white">
-          <div className="w-36 h-36 bg-white rounded-full flex items-center justify-center shadow-2xl mb-8 p-2">
+        <div className="relative z-10 flex flex-col items-center px-6 lg:px-12 text-center text-white">
+          <div className="w-24 h-24 lg:w-36 lg:h-36 bg-white rounded-full flex items-center justify-center shadow-2xl mb-6 lg:mb-8 p-1.5 lg:p-2">
             <img
               src="/logo.png"
               alt="NCD Logo"
@@ -106,41 +106,29 @@ const LoginPage: React.FC = () => {
               }}
             />
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold font-display tracking-tight mb-4 leading-[1.1]">
-            Nouvelle Cité <br />de David
+          <h1 className="text-3xl lg:text-4xl md:text-5xl font-extrabold font-display tracking-tight mb-2 lg:mb-4 leading-[1.1]">
+            Nouvelle Cité <br className="hidden lg:block" />de David
           </h1>
-          <p className="text-blue-100 font-bold text-xs tracking-[0.2em] uppercase mt-2">
+          <p className="text-blue-100 font-bold text-[10px] lg:text-xs tracking-[0.2em] uppercase mt-2">
             Administration & Leadership
           </p>
-          <div className="mt-10 w-20 h-1.5 bg-gradient-to-r from-red-600 to-amber-400 rounded-full"></div>
+          <div className="mt-6 lg:mt-10 w-16 lg:w-20 h-1.5 bg-gradient-to-r from-red-600 to-amber-400 rounded-full"></div>
         </div>
 
-        <div className="absolute bottom-8 text-white/50 text-xs font-medium">
+        <div className="hidden lg:block absolute bottom-8 text-white/50 text-xs font-medium">
           &copy; {new Date().getFullYear()} NCD La Pentecôte. Accès Sécurisé.
         </div>
       </div>
 
-      {/* RIGHT PANE - Login Form */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center relative items-center px-6 sm:px-12 md:px-24 bg-white">
+      {/* FORM PANE - Bottom on Mobile, Right on Desktop */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-center relative items-center px-6 sm:px-12 md:px-24 bg-white flex-1 py-10 lg:py-0">
         <div className="w-full max-w-[380px]">
 
-          {/* Mobile header */}
-          <div className="lg:hidden text-center mb-10 flex flex-col items-center">
-            <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 mb-6 p-2">
-              <img
-                src="/logo.png"
-                alt="NCD Logo"
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <h2 className="text-3xl font-extrabold text-slate-800 tracking-tight">Portail NCD</h2>
-            <p className="text-amber-600 font-bold text-[10px] uppercase tracking-[0.2em] mt-2">Administration</p>
-          </div>
-
-          <div className="mb-8 hidden lg:block">
-            <h3 className="text-3xl font-black text-slate-900 mb-2">Bienvenue</h3>
+          <div className="mb-8 text-center lg:text-left">
+            <h3 className="text-2xl lg:text-3xl font-black text-slate-900 mb-2">Bienvenue</h3>
             <p className="text-sm font-medium text-slate-500">Connectez-vous à votre espace sécurisé.</p>
           </div>
+
 
           {!hasApiKey && (window as any).aistudio ? (
             <div className="space-y-6">
