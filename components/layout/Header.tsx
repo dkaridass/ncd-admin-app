@@ -27,9 +27,12 @@ const Header: React.FC<HeaderProps> = ({ onLogout }) => {
   };
 
   return (
-    <header className="flex items-center justify-between h-20 px-4 md:px-8 glass-effect border-b border-white/40 dark:border-white/5 sticky top-0 z-40 shrink-0 shadow-sm dark:shadow-none">
-      <div className="flex items-center gap-3 md:gap-6">
-        <div className="hidden lg:flex items-center gap-3 px-5 py-2.5 bg-slate-100/40 dark:bg-white/5 rounded-2xl border border-slate-200/30 dark:border-white/10 group hover:border-primary/30 dark:hover:border-darkHighlight transition-all cursor-pointer">
+    <header className="flex items-center justify-between h-20 px-4 md:px-8 glass-effect border-b border-white/40 dark:border-white/5 sticky top-0 z-40 shrink-0 shadow-sm dark:shadow-none relative">
+      {/* NCD Brand Ribbon */}
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-red-600 to-amber-500"></div>
+
+      <div className="flex items-center gap-3 md:gap-6 mt-1">
+        <div className="hidden lg:flex items-center gap-3 px-5 py-2.5 bg-slate-100/40 dark:bg-white/5 rounded-lg border border-slate-200/30 dark:border-white/10 group hover:border-primary/30 dark:hover:border-darkHighlight transition-all cursor-pointer">
           <svg className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-primary dark:group-hover:text-gold transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
           <span className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest group-hover:text-primary dark:group-hover:text-gold transition-colors">Rechercher</span>
         </div>
@@ -48,8 +51,8 @@ const Header: React.FC<HeaderProps> = ({ onLogout }) => {
       </div>
 
       <div className="flex items-center gap-2 md:gap-4">
-        <div className="flex items-center px-2 md:px-4 py-2 rounded-2xl hover:bg-slate-50/80 dark:hover:bg-card dark:bg-card-dark transition-all cursor-pointer group">
-          <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-primary dark:bg-gold/20 flex items-center justify-center text-white dark:text-gold overflow-hidden shadow-premium dark:shadow-none group-hover:rotate-6 transition-transform">
+        <div className="flex items-center px-2 md:px-4 py-2 rounded-lg hover:bg-slate-50/80 dark:hover:bg-card dark:bg-card-dark transition-all cursor-pointer group">
+          <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-lg bg-primary dark:bg-gold/20 flex items-center justify-center text-white dark:text-gold overflow-hidden shadow-admin group-hover:rotate-6 transition-transform">
             {currentUser?.avatarUrl ? <img src={currentUser.avatarUrl} alt="User" /> : <UserIcon className="w-5 h-5 md:w-6 md:h-6" />}
           </div>
           <div className="ml-3 hidden md:block text-left">
@@ -60,7 +63,7 @@ const Header: React.FC<HeaderProps> = ({ onLogout }) => {
 
         <div className="h-6 w-px bg-slate-200/50 dark:bg-white/10 mx-1 hidden sm:block"></div>
 
-        <Button onClick={handleLogout} variant="ghost" size="sm" className="rounded-xl hover:bg-red-50 dark:bg-red-900/20 dark:hover:bg-red-500/10 hover:text-red-600 text-slate-400 dark:text-slate-500 p-2">
+        <Button onClick={handleLogout} variant="ghost" size="sm" className="rounded-lg hover:bg-red-50 dark:bg-red-900/20 dark:hover:bg-red-500/10 hover:text-red-600 text-slate-400 dark:text-slate-500 p-2">
           <LogOutIcon className="w-4 h-4" />
         </Button>
       </div>

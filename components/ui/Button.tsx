@@ -16,20 +16,20 @@ const Button: React.FC<ButtonProps> = ({
   isLoading = false,
   ...props
 }) => {
-  const baseClasses = 'inline-flex items-center justify-center font-black uppercase tracking-widest transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-current transform active:scale-95 focus:outline-none';
+  const baseClasses = 'inline-flex items-center justify-center font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-current transform active:scale-[0.98] focus:outline-none';
 
   const variantClasses = {
-    primary: 'bg-primary dark:bg-primary-light text-white hover:bg-primary-light dark:hover:bg-primary-accent shadow-premium dark:shadow-glow-gold focus:ring-4 focus:ring-primary/20',
-    secondary: 'bg-secondary text-white hover:bg-secondary-light shadow-premium dark:shadow-glow-danger focus:ring-4 focus:ring-secondary/20',
-    danger: 'bg-red-600 dark:bg-red-900/40 text-white hover:bg-red-700 dark:hover:bg-red-900/60 shadow-premium dark:shadow-glow-danger dark:border dark:border-red-500/30 focus:ring-4 focus:ring-red-300',
-    ghost: 'bg-transparent text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-primary dark:hover:text-white border border-transparent focus:ring-2 focus:ring-slate-300',
-    white: 'bg-white dark:bg-card-dark text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-card-hover hover:text-slate-900 dark:hover:text-white shadow-sm dark:shadow-none border border-slate-200 dark:border-dark hover:border-primary/30 dark:hover:border-darkHighlight focus:ring-4 focus:ring-primary/10',
+    primary: 'bg-primary text-white hover:bg-blue-700 shadow-sm',
+    secondary: 'bg-white text-slate-700 border border-border hover:bg-slate-50 shadow-sm',
+    danger: 'bg-secondary text-white hover:bg-red-700 shadow-sm',
+    ghost: 'bg-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900',
+    white: 'bg-white text-slate-700 border border-border hover:bg-slate-50 shadow-sm',
   };
 
   const sizeClasses = {
-    sm: 'px-4 py-2 text-[10px] rounded-xl',
-    md: 'px-6 py-3 text-[11px] rounded-2xl',
-    lg: 'px-8 py-4 text-xs rounded-[1.5rem]',
+    sm: 'px-4 py-2 text-xs rounded-md',
+    md: 'px-6 py-3 text-sm rounded-md',
+    lg: 'px-8 py-4 text-base rounded-md',
   };
 
   return (

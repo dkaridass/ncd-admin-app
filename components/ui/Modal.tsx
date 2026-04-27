@@ -19,14 +19,14 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-primary/40 dark:bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-slate-900/40 "
           />
           <motion.div
             initial={{ opacity: 0, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 100 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="bg-card dark:bg-card-dark rounded-t-[2rem] md:rounded-[2.5rem] shadow-2xl dark:shadow-none w-full max-w-lg max-h-[90vh] overflow-y-auto custom-scrollbar relative z-10 border border-slate-100 dark:border-slate-700"
+            className="bg-card dark:bg-card-dark rounded-t-[2rem] md:rounded-lg shadow-admin dark:shadow-none w-full max-w-lg max-h-[90vh] overflow-y-auto custom-scrollbar relative z-10 border border-slate-100 dark:border-slate-700"
           >
             <div className="flex justify-between items-center px-6 py-4 md:px-8 md:py-6 border-b border-slate-50 dark:border-slate-700">
               <h3 className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-primary dark:text-gold">{title}</h3>

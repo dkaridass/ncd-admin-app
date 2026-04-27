@@ -47,7 +47,7 @@ const AnnouncementDetail: React.FC<AnnouncementDetailProps> = ({ announcement, o
                     </h1>
 
                     <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-sm">
+                        <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">
                             {announcement.author.charAt(0)}
                         </div>
                         <div>

@@ -61,14 +61,14 @@ const AnnouncementDrawer: React.FC<AnnouncementDrawerProps> = ({ isOpen, onClose
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40"
+                        className="fixed inset-0 bg-slate-900/20  z-40"
                     />
                     <motion.div
                         initial={{ x: '100%' }}
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
                         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                        className="fixed inset-y-0 right-0 w-full md:w-[600px] bg-card dark:bg-card-dark shadow-2xl dark:shadow-none z-50 overflow-y-auto flex flex-col"
+                        className="fixed inset-y-0 right-0 w-full md:w-[600px] bg-card dark:bg-card-dark shadow-admin dark:shadow-none z-50 overflow-y-auto flex flex-col"
                     >
                         <div className="flex items-center justify-between p-8 border-b border-slate-100 dark:border-dark">
                             <div>
@@ -113,7 +113,7 @@ const AnnouncementDrawer: React.FC<AnnouncementDrawerProps> = ({ isOpen, onClose
                                     onChange={handleInputChange}
                                     required
                                     placeholder="Rédigez votre annonce ici..."
-                                    className="flex-1 w-full p-6 border-2 border-slate-100 dark:border-dark rounded-2xl text-sm leading-loose text-slate-600 dark:text-slate-400 placeholder-slate-300 outline-none focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all resize-none"
+                                    className="flex-1 w-full p-6 border border-slate-200 dark:border-dark rounded-lg text-sm leading-loose text-slate-600 dark:text-slate-400 placeholder-slate-300 outline-none focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all resize-none"
                                 />
                             </div>
 

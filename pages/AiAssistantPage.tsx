@@ -124,9 +124,9 @@ const AiAssistantPage: React.FC = () => {
     };
 
     const quickActions = [
-        { label: 'Briefing Pastoral', icon: CalendarIcon, prompt: "Prépare un briefing pastoral pour la journée.", color: 'from-indigo-500/20 to-indigo-600/10', iconColor: 'text-indigo-400', borderColor: 'border-indigo-500/20 hover:border-indigo-400/40' },
-        { label: 'Plan de Sermon', icon: FileTextIcon, prompt: "Suggère un plan de sermon sur...", color: 'from-violet-500/20 to-violet-600/10', iconColor: 'text-violet-400', borderColor: 'border-violet-500/20 hover:border-violet-400/40' },
-        { label: 'Verset du Jour', icon: SparklesIcon, prompt: "Donne-moi un verset biblique inspirant pour aujourd'hui.", color: 'from-amber-500/20 to-amber-600/10', iconColor: 'text-amber-400', borderColor: 'border-amber-500/20 hover:border-amber-400/40' },
+        { label: 'Briefing Pastoral', icon: CalendarIcon, prompt: "Prépare un briefing pastoral pour la journée.", color: 'bg-slate-50', iconColor: 'text-indigo-600', borderColor: 'border-slate-200 hover:border-indigo-400' },
+        { label: 'Plan de Sermon', icon: FileTextIcon, prompt: "Suggère un plan de sermon sur...", color: 'bg-slate-50', iconColor: 'text-violet-600', borderColor: 'border-slate-200 hover:border-violet-400' },
+        { label: 'Verset du Jour', icon: SparklesIcon, prompt: "Donne-moi un verset biblique inspirant pour aujourd'hui.", color: 'bg-slate-50', iconColor: 'text-amber-600', borderColor: 'border-slate-200 hover:border-amber-400' },
     ];
 
     return (
@@ -147,17 +147,7 @@ const AiAssistantPage: React.FC = () => {
             ) : null}
 
             {/* Left Panel — The Brain/Vision Module */}
-            <div className="w-full md:w-[340px] rounded-[2.5rem] flex flex-col shadow-2xl dark:shadow-none relative overflow-hidden shrink-0 border border-white/[0.06]">
-                {/* Immersive Background */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[#080C18] via-[#0E1428] to-[#151B33]"></div>
-                <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                    <div className="absolute -top-32 -left-32 w-80 h-80 bg-indigo-600/15 rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '8s' }}></div>
-                    <div className="absolute bottom-20 -right-20 w-64 h-64 bg-purple-600/12 rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '12s', animationDelay: '4s' }}></div>
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-blue-500/8 rounded-full blur-[80px]"></div>
-                    {/* Subtle grid texture */}
-                    <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
-                </div>
-
+            <div className="w-full md:w-[340px] rounded-lg bg-white flex flex-col shadow-admin relative overflow-hidden shrink-0 border border-border">
                 <div className="relative z-10 flex-1 flex flex-col p-8">
                     {/* Module Header */}
                     <div className="mb-10">
@@ -165,10 +155,10 @@ const AiAssistantPage: React.FC = () => {
                             <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse shadow-[0_0_8px_rgba(129,140,248,0.6)]"></div>
                             <p className="text-[9px] font-black text-indigo-300/70 uppercase tracking-[0.3em]">Module</p>
                         </div>
-                        <h2 className="text-[1.7rem] font-display font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-indigo-200 leading-[1.15] tracking-tight">
+                        <h2 className="text-[1.7rem] font-display font-black text-slate-800 leading-[1.15] tracking-tight">
                             INTELLIGENCE<br />DE VISION
                         </h2>
-                        <div className="mt-3 h-[2px] w-12 bg-gradient-to-r from-indigo-500 to-transparent rounded-full"></div>
+                        <div className="mt-3 h-[2px] w-12 bg-indigo-500 rounded-full"></div>
                     </div>
 
                     {/* Quick Actions */}
@@ -179,16 +169,15 @@ const AiAssistantPage: React.FC = () => {
                                 onClick={() => { setInput(action.prompt); setActiveQuickAction(i); inputRef.current?.focus(); }}
                                 whileHover={{ x: 4, scale: 1.01 }}
                                 whileTap={{ scale: 0.98 }}
-                                className={`flex items-center w-full p-4 rounded-2xl bg-gradient-to-r ${action.color} border ${action.borderColor} text-white/80 hover:text-white transition-all group backdrop-blur-sm`}
+                                className={`flex items-center w-full p-4 rounded-lg flex-col items-start ${action.color} border ${action.borderColor} text-slate-700 hover:text-slate-900 transition-all group`}
                             >
-                                <div className={`w-10 h-10 rounded-xl bg-white/5 backdrop-blur-sm flex items-center justify-center ${action.iconColor} group-hover:bg-white/10 transition-all mr-4 shadow-inner`}>
-                                    <action.icon className="w-5 h-5" />
+                                <div className={`w-8 h-8 rounded-lg bg-white flex items-center justify-center ${action.iconColor} group-hover:bg-slate-100 transition-all shadow-sm mb-3`}>
+                                    <action.icon className="w-4 h-4" />
                                 </div>
-                                <div className="text-left flex-1">
+                                <div className="text-left w-full">
                                     <span className="font-bold text-xs tracking-wide block">{action.label}</span>
-                                    <span className="text-[9px] text-white/30 font-medium">Cliquer pour saisir</span>
+                                    <span className="text-[10px] text-slate-500 font-medium">Cliquer pour saisir</span>
                                 </div>
-                                <svg className="w-4 h-4 text-white/20 group-hover:text-white/50 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                             </motion.button>
                         ))}
                     </div>
@@ -198,13 +187,13 @@ const AiAssistantPage: React.FC = () => {
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <div className={`w-2 h-2 rounded-full ${isApiConfigured ? 'bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.6)]' : 'bg-red-400 shadow-[0_0_10px_rgba(248,113,113,0.6)]'} animate-pulse`}></div>
-                                <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.15em]">
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em]">
                                     {isApiConfigured ? 'GROQ AI ACTIVE' : 'NON CONFIGURÉ'}
                                 </span>
                             </div>
                         </div>
                         {!isApiConfigured && (
-                            <p className="text-[8px] text-red-300/60 mt-2 font-medium">
+                            <p className="text-[9px] text-red-500 mt-2 font-medium">
                                 Configurez VITE_GROQ_API_KEY dans .env.local
                             </p>
                         )}
@@ -213,10 +202,7 @@ const AiAssistantPage: React.FC = () => {
             </div>
 
             {/* Right Panel — Chat Interface */}
-            <div className="flex-1 bg-white dark:bg-[#0A0E1A] rounded-[2.5rem] shadow-xl dark:shadow-none flex flex-col overflow-hidden relative border border-slate-100 dark:border-white/[0.06]">
-                {/* Subtle Background Glow for chat area */}
-                <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/[0.03] rounded-full blur-[120px] pointer-events-none"></div>
-
+            <div className="flex-1 bg-white rounded-lg shadow-admin flex flex-col overflow-hidden relative border border-border">
                 {/* Messages Area */}
                 <div className="flex-1 overflow-y-auto p-6 md:p-10 space-y-6 custom-scrollbar relative z-10">
                     <AnimatePresence>
@@ -243,18 +229,18 @@ const AiAssistantPage: React.FC = () => {
                                     />
                                 ) : (
                                     <div className={`max-w-[78%] relative group ${msg.role === 'user' ? '' : ''}`}>
-                                        <div className={`p-5 md:p-6 text-[15px] font-medium leading-[1.7] tracking-wide ${msg.role === 'user'
-                                            ? 'bg-gradient-to-br from-[#1E1F54] to-[#2A2B6A] text-white rounded-[1.5rem] rounded-br-md shadow-lg shadow-indigo-900/20 border border-indigo-800/20'
-                                            : 'bg-slate-50 dark:bg-white/[0.03] text-slate-700 dark:text-slate-200 rounded-[1.5rem] rounded-bl-md border border-slate-100 dark:border-white/[0.06] shadow-sm dark:shadow-none'
+                                        <div className={`p-4 md:p-5 text-[14px] font-medium leading-[1.6] tracking-wide ${msg.role === 'user'
+                                            ? 'bg-primary text-white rounded-lg rounded-br-none border border-primary/20'
+                                            : 'bg-slate-50 text-slate-800 rounded-lg rounded-bl-none border border-slate-200'
                                             }`}>
                                             <p className="whitespace-pre-line">{msg.content as string}</p>
                                         </div>
                                         {msg.role === 'assistant' && (
                                             <div className="flex items-center gap-2 mt-2.5 ml-2">
-                                                <div className="w-4 h-4 rounded-full bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center">
+                                                <div className="w-4 h-4 rounded-full bg-indigo-500 flex items-center justify-center">
                                                     <SparklesIcon className="w-2.5 h-2.5 text-white" />
                                                 </div>
-                                                <p className="text-[9px] font-black text-slate-300 dark:text-white/20 uppercase tracking-[0.15em]">
+                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.15em]">
                                                     Assistant Vision
                                                 </p>
                                             </div>
@@ -272,22 +258,21 @@ const AiAssistantPage: React.FC = () => {
                             animate={{ opacity: 1, y: 0 }}
                             className="flex justify-start"
                         >
-                            <div className="bg-slate-50 dark:bg-white/[0.03] p-5 rounded-[1.5rem] rounded-bl-md border border-slate-100 dark:border-white/[0.06] flex gap-1.5 items-center shadow-sm dark:shadow-none">
+                            <div className="bg-slate-50 p-4 rounded-lg rounded-bl-none border border-slate-200 flex gap-1.5 items-center">
                                 <div className="w-2 h-2 bg-indigo-400/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
                                 <div className="w-2 h-2 bg-indigo-400/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
                                 <div className="w-2 h-2 bg-indigo-400/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-                                <span className="ml-2 text-[9px] font-bold text-slate-300 dark:text-white/20 uppercase tracking-widest">Réflexion...</span>
+                                <span className="ml-2 text-[9px] font-bold text-slate-500 uppercase tracking-widest">Réflexion...</span>
                             </div>
                         </motion.div>
                     )}
                     <div ref={messagesEndRef} />
                 </div>
 
-                {/* Premium Input Area */}
-                <div className="p-4 md:p-6 bg-white/80 dark:bg-[#0A0E1A]/80 backdrop-blur-xl border-t border-slate-100 dark:border-white/[0.04]">
+                <div className="p-4 md:p-6 bg-white border-t border-slate-100">
                     <form
                         onSubmit={(e) => { e.preventDefault(); handleSend(); }}
-                        className="flex items-center gap-3 bg-slate-50 dark:bg-white/[0.03] p-2 pr-2 pl-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.06] focus-within:border-indigo-400/40 focus-within:ring-4 focus-within:ring-indigo-500/[0.06] transition-all duration-300 shadow-sm dark:shadow-none hover:shadow-md dark:hover:shadow-none"
+                        className="flex items-center gap-3 bg-white p-2 pr-2 pl-4 rounded-lg border border-slate-200 focus-within:border-primary/40 focus-within:ring-4 focus-within:ring-primary/5 transition-all duration-300"
                     >
                         <input
                             ref={inputRef}
@@ -300,9 +285,7 @@ const AiAssistantPage: React.FC = () => {
                         <motion.button
                             type="submit"
                             disabled={isLoading || !input.trim()}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white flex items-center justify-center shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:shadow-indigo-500/30 disabled:opacity-40 disabled:scale-100 disabled:shadow-none transition-all duration-300"
+                            className="w-10 h-10 rounded-lg bg-primary text-white flex items-center justify-center disabled:opacity-40 transition-all duration-300"
                         >
                             {isLoading ? (
                                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -311,7 +294,7 @@ const AiAssistantPage: React.FC = () => {
                             )}
                         </motion.button>
                     </form>
-                    <p className="text-center text-[9px] text-slate-300 dark:text-white/10 font-medium mt-2.5 tracking-wide">
+                    <p className="text-center text-[9px] text-slate-400 font-medium mt-3 tracking-wide">
                         Intelligence Antigravité · Propulsé par Groq AI
                     </p>
                 </div>

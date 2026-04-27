@@ -211,7 +211,7 @@ const AnnouncementsPage: React.FC = () => {
                             <button
                                 key={cat}
                                 onClick={() => setActiveCategoryFilter(cat as any)}
-                                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeCategoryFilter === cat ? 'bg-primary text-white shadow-md dark:shadow-none' : 'bg-card dark:bg-card-dark border-2 border-slate-200 dark:border-dark text-slate-700 dark:text-white hover:border-primary/50'}`}
+                                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${activeCategoryFilter === cat ? 'bg-primary text-white shadow-md dark:shadow-none' : 'bg-card dark:bg-card-dark border border-slate-200 dark:border-dark text-slate-700 dark:text-white hover:border-primary/50'}`}
                             >
                                 {cat}
                             </button>
@@ -227,7 +227,7 @@ const AnnouncementsPage: React.FC = () => {
                             <button
                                 key={target}
                                 onClick={() => setActiveTargetFilter(target as any)}
-                                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeTargetFilter === target ? 'bg-primary text-white shadow-md dark:shadow-none' : 'bg-card dark:bg-card-dark border-2 border-slate-200 dark:border-dark text-slate-700 dark:text-white hover:border-primary/50'}`}
+                                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${activeTargetFilter === target ? 'bg-primary text-white shadow-md dark:shadow-none' : 'bg-card dark:bg-card-dark border border-slate-200 dark:border-dark text-slate-700 dark:text-white hover:border-primary/50'}`}
                             >
                                 {target}
                             </button>
@@ -340,7 +340,7 @@ const AnnouncementsPage: React.FC = () => {
                                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                                 required
                                 rows={5}
-                                className="block w-full px-4 py-3 border-2 border-slate-100 dark:border-dark rounded-xl bg-card dark:bg-card-dark text-slate-900 dark:text-white placeholder-slate-300 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
+                                className="block w-full px-4 py-3 border border-slate-200 dark:border-dark rounded-lg bg-card dark:bg-card-dark text-slate-900 dark:text-white placeholder-slate-300 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
                                 placeholder="Détails de l'annonce..."
                             />
                         </div>
@@ -353,7 +353,7 @@ const AnnouncementsPage: React.FC = () => {
                                 <select
                                     value={formData.category}
                                     onChange={(e) => setFormData({ ...formData, category: e.target.value as Announcement['category'] })}
-                                    className="block w-full px-4 py-3 border-2 border-slate-100 dark:border-dark rounded-xl bg-card dark:bg-card-dark text-slate-900 dark:text-white focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
+                                    className="block w-full px-4 py-3 border border-slate-200 dark:border-dark rounded-lg bg-card dark:bg-card-dark text-slate-900 dark:text-white focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
                                 >
                                     {categories.map((cat) => (
                                         <option key={cat} value={cat}>{cat}</option>
@@ -368,7 +368,7 @@ const AnnouncementsPage: React.FC = () => {
                                 <select
                                     value={formData.target}
                                     onChange={(e) => setFormData({ ...formData, target: e.target.value as Announcement['target'] })}
-                                    className="block w-full px-4 py-3 border-2 border-slate-100 dark:border-dark rounded-xl bg-card dark:bg-card-dark text-slate-900 dark:text-white focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
+                                    className="block w-full px-4 py-3 border border-slate-200 dark:border-dark rounded-lg bg-card dark:bg-card-dark text-slate-900 dark:text-white focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
                                 >
                                     {targets.map((target) => (
                                         <option key={target} value={target}>{target}</option>

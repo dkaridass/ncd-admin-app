@@ -19,62 +19,41 @@
         extend: {
           fontFamily: {
             sans: ['Inter', 'sans-serif'],
-            display: ['Outfit', 'sans-serif'],
-            serif: ['Playfair Display', 'serif'],
+            display: ['Inter', 'sans-serif'],
+            serif: ['Inter', 'serif'],
             mono: ['Space Mono', 'JetBrains Mono', 'Fira Code', 'monospace'],
           },
           colors: {
             primary: {
-              DEFAULT: '#0B132B', // Deep Royal Navy (Logo match)
-              light: '#16234D',   // Lighter Navy
-              dark: '#060A17',    // Deepest Navy
-              accent: '#C5A059',  // Champagne Gold
+              DEFAULT: '#0044FF', // action-primary
+              light: '#3B82F6',
+              dark: '#0033CC'
             },
             secondary: {
-              DEFAULT: '#C8102E', // Vibrant Crimson Red (Logo match)
-              light: '#E61E3D',   // Lighter Crimson
-              dim: '#F48E9D',     // Muted Crimson
+              DEFAULT: '#D81124', // action-danger
+              light: '#EF4444',
             },
-            gold: {
-              DEFAULT: '#C5A059', // Refined Royal gold accent
-              light: '#D4AF37',
-              dim: '#9A7D46',
-            },
-            // Premium Dark Mode Tokens
             surface: {
-              DEFAULT: '#F8FAFC', // Light: Slate 50
-              dark: '#05050A',    // Dark: Bespoke Midnight
-              glass: 'rgba(255, 255, 255, 0.7)',
-              glassDark: 'rgba(5, 5, 10, 0.85)',
+              DEFAULT: '#FFFFFF',
             },
             card: {
               DEFAULT: '#FFFFFF',
-              hover: '#F1F5F9', // light hover
-              dark: 'rgba(197, 160, 89, 0.03)', // Translucent gold tint for cards
-              darkHover: 'rgba(197, 160, 89, 0.08)',
             },
             border: {
-              DEFAULT: '#E2E8F0', // Light: Slate 200
-              dark: 'rgba(255, 255, 255, 0.08)', // Barely there structure
-              darkHighlight: 'rgba(255, 255, 255, 0.2)', // Hover states & active inputs
+              DEFAULT: '#E2E8F0', // border-color
             },
             text: {
-              primary: { DEFAULT: '#0F172A', dark: '#F8FAFC' },
-              secondary: { DEFAULT: '#475569', dark: '#94A3B8' },
-              muted: { DEFAULT: '#94A3B8', dark: '#475569' },
+              primary: '#1E293B',
+              secondary: '#64748B',
+              muted: '#94A3B8',
             },
-            accent: {
-              glow: 'rgba(212, 168, 67, 0.3)',
-              dangerGlow: 'rgba(220, 38, 38, 0.15)',
-            }
+            sidebar: '#0F172A',
+            success: '#10B981',
+            canvas: '#F8FAFC',
           },
           boxShadow: {
-            'premium': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', // Stronger depth for login card
-            'soft': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
-            'input': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-            'glow-gold': '0 0 15px rgba(212, 168, 67, 0.3)',
-            'glow-danger': '0 0 15px rgba(220, 38, 38, 0.15)',
-            'glow-primary': '0 0 15px rgba(37, 99, 235, 0.3)',
+            'admin': '0 1px 2px rgba(0, 0, 0, 0.05)',
+            'input': '0 1px 2px 0 rgba(0, 0, 0, 0.03)',
           },
           animation: {
             'fade-in': 'fadeIn 0.5s ease-out forwards',
@@ -91,6 +70,10 @@
               '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
               '40%, 60%': { transform: 'translate3d(4px, 0, 0)' }
             }
+          },
+          backgroundImage: {
+            'gradient-open-heaven': 'linear-gradient(145deg, #030614 0%, #002570 50%, #005AE5 100%)',
+            'gradient-spirit-fire': 'linear-gradient(135deg, #005AE5 0%, #8215E5 50%, #E3001B 100%)',
           }
         },
       },
@@ -102,36 +85,64 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       text-rendering: optimizeLegibility;
-      font-size: 15px;
-      /* Slightly larger baseline than default 14px */
-      line-height: var(--tw-prose-body, 1.6);
+      font-size: 14px;
+      line-height: 1.5;
+      color: #1E293B;
+      background-color: #F8FAFC;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: 'Inter', sans-serif;
       color: #0F172A;
-      /* Slate 900 for Light Mode */
     }
 
-    .dark body {
-      color: #F8FAFC;
-      /* Slate 50 for Dark Mode */
-      /* Add an incredibly subtle text shadow to text in dark mode to combat native browser thinning */
-      text-shadow: 0 0.5px 0.5px rgba(0, 0, 0, 0.4);
+    table th {
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: #64748B;
+      border-bottom: 2px solid #E2E8F0;
+      padding: 0.5rem 0.75rem;
+      text-align: left;
     }
 
-    .glass-effect {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+    table td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #E2E8F0;
+      font-size: 0.875rem;
     }
 
-    .dark .glass-effect {
-      background: rgba(11, 17, 32, 0.85);
-      border-color: rgba(255, 255, 255, 0.06) !important;
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      line-height: 1;
+      white-space: nowrap;
     }
 
-    .sidebar-glass {
-      background: rgba(30, 27, 75, 0.95);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+    .badge-success {
+      background: #D1FAE5;
+      color: #065F46;
     }
+
+    .badge-pending {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+
+    .badge-danger {
+      background: #FEE2E2;
+      color: #991B1B;
+    }
+
+
 
     ::-webkit-scrollbar {
       width: 6px;
@@ -195,8 +206,7 @@
   <link rel="stylesheet" href="/index.css">
 </head>
 
-<body
-  class="bg-[#F8F9FA] dark:bg-surface-dark text-primary dark:text-slate-100 font-sans antialiased selection:bg-secondary-light selection:text-primary transition-colors duration-200">
+<body class="bg-[#F8FAFC] text-[#1E293B] font-sans antialiased selection:bg-primary/20">
   <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>

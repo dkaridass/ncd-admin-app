@@ -121,7 +121,7 @@ const CsvImportModal: React.FC<CsvImportModalProps> = ({ isOpen, onClose, existi
                 {/* STEP 1: Upload */}
                 {step === 'UPLOAD' && (
                     <div className="space-y-6">
-                        <div className="border-2 border-dashed border-slate-200 dark:border-dark rounded-2xl p-10 text-center hover:border-primary/40 transition-colors">
+                        <div className="border-2 border-dashed border-slate-200 dark:border-dark rounded-lg p-10 text-center hover:border-primary/40 transition-colors">
                             <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <span className="text-3xl">📄</span>
                             </div>
@@ -140,13 +140,13 @@ const CsvImportModal: React.FC<CsvImportModalProps> = ({ isOpen, onClose, existi
                             />
                             <label
                                 htmlFor="csv-file-input"
-                                className="inline-block px-6 py-3 bg-primary text-white rounded-xl text-xs font-black uppercase tracking-widest cursor-pointer hover:opacity-90 transition-opacity"
+                                className="inline-block px-6 py-3 bg-primary text-white rounded-lg text-xs font-black uppercase tracking-widest cursor-pointer hover:opacity-90 transition-opacity"
                             >
                                 Choisir un Fichier
                             </label>
                         </div>
 
-                        <div className="bg-slate-50 dark:bg-white/[0.02] rounded-2xl p-5">
+                        <div className="bg-slate-50 dark:bg-white/[0.02] rounded-lg p-5">
                             <p className="text-xs font-black text-slate-500 uppercase tracking-widest mb-3">Colonnes reconnues automatiquement</p>
                             <div className="flex flex-wrap gap-2">
                                 {['Nom', 'Téléphone', 'Email', 'Sexe', 'Adresse', 'Commune', 'Date de naissance', 'Rôle', 'Statut', 'WhatsApp', 'Référence', 'État civil', 'Baptisé'].map(col => (
@@ -164,26 +164,26 @@ const CsvImportModal: React.FC<CsvImportModalProps> = ({ isOpen, onClose, existi
                     <div className="space-y-6">
                         {/* Stats */}
                         <div className="grid grid-cols-4 gap-3">
-                            <div className="bg-slate-50 dark:bg-white/[0.02] rounded-xl p-4 text-center">
+                            <div className="bg-slate-50 dark:bg-white/[0.02] rounded-lg p-4 text-center">
                                 <p className="text-2xl font-black text-primary">{parseResult.rows.length}</p>
                                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Lignes</p>
                             </div>
-                            <div className="bg-emerald-50 dark:bg-emerald-900/10 rounded-xl p-4 text-center">
+                            <div className="bg-emerald-50 dark:bg-emerald-900/10 rounded-lg p-4 text-center">
                                 <p className="text-2xl font-black text-emerald-600">{validationResult.valid.length}</p>
                                 <p className="text-[9px] font-bold text-emerald-500 uppercase tracking-widest">Valides</p>
                             </div>
-                            <div className="bg-red-50 dark:bg-red-900/10 rounded-xl p-4 text-center">
+                            <div className="bg-red-50 dark:bg-red-900/10 rounded-lg p-4 text-center">
                                 <p className="text-2xl font-black text-red-600">{validationResult.errors.length}</p>
                                 <p className="text-[9px] font-bold text-red-500 uppercase tracking-widest">Erreurs</p>
                             </div>
-                            <div className="bg-amber-50 dark:bg-amber-900/10 rounded-xl p-4 text-center">
+                            <div className="bg-amber-50 dark:bg-amber-900/10 rounded-lg p-4 text-center">
                                 <p className="text-2xl font-black text-amber-600">{validationResult.duplicates.length}</p>
                                 <p className="text-[9px] font-bold text-amber-500 uppercase tracking-widest">Doublons</p>
                             </div>
                         </div>
 
                         {/* Column Mapping */}
-                        <div className="bg-indigo-50 dark:bg-indigo-900/10 rounded-xl p-4">
+                        <div className="bg-indigo-50 dark:bg-indigo-900/10 rounded-lg p-4">
                             <p className="text-xs font-black text-indigo-700 mb-2">
                                 {mappedCount}/{parseResult.headers.length} colonnes mappées automatiquement
                             </p>
@@ -196,7 +196,7 @@ const CsvImportModal: React.FC<CsvImportModalProps> = ({ isOpen, onClose, existi
 
                         {/* Errors list */}
                         {validationResult.errors.length > 0 && (
-                            <div className="bg-red-50 dark:bg-red-900/10 rounded-xl p-4 max-h-32 overflow-y-auto">
+                            <div className="bg-red-50 dark:bg-red-900/10 rounded-lg p-4 max-h-32 overflow-y-auto">
                                 <p className="text-xs font-black text-red-600 mb-2">Erreurs détectées</p>
                                 {validationResult.errors.map((err, i) => (
                                     <p key={i} className="text-[10px] text-red-500 font-medium">
@@ -208,7 +208,7 @@ const CsvImportModal: React.FC<CsvImportModalProps> = ({ isOpen, onClose, existi
 
                         {/* Duplicates list */}
                         {validationResult.duplicates.length > 0 && (
-                            <div className="bg-amber-50 dark:bg-amber-900/10 rounded-xl p-4 max-h-32 overflow-y-auto">
+                            <div className="bg-amber-50 dark:bg-amber-900/10 rounded-lg p-4 max-h-32 overflow-y-auto">
                                 <p className="text-xs font-black text-amber-600 mb-2">Doublons détectés (seront importés malgré tout)</p>
                                 {validationResult.duplicates.map((dup, i) => (
                                     <p key={i} className="text-[10px] text-amber-500 font-medium">
@@ -219,7 +219,7 @@ const CsvImportModal: React.FC<CsvImportModalProps> = ({ isOpen, onClose, existi
                         )}
 
                         {/* Preview table */}
-                        <div className="border rounded-xl overflow-hidden">
+                        <div className="border rounded-lg overflow-hidden">
                             <div className="overflow-x-auto max-h-48">
                                 <table className="w-full text-[10px]">
                                     <thead className="bg-slate-50 dark:bg-white/[0.02] sticky top-0">
@@ -261,13 +261,13 @@ const CsvImportModal: React.FC<CsvImportModalProps> = ({ isOpen, onClose, existi
 
                         {/* Actions */}
                         <div className="flex gap-3 justify-end">
-                            <Button onClick={reset} variant="secondary" className="rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest">
+                            <Button onClick={reset} variant="secondary" className="rounded-lg px-6 py-3 text-xs font-black uppercase tracking-widest">
                                 ← Retour
                             </Button>
                             <Button
                                 onClick={handleImport}
                                 disabled={validationResult.valid.length === 0}
-                                className="rounded-xl px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black uppercase tracking-widest"
+                                className="rounded-lg px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black uppercase tracking-widest"
                             >
                                 Importer {validationResult.valid.length} membre(s)
                             </Button>
@@ -305,7 +305,7 @@ const CsvImportModal: React.FC<CsvImportModalProps> = ({ isOpen, onClose, existi
                                 Fichier : {fileName}
                             </p>
                         </div>
-                        <Button onClick={handleClose} className="rounded-xl px-8 py-3 bg-primary text-white text-xs font-black uppercase tracking-widest">
+                        <Button onClick={handleClose} className="rounded-lg px-8 py-3 bg-primary text-white text-xs font-black uppercase tracking-widest">
                             Fermer
                         </Button>
                     </div>

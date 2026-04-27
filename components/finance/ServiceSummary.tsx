@@ -50,11 +50,11 @@ const ServiceSummary: React.FC<ServiceSummaryProps> = ({ date, records }) => {
                     Récapitulatif du {new Date(date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
                 </h3>
                 <div className="flex gap-4">
-                    <div className="px-6 py-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border border-emerald-100 flex flex-col items-end">
+                    <div className="px-6 py-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg border border-emerald-100 flex flex-col items-end">
                         <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Total Jour (CDF)</span>
                         <span className="text-2xl font-black text-emerald-700 font-display">{grandTotalCDF.toLocaleString()} FC</span>
                     </div>
-                    <div className="px-6 py-3 bg-blue-50 rounded-xl border border-blue-100 flex flex-col items-end">
+                    <div className="px-6 py-3 bg-blue-50 rounded-lg border border-blue-100 flex flex-col items-end">
                         <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Total Jour (USD)</span>
                         <span className="text-2xl font-black text-blue-700 font-display">${grandTotalUSD.toLocaleString()}</span>
                     </div>
@@ -80,13 +80,13 @@ const ServiceCard: React.FC<{ service: any }> = ({ service }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
-        <Card className="overflow-hidden border border-slate-100 dark:border-dark hover:shadow-lg dark:shadow-none transition-all duration-300">
+        <Card className="overflow-hidden border border-slate-100 dark:border-dark hover:shadow-md transition-all duration-300">
             <div
                 className="p-6 bg-card dark:bg-card-dark flex items-center justify-between cursor-pointer"
                 onClick={() => setIsExpanded(!isExpanded)}
             >
                 <div className="flex items-center gap-4">
-                    <div className={`p-3 rounded-xl ${service.name.includes('Culte') ? 'bg-primary/10 text-primary' : 'bg-slate-100 text-slate-500 dark:text-slate-400'}`}>
+                    <div className={`p-3 rounded-lg ${service.name.includes('Culte') ? 'bg-primary/10 text-primary' : 'bg-slate-100 text-slate-500 dark:text-slate-400'}`}>
                         <TrendingUpIcon className="w-6 h-6" />
                     </div>
                     <div>

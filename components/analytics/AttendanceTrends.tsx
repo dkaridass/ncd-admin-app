@@ -76,24 +76,24 @@ const AttendanceTrends: React.FC = () => {
     const maxTotal = Math.max(...trendData.map(w => w.total), 1);
 
     return (
-        <div className="bg-card dark:bg-card-dark rounded-[2rem] border border-slate-100 dark:border-slate-700 shadow-sm dark:shadow-none overflow-hidden">
+        <div className="bg-white rounded-lg border border-border shadow-admin overflow-hidden">
             {/* Header */}
-            <div className="px-6 py-5 border-b border-slate-50 dark:border-dark">
+            <div className="px-6 py-4 border-b border-border">
                 <div className="flex items-center justify-between flex-wrap gap-4">
                     <div>
-                        <h3 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">
-                            📈 Tendances Présences
+                        <h3 className="text-sm font-bold text-slate-800 tracking-wide">
+                            Tendances Présences
                         </h3>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">
+                        <p className="text-xs text-slate-500 mt-1 font-medium">
                             Évolution hebdomadaire
                         </p>
                     </div>
-                    <div className="flex gap-1 p-1 bg-slate-100 dark:bg-slate-700 rounded-xl">
+                    <div className="flex gap-1 p-1 shadow-sm border border-border rounded bg-slate-50">
                         {(['3M', '6M', '12M'] as Period[]).map(p => (
                             <button
                                 key={p}
                                 onClick={() => setPeriod(p)}
-                                className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all ${period === p ? 'bg-white dark:bg-slate-600 text-primary dark:text-gold shadow-sm dark:shadow-none' : 'text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-gold' }`}
+                                className={`px-3 py-1 text-xs font-bold transition-colors rounded-sm ${period === p ? 'bg-white text-primary shadow-sm border border-slate-200' : 'text-slate-500 hover:text-slate-800'}`}
                             >
                                 {p}
                             </button>
@@ -103,29 +103,29 @@ const AttendanceTrends: React.FC = () => {
 
                 {/* KPI Strip */}
                 <div className="grid grid-cols-4 gap-4 mt-5">
-                    <div className="text-center">
-                        <p className="text-xl font-black text-primary dark:text-gold font-display">
+                    <div className="text-center p-3 rounded border border-slate-100">
+                        <p className="text-lg font-bold text-slate-800">
                             <AnimatedCounter value={stats.avg} />
                         </p>
-                        <p className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Moy/Semaine</p>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Moy/Semaine</p>
                     </div>
-                    <div className="text-center">
-                        <p className="text-xl font-black text-indigo-600 dark:text-indigo-400 font-display">
+                    <div className="text-center p-3 rounded border border-slate-100">
+                        <p className="text-lg font-bold text-indigo-600">
                             <AnimatedCounter value={stats.peak} />
                         </p>
-                        <p className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Record</p>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Record</p>
                     </div>
-                    <div className="text-center">
-                        <p className="text-xl font-black text-slate-600 dark:text-slate-400 font-display">
+                    <div className="text-center p-3 rounded border border-slate-100">
+                        <p className="text-lg font-bold text-slate-800">
                             <AnimatedCounter value={stats.totalServices} />
                         </p>
-                        <p className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Cultes</p>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Cultes</p>
                     </div>
-                    <div className="text-center">
-                        <p className={`text-xl font-black font-display ${stats.trend >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500 dark:text-red-400'}`}>
+                    <div className="text-center p-3 rounded border border-slate-100">
+                        <p className={`text-lg font-bold ${stats.trend >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>
                             {stats.trend >= 0 ? '+' : ''}{stats.trend}%
                         </p>
-                        <p className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Tendance</p>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Tendance</p>
                     </div>
                 </div>
             </div>

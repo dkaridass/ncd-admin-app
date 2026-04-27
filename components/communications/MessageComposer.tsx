@@ -37,7 +37,7 @@ const MessageComposer: React.FC<Props> = ({ onSend, isLoading }) => {
     };
 
     return (
-        <Card className="border-none shadow-soft dark:shadow-none rounded-2xl p-8">
+        <Card className="border-none shadow-sm rounded-lg p-8">
             <h3 className="text-lg font-bold text-slate-700 dark:text-white mb-6">Composer un Message</h3>
 
             {/* Message Type Selection */}
@@ -48,7 +48,7 @@ const MessageComposer: React.FC<Props> = ({ onSend, isLoading }) => {
                         <button
                             key={type}
                             onClick={() => setMessageType(type)}
-                            className={`flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all ${messageType === type ? 'bg-primary text-white shadow-md dark:shadow-none' : 'bg-slate-100 text-slate-600 dark:text-slate-400 hover:bg-slate-200' }`}
+                            className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-all ${messageType === type ? 'bg-primary text-white shadow-md dark:shadow-none' : 'bg-slate-100 text-slate-600 dark:text-slate-400 hover:bg-slate-200' }`}
                         >
                             {type === 'SMS' ? '📱 SMS' : type === 'EMAIL' ? '📧 Email' : '📱📧 Les Deux'}
                         </button>
@@ -64,7 +64,7 @@ const MessageComposer: React.FC<Props> = ({ onSend, isLoading }) => {
                         value={subject}
                         onChange={(e) => setSubject(e.target.value)}
                         placeholder="Entrez le sujet du message..."
-                        className="rounded-xl"
+                        className="rounded-lg"
                     />
                 </div>
             )}
@@ -79,7 +79,7 @@ const MessageComposer: React.FC<Props> = ({ onSend, isLoading }) => {
                     onChange={(e) => setContent(e.target.value)}
                     placeholder="Écrivez votre message ici..."
                     rows={8}
-                    className="w-full px-4 py-3 border-2 border-slate-200 dark:border-dark rounded-xl bg-card dark:bg-card-dark text-sm font-medium text-slate-800 dark:text-white placeholder-slate-400 outline-none focus:border-primary transition-all resize-none"
+                    className="w-full px-4 py-3 border border-slate-200 dark:border-dark rounded-lg bg-card dark:bg-card-dark text-sm font-medium text-slate-800 dark:text-white placeholder-slate-400 outline-none focus:border-primary transition-all resize-none"
                 />
 
                 {/* Character Counter */}
@@ -114,7 +114,7 @@ const MessageComposer: React.FC<Props> = ({ onSend, isLoading }) => {
             <Button
                 onClick={handleSend}
                 disabled={!content.trim() || isLoading}
-                className="w-full py-4 rounded-xl bg-primary text-white font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-4 rounded-lg bg-primary text-white font-black uppercase tracking-widest text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 {isLoading ? 'Envoi en cours...' : `📤 Envoyer le Message`}
             </Button>

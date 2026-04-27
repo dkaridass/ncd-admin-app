@@ -13,22 +13,13 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [theme, setTheme] = useState<Theme>(() => {
-        if (typeof window !== 'undefined') {
-            const stored = localStorage.getItem('ncd-theme') as Theme;
-            if (stored) return stored;
-            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        }
-        return 'light';
+        return 'light'; // Forced light mode specification
     });
 
     useEffect(() => {
         const root = document.documentElement;
-        if (theme === 'dark') {
-            root.classList.add('dark');
-        } else {
-            root.classList.remove('dark');
-        }
-        localStorage.setItem('ncd-theme', theme);
+        root.classList.remove('dark');
+        localStorage.setItem('ncd-theme-v3', 'light');
     }, [theme]);
 
     const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');

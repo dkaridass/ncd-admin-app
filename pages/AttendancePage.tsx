@@ -137,7 +137,7 @@ const AttendancePage: React.FC = () => {
                     <h2 className="text-3xl md:text-5xl font-extrabold text-primary dark:text-white font-display tracking-tight leading-none mb-1 uppercase italic">Présences</h2>
                     <p className="text-slate-500 dark:text-slate-400 font-medium italic opacity-80 uppercase tracking-widest text-[9px]">Suivi des Cultes • NCD La Pentecôte</p>
                 </div>
-                <Button onClick={() => setIsModalOpen(true)} className="rounded-xl px-6 py-4 bg-primary text-white text-[10px] uppercase font-black tracking-widest shadow-lg dark:shadow-none hover:scale-105 transition-transform">
+                <Button onClick={() => setIsModalOpen(true)} className="rounded-lg px-6 py-3 bg-primary text-white text-[10px] uppercase font-black tracking-widest shadow-md hover:bg-primary/90 transition-colors">
                     <PlusCircleIcon className="w-5 h-5 mr-2" />
                     Nouveau Rapport
                 </Button>
@@ -145,7 +145,7 @@ const AttendancePage: React.FC = () => {
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <Card className="p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg dark:shadow-none relative overflow-hidden group">
+                <Card className="p-6 rounded-lg shadow-admin bg-blue-500 text-white relative overflow-hidden group border-none">
                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                         <UsersIcon className="w-24 h-24" />
                     </div>
@@ -154,7 +154,7 @@ const AttendancePage: React.FC = () => {
                         {sortedRecords.slice(0, 4).reduce((acc, r) => acc + r.totalCount, 0).toLocaleString()}
                     </p>
                 </Card>
-                <Card className="p-6 bg-card dark:bg-card-dark border border-slate-100 dark:border-dark shadow-sm dark:shadow-none">
+                <Card className="p-6 rounded-lg bg-white border border-slate-200 shadow-admin">
                     <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Dernier Culte</h3>
                     {sortedRecords[0] ? (
                         <div>
@@ -165,7 +165,7 @@ const AttendancePage: React.FC = () => {
                         <p className="text-sm text-slate-400 font-medium">Aucune donnée</p>
                     )}
                 </Card>
-                <Card className="p-6 bg-card dark:bg-card-dark border border-slate-100 dark:border-dark shadow-sm dark:shadow-none">
+                <Card className="p-6 rounded-lg bg-white border border-slate-200 shadow-admin">
                     <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Tendances</h3>
                     {(() => {
                         // I3 fix: Calculate real attendance trend
@@ -196,7 +196,7 @@ const AttendancePage: React.FC = () => {
 
             {/* Special Services Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <Card className="p-6 bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-lg dark:shadow-none relative overflow-hidden group">
+                <Card className="p-6 rounded-lg shadow-admin bg-amber-500 text-white relative overflow-hidden group border-none">
                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                         <CalendarIcon className="w-24 h-24" />
                     </div>
@@ -206,7 +206,7 @@ const AttendancePage: React.FC = () => {
                         {specialServicesThisYear.length > 0 ? specialServicesThisYear.map(s => s.specialServiceName || s.sessionName).slice(0, 3).join(', ') + (specialServicesThisYear.length > 3 ? '...' : '') : 'Aucun cette année'}
                     </p>
                 </Card>
-                <Card className="p-6 bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg dark:shadow-none relative overflow-hidden group">
+                <Card className="p-6 rounded-lg shadow-admin bg-emerald-500 text-white relative overflow-hidden group border-none">
                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                         <HeartIcon className="w-24 h-24" />
                     </div>
@@ -221,15 +221,15 @@ const AttendancePage: React.FC = () => {
             </div>
 
             {/* Attendance List */}
-            <div className="bg-card dark:bg-card-dark rounded-3xl shadow-sm dark:shadow-none border border-slate-100 dark:border-dark overflow-hidden">
-                <div className="p-6 border-b border-slate-100 dark:border-dark bg-slate-50 dark:bg-white/[0.02]/50 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="bg-white rounded-lg shadow-admin border border-slate-200 overflow-hidden">
+                <div className="p-6 border-b border-slate-200 bg-slate-50 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <h3 className="font-bold text-slate-700 dark:text-white">Historique des Rapports</h3>
                     <div className="flex gap-2 bg-card dark:bg-card-dark rounded-full p-1 shadow-sm dark:shadow-none border border-slate-100 dark:border-dark">
                         {(['Tous', 'Ordinaire', 'Spécial'] as const).map(f => (
                             <button
                                 key={f}
                                 onClick={() => setHistoryFilter(f)}
-                                className={`px-4 py-2 rounded-full text-[9px] font-black uppercase transition-all ${historyFilter === f ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600' : 'text-slate-400 hover:text-slate-600'}`}
+                                className={`px-4 py-2 rounded-md text-[9px] font-black uppercase transition-all ${historyFilter === f ? 'bg-primary/10 text-primary' : 'text-slate-400 hover:text-slate-600'}`}
                             >
                                 {f}
                             </button>
@@ -252,13 +252,13 @@ const AttendancePage: React.FC = () => {
                                 </div>
                                 <div className="text-right">
                                     <p className="text-[9px] uppercase font-black tracking-widest text-slate-400 mb-1">Total</p>
-                                    <span className="inline-flex items-center justify-center min-w-[3rem] h-8 px-3 rounded-xl bg-slate-100 dark:bg-white/5 text-slate-800 dark:text-white font-black text-base shadow-sm">
+                                    <span className="inline-flex items-center justify-center min-w-[3rem] h-8 px-3 rounded-lg bg-slate-100 dark:bg-white/5 text-slate-800 dark:text-white font-black text-base shadow-sm">
                                         {record.totalCount}
                                     </span>
                                 </div>
                             </div>
 
-                            <div className="flex justify-between items-center bg-slate-50 dark:bg-white/[0.02] p-3 rounded-xl border border-slate-100 dark:border-dark">
+                            <div className="flex justify-between items-center bg-slate-50 dark:bg-white/[0.02] p-3 rounded-lg border border-slate-100 dark:border-dark">
                                 <div className="flex-1 text-center">
                                     <p className="text-[9px] font-black text-blue-500 dark:text-blue-400 mb-1">H</p>
                                     <p className="text-xs font-bold text-slate-600 dark:text-slate-300">{record.menCount}</p>
@@ -349,16 +349,16 @@ const AttendancePage: React.FC = () => {
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Nouveau Rapport de Présence">
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Service Type Toggle */}
-                    <div className="flex gap-2 bg-slate-50 dark:bg-white/[0.02] rounded-2xl p-1.5 border border-slate-100 dark:border-dark">
+                    <div className="flex gap-2 bg-slate-50 rounded-lg p-1.5 border border-slate-200">
                         {(['Ordinaire', 'Spécial'] as const).map(t => (
                             <button
                                 key={t}
                                 type="button"
                                 onClick={() => setFormData({ ...formData, serviceType: t })}
-                                className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${formData.serviceType === t
+                                className={`flex-1 py-2 rounded-md text-[10px] font-black uppercase tracking-widest transition-all ${formData.serviceType === t
                                     ? t === 'Spécial'
-                                        ? 'bg-amber-500 text-white shadow-lg'
-                                        : 'bg-primary text-white shadow-lg'
+                                        ? 'bg-amber-500 text-white shadow-sm'
+                                        : 'bg-primary text-white shadow-sm'
                                     : 'text-slate-400 hover:text-slate-600'
                                     }`}
                             >
@@ -375,7 +375,7 @@ const AttendancePage: React.FC = () => {
                                 <select
                                     value={formData.sessionName}
                                     onChange={e => setFormData({ ...formData, sessionName: e.target.value })}
-                                    className="block w-full px-4 py-3 border-2 border-slate-200 dark:border-dark rounded-xl bg-slate-50 dark:bg-white/[0.02] font-bold text-sm text-slate-700 dark:text-white outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all"
+                                    className="block w-full px-4 py-3 border border-slate-200 dark:border-dark rounded-lg bg-slate-50 dark:bg-white/[0.02] font-bold text-sm text-slate-700 dark:text-white outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all"
                                 >
                                     {cultesDisponibles.map(c => <option key={c} value={c}>{c}</option>)}
                                 </select>
@@ -386,7 +386,7 @@ const AttendancePage: React.FC = () => {
                                 <select
                                     value={formData.specialServiceName}
                                     onChange={e => setFormData({ ...formData, specialServiceName: e.target.value })}
-                                    className="block w-full px-4 py-3 border-2 border-amber-300 dark:border-amber-800 rounded-xl bg-amber-50 dark:bg-amber-900/10 font-bold text-sm text-amber-800 dark:text-amber-300 outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all"
+                                    className="block w-full px-4 py-3 border-2 border-amber-300 dark:border-amber-800 rounded-lg bg-amber-50 dark:bg-amber-900/10 font-bold text-sm text-amber-800 dark:text-amber-300 outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all"
                                     required
                                 >
                                     <option value="">Sélectionner...</option>
@@ -405,7 +405,7 @@ const AttendancePage: React.FC = () => {
                             { label: 'Visiteurs', field: 'visitorCount', color: 'bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-900/20 dark:border-emerald-800' },
                             { label: 'Conversions', field: 'newConvertsCount', color: 'bg-teal-50 text-teal-600 border-teal-200 dark:bg-teal-900/20 dark:border-teal-800' }
                         ].map((item) => (
-                            <div key={item.field} className={`flex flex-col items-center p-4 rounded-2xl border-2 ${item.color}`}>
+                            <div key={item.field} className={`flex flex-col items-center p-4 rounded-lg border border-slate-200 ${item.color.replace('border-', 'border-').replace('text-', 'text-').split(' ')[0]} ${item.color.split(' ')[1]}`}>
                                 <label className="text-[10px] font-black uppercase tracking-widest mb-3">{item.label}</label>
                                 <input
                                     type="number"
@@ -413,7 +413,7 @@ const AttendancePage: React.FC = () => {
                                     min="0"
                                     value={formData[item.field as keyof typeof formData]}
                                     onChange={e => setFormData({ ...formData, [item.field]: e.target.value })}
-                                    className="w-full text-center text-3xl font-black font-display bg-white dark:bg-card-dark rounded-xl py-3 border-2 border-transparent focus:border-current outline-none transition-all text-slate-800 dark:text-white placeholder-slate-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    className="w-full text-center text-3xl font-black font-display bg-white dark:bg-card-dark rounded-lg py-3 border-2 border-transparent focus:border-current outline-none transition-all text-slate-800 dark:text-white placeholder-slate-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     placeholder="0"
                                 />
                                 <div className="flex gap-2 mt-2">
@@ -436,7 +436,7 @@ const AttendancePage: React.FC = () => {
                         ))}
                     </div>
 
-                    <div className="p-4 bg-slate-50 dark:bg-white/[0.02] rounded-xl border border-slate-200 dark:border-dark flex justify-between items-center">
+                    <div className="p-4 bg-slate-50 dark:bg-white/[0.02] rounded-lg border border-slate-200 dark:border-dark flex justify-between items-center">
                         <span className="text-xs font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Total Calculé</span>
                         <span className="text-2xl font-black text-primary dark:text-white font-display">{calculateTotal()}</span>
                     </div>

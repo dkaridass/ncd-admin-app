@@ -297,11 +297,11 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                             <div className="space-y-8 animate-fade-in">
                                 {/* Stats Cards */}
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                    <div className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-2xl border border-slate-100 dark:border-dark text-center">
+                                    <div className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-lg border border-slate-100 dark:border-dark text-center">
                                         <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Effectif</p>
                                         <p className="text-xl font-black text-primary dark:text-white">{actualMemberCount}</p>
                                     </div>
-                                    <div className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-2xl border border-slate-100 dark:border-dark text-center">
+                                    <div className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-lg border border-slate-100 dark:border-dark text-center">
                                         <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Réunion</p>
                                         <p className="text-xl font-black text-primary dark:text-white">
                                             {department.meetingDays && department.meetingDays.length > 0
@@ -312,18 +312,18 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                                             <p className="text-[8px] text-slate-400 mt-1">{department.meetingTime}</p>
                                         )}
                                     </div>
-                                    <div className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-2xl border border-slate-100 dark:border-dark text-center">
+                                    <div className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-lg border border-slate-100 dark:border-dark text-center">
                                         <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Status</p>
                                         <p className={`text-xl font-black ${department.reportStatus === 'À jour' ? 'text-emerald-500' : 'text-rose-500'}`}>{department.reportStatus === 'À jour' ? 'OK' : '!'}</p>
                                     </div>
-                                    <div className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-2xl border border-slate-100 dark:border-dark text-center">
+                                    <div className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-lg border border-slate-100 dark:border-dark text-center">
                                         <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Archivés</p>
                                         <p className="text-xl font-black text-primary dark:text-white">{departmentReports.filter(r => r.departmentId === department.id).length}</p>
                                     </div>
                                 </div>
 
                                 {/* Leadership Section */}
-                                <div className="bg-card dark:bg-card-dark p-6 rounded-[2rem] border border-indigo-50 shadow-sm dark:shadow-none relative overflow-hidden">
+                                <div className="bg-card dark:bg-card-dark p-6 rounded-lg border border-indigo-50 shadow-sm dark:shadow-none relative overflow-hidden">
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 dark:bg-indigo-900/20 rounded-bl-full -z-0 opacity-50" />
                                     <h4 className="text-[10px] font-black uppercase text-indigo-400 tracking-[0.3em] mb-6 relative z-10">Leadership</h4>
 
@@ -394,13 +394,13 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                                 {isLoading && deptMembers.length === 0 ? (
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         {[1, 2, 3, 4].map(i => (
-                                            <div key={i} className="h-20 bg-slate-100 rounded-2xl animate-pulse" />
+                                            <div key={i} className="h-20 bg-slate-100 rounded-lg animate-pulse" />
                                         ))}
                                     </div>
                                 ) : deptMembers.length > 0 ? (
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         {deptMembers.map(member => (
-                                            <div key={member.id} className="flex items-center gap-4 p-4 bg-card dark:bg-card-dark border border-slate-100 dark:border-dark rounded-2xl hover:shadow-sm dark:shadow-none hover:border-primary/20 transition-all">
+                                            <div key={member.id} className="flex items-center gap-4 p-4 bg-card dark:bg-card-dark border border-slate-100 dark:border-dark rounded-lg hover:shadow-sm dark:shadow-none hover:border-primary/20 transition-all">
                                                 <img
                                                     src={member.avatarUrl || `https://ui-avatars.com/api/?name=${member.name}`}
                                                     className="w-10 h-10 rounded-full object-cover bg-slate-100"
@@ -428,13 +428,13 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
 
                         {activeTab === 'reports' && (
                             <div className="space-y-8 animate-fade-in">
-                                <div className="bg-primary/5 p-8 rounded-[2.5rem] border-2 border-dashed border-primary dark:border-white/20/20 text-center relative overflow-hidden">
+                                <div className="bg-primary/5 p-8 rounded-lg border-2 border-dashed border-primary dark:border-white/20/20 text-center relative overflow-hidden">
                                     <h4 className="text-[10px] font-black uppercase text-primary dark:text-white tracking-[0.3em] mb-6">Soumettre Nouveau Rapport</h4>
                                     {reportsMode === 'link' ? (
                                         <div className="max-w-xl mx-auto text-left space-y-4">
-                                            <div className="bg-card dark:bg-card-dark rounded-[2rem] border-2 border-slate-100 dark:border-dark p-6">
+                                            <div className="bg-card dark:bg-card-dark rounded-lg border border-slate-200 dark:border-dark p-6">
                                                 <div className="flex items-center gap-3 mb-4">
-                                                    <div className="w-10 h-10 bg-slate-50 dark:bg-white/[0.02] rounded-xl flex items-center justify-center">
+                                                    <div className="w-10 h-10 bg-slate-50 dark:bg-white/[0.02] rounded-lg flex items-center justify-center">
                                                         <FileTextIcon className="w-5 h-5 text-slate-400" />
                                                     </div>
                                                     <div>
@@ -469,7 +469,7 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                                                         value={reportNote}
                                                         onChange={(e) => setReportNote(e.target.value)}
                                                         rows={3}
-                                                        className="block w-full px-4 py-3 border-2 border-slate-200 dark:border-dark rounded-xl bg-card dark:bg-card-dark text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
+                                                        className="block w-full px-4 py-3 border border-slate-200 dark:border-dark rounded-lg bg-card dark:bg-card-dark text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
                                                         placeholder="Résumé ou message pour la supervision..."
                                                     />
                                                 </div>
@@ -482,7 +482,7 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                                                             setReportNote('');
                                                         }}
                                                         variant="white"
-                                                        className="rounded-xl py-2 px-6 text-[10px]"
+                                                        className="rounded-lg py-2 px-6 text-[10px]"
                                                         disabled={isSubmittingReport}
                                                     >
                                                         Réinitialiser
@@ -491,7 +491,7 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                                                         onClick={handleSubmitReport}
                                                         disabled={isSubmittingReport || !reportUrl.trim()}
                                                         isLoading={isSubmittingReport}
-                                                        className="rounded-xl py-2 px-6 bg-primary text-white uppercase font-black text-[10px] disabled:opacity-50"
+                                                        className="rounded-lg py-2 px-6 bg-primary text-white uppercase font-black text-[10px] disabled:opacity-50"
                                                     >
                                                         Envoyer
                                                     </Button>
@@ -510,7 +510,7 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                                             {!selectedFile ? (
                                                 <div
                                                     onClick={() => fileInputRef.current?.click()}
-                                                    className="cursor-pointer py-8 px-6 bg-card dark:bg-card-dark rounded-[2rem] border-2 border-slate-100 dark:border-dark hover:border-secondary transition-all group shadow-sm dark:shadow-none"
+                                                    className="cursor-pointer py-8 px-6 bg-card dark:bg-card-dark rounded-lg border border-slate-200 dark:border-dark hover:border-secondary transition-all group shadow-sm dark:shadow-none"
                                                 >
                                                     <div className="w-12 h-12 bg-slate-50 dark:bg-white/[0.02] rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-secondary/10 transition-colors">
                                                         <FileTextIcon className="w-6 h-6 text-slate-300 group-hover:text-secondary" />
@@ -518,7 +518,7 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                                                     <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Choisir un fichier</p>
                                                 </div>
                                             ) : (
-                                                <div className="py-6 px-6 bg-secondary/10 rounded-[2rem] border-2 border-secondary/30">
+                                                <div className="py-6 px-6 bg-secondary/10 rounded-lg border-2 border-secondary/30">
                                                     <p className="text-[11px] font-black text-primary dark:text-white mb-4">{selectedFile.name}</p>
 
                                                     <div className="mb-4 text-left">
@@ -529,18 +529,18 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                                                             value={reportNote}
                                                             onChange={(e) => setReportNote(e.target.value)}
                                                             rows={2}
-                                                            className="block w-full px-4 py-3 border-2 border-slate-200 dark:border-dark rounded-xl bg-card dark:bg-card-dark text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
+                                                            className="block w-full px-4 py-3 border border-slate-200 dark:border-dark rounded-lg bg-card dark:bg-card-dark text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
                                                             placeholder="Résumé rapide pour l'administrateur..."
                                                         />
                                                     </div>
 
                                                     <div className="flex gap-2 justify-center">
-                                                        <button onClick={() => setSelectedFile(null)} disabled={isSubmittingReport || isUploadingFile} className="px-4 py-2 bg-card dark:bg-card-dark text-red-500 rounded-xl text-[10px] font-black uppercase disabled:opacity-50">Annuler</button>
+                                                        <button onClick={() => setSelectedFile(null)} disabled={isSubmittingReport || isUploadingFile} className="px-4 py-2 bg-card dark:bg-card-dark text-red-500 rounded-lg text-[10px] font-black uppercase disabled:opacity-50">Annuler</button>
                                                         <Button
                                                             onClick={handleSubmitReport}
                                                             disabled={isSubmittingReport || isUploadingFile}
                                                             isLoading={isSubmittingReport || isUploadingFile}
-                                                            className="rounded-xl py-2 px-6 bg-primary text-white uppercase font-black text-[10px] disabled:opacity-50"
+                                                            className="rounded-lg py-2 px-6 bg-primary text-white uppercase font-black text-[10px] disabled:opacity-50"
                                                         >
                                                             {isUploadingFile ? "Upload du Rapport..." : "Envoyer"}
                                                         </Button>
@@ -562,9 +562,9 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                                                 return months.indexOf(b.month.toLowerCase()) - months.indexOf(a.month.toLowerCase());
                                             })
                                             .map(report => (
-                                                <div key={report.id} className="bg-card dark:bg-card-dark p-4 rounded-2xl border border-slate-100 dark:border-dark flex justify-between items-center hover:shadow-sm dark:shadow-none transition-all">
+                                                <div key={report.id} className="bg-card dark:bg-card-dark p-4 rounded-lg border border-slate-100 dark:border-dark flex justify-between items-center hover:shadow-sm dark:shadow-none transition-all">
                                                     <div className="flex items-center gap-4 flex-1 min-w-0">
-                                                        <div className="w-10 h-10 bg-slate-50 dark:bg-white/[0.02] rounded-xl flex items-center justify-center text-primary dark:text-white flex-shrink-0">
+                                                        <div className="w-10 h-10 bg-slate-50 dark:bg-white/[0.02] rounded-lg flex items-center justify-center text-primary dark:text-white flex-shrink-0">
                                                             <FileTextIcon className="w-5 h-5" />
                                                         </div>
                                                         <div className="flex-1 min-w-0">
@@ -609,7 +609,7 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                         {activeTab === 'settings' && hasPermission('MANAGE_DEPARTMENTS') && (
                             <div className="space-y-8 animate-fade-in p-2">
                                 {settingsError && (
-                                    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-bold">
+                                    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm font-bold">
                                         {settingsError}
                                     </div>
                                 )}
@@ -622,7 +622,7 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                                         <input
                                             value={editName}
                                             onChange={e => setEditName(e.target.value)}
-                                            className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-dark font-bold text-slate-700 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+                                            className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark font-bold text-slate-700 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
                                             placeholder="Nom du département"
                                             disabled={isSavingSettings}
                                         />
@@ -634,7 +634,7 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                                             value={editDescription}
                                             onChange={e => setEditDescription(e.target.value)}
                                             rows={3}
-                                            className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-dark font-bold text-slate-700 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none resize-none"
+                                            className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark font-bold text-slate-700 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none resize-none"
                                             placeholder="Description du département..."
                                             disabled={isSavingSettings}
                                         />
@@ -660,7 +660,7 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                                                 type="text"
                                                 value={editMeetingDay}
                                                 onChange={e => setEditMeetingDay(e.target.value)}
-                                                className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-dark font-bold text-slate-700 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+                                                className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark font-bold text-slate-700 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
                                                 placeholder="Ou saisir manuellement (ex: Samedi)"
                                                 disabled={isSavingSettings}
                                             />
@@ -673,7 +673,7 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                                             type="text"
                                             value={editMeetingTime}
                                             onChange={e => setEditMeetingTime(e.target.value)}
-                                            className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-dark font-bold text-slate-700 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+                                            className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark font-bold text-slate-700 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
                                             placeholder="Ex: 17h00"
                                             disabled={isSavingSettings}
                                         />
@@ -684,7 +684,7 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                                         <select
                                             value={editLeaderId}
                                             onChange={e => setEditLeaderId(e.target.value)}
-                                            className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-dark font-bold text-slate-700 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+                                            className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark font-bold text-slate-700 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
                                             disabled={isSavingSettings}
                                         >
                                             <option value="">-- Sélectionner Titulaire --</option>
@@ -699,7 +699,7 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                                         <select
                                             value={editVpId}
                                             onChange={e => setEditVpId(e.target.value)}
-                                            className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-dark font-bold text-slate-700 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+                                            className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark font-bold text-slate-700 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
                                             disabled={isSavingSettings}
                                         >
                                             <option value="">-- Sélectionner VP --</option>
@@ -714,7 +714,7 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                                         <select
                                             value={editSecondVpId}
                                             onChange={e => setEditSecondVpId(e.target.value)}
-                                            className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-dark font-bold text-slate-700 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+                                            className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark font-bold text-slate-700 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
                                             disabled={isSavingSettings}
                                         >
                                             <option value="">-- Sélectionner 2VP --</option>
@@ -728,7 +728,7 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                                         <Button
                                             onClick={handleSaveSettings}
                                             disabled={isSavingSettings}
-                                            className="bg-primary text-white rounded-xl px-8 py-3 uppercase font-black tracking-widest text-[10px] disabled:opacity-50"
+                                            className="bg-primary text-white rounded-lg px-8 py-3 uppercase font-black tracking-widest text-[10px] disabled:opacity-50"
                                         >
                                             {isSavingSettings ? 'Enregistrement...' : 'Enregistrer'}
                                         </Button>
@@ -736,7 +736,7 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
 
                                     <div className="border-t border-red-100 mt-8 pt-8">
                                         <h5 className="text-red-500 font-black text-xs uppercase tracking-widest mb-2">Zone Danger</h5>
-                                        <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-xl mb-4">
+                                        <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg mb-4">
                                             <p className="text-xs text-slate-600 dark:text-slate-400 mb-2 font-bold">⚠️ La suppression est irréversible.</p>
                                             {deptMembers.length > 0 && (
                                                 <p className="text-xs text-slate-500 dark:text-slate-400">• {deptMembers.length} membre(s) assigné(s)</p>
@@ -748,7 +748,7 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                                         <Button
                                             onClick={handleDeleteDepartment}
                                             disabled={isDeleting}
-                                            className="bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-500 hover:text-white rounded-xl px-6 py-3 uppercase font-black tracking-widest text-[10px] disabled:opacity-50"
+                                            className="bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-500 hover:text-white rounded-lg px-6 py-3 uppercase font-black tracking-widest text-[10px] disabled:opacity-50"
                                         >
                                             {isDeleting ? 'Suppression...' : 'Supprimer le Département'}
                                         </Button>

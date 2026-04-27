@@ -46,7 +46,7 @@ const CategoryTable: React.FC<Props> = ({ records, periodLabel, onCategoryFilter
 
     if (categoryData.length === 0) {
         return (
-            <Card className="border-none shadow-soft dark:shadow-none rounded-2xl p-8">
+            <Card className="border-none shadow-sm rounded-lg p-8">
                 <h3 className="text-lg font-bold text-slate-700 dark:text-white mb-4">Analyse Détaillée par Catégorie</h3>
                 <div className="flex flex-col items-center justify-center py-12 text-center">
                     <p className="text-sm text-slate-400">Aucune donnée pour cette période</p>
@@ -56,7 +56,7 @@ const CategoryTable: React.FC<Props> = ({ records, periodLabel, onCategoryFilter
     }
 
     return (
-        <Card className="border-none shadow-soft dark:shadow-none rounded-2xl overflow-hidden">
+        <Card className="border-none shadow-sm rounded-lg overflow-hidden">
             <div className="p-8 pb-0">
                 <h3 className="text-lg font-bold text-slate-700 dark:text-white mb-2">Analyse Détaillée par Catégorie</h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">Cliquez sur une catégorie pour filtrer les transactions</p>
@@ -117,7 +117,7 @@ const CategoryTable: React.FC<Props> = ({ records, periodLabel, onCategoryFilter
                                     <div className="flex items-center justify-end gap-3">
                                         <div className="flex-1 max-w-[100px] bg-slate-100 rounded-full h-2 overflow-hidden">
                                             <div
-                                                className="h-full bg-gradient-to-r from-primary to-secondary rounded-full transition-all duration-500"
+                                                className="h-full bg-primary rounded-full transition-all duration-500"
                                                 style={{ width: `${row.percentage}%` }}
                                             />
                                         </div>

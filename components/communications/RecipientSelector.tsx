@@ -58,11 +58,11 @@ const RecipientSelector: React.FC<Props> = ({ members, departments, onSelectionC
 
     return (
         <>
-            <Card className="border-none shadow-soft dark:shadow-none rounded-2xl p-8">
+            <Card className="border-none shadow-sm rounded-lg p-8">
                 <h3 className="text-lg font-bold text-slate-700 dark:text-white mb-6">Sélectionner les Destinataires</h3>
 
                 {/* Select All */}
-                <div className="mb-6 p-4 bg-primary/5 rounded-xl border-2 border-primary dark:border-white/20/10">
+                <div className="mb-6 p-4 bg-primary/5 rounded-lg border-2 border-primary dark:border-white/20/10">
                     <label className="flex items-center gap-3 cursor-pointer">
                         <input
                             type="checkbox"
@@ -85,7 +85,7 @@ const RecipientSelector: React.FC<Props> = ({ members, departments, onSelectionC
                     {departments.map((dept) => (
                         <label
                             key={dept.id}
-                            className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all cursor-pointer ${selectedDepts.includes(dept.id) ? 'border-primary bg-primary/5' : 'border-slate-200 dark:border-dark hover:border-slate-300 bg-card dark:bg-card-dark' }`}
+                            className={`flex items-center gap-3 p-4 rounded-lg border-2 transition-all cursor-pointer ${selectedDepts.includes(dept.id) ? 'border-primary bg-primary/5' : 'border-slate-200 dark:border-dark hover:border-slate-300 bg-card dark:bg-card-dark' }`}
                         >
                             <input
                                 type="checkbox"
@@ -116,7 +116,7 @@ const RecipientSelector: React.FC<Props> = ({ members, departments, onSelectionC
                     <Button
                         onClick={() => setShowPreview(true)}
                         disabled={selectedMembers.length === 0}
-                        className="w-full py-3 rounded-xl bg-slate-100 text-primary dark:text-white font-bold hover:bg-slate-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full py-3 rounded-lg bg-slate-100 text-primary dark:text-white font-bold hover:bg-slate-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         👁️ Prévisualiser les Destinataires
                     </Button>
@@ -159,7 +159,7 @@ const RecipientSelector: React.FC<Props> = ({ members, departments, onSelectionC
                         <div className="p-6 border-t border-slate-200 dark:border-dark">
                             <Button
                                 onClick={() => setShowPreview(false)}
-                                className="w-full py-3 rounded-xl bg-slate-200 text-slate-800 dark:text-white font-bold hover:bg-slate-300"
+                                className="w-full py-3 rounded-lg bg-slate-200 text-slate-800 dark:text-white font-bold hover:bg-slate-300"
                             >
                                 Fermer
                             </Button>

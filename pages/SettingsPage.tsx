@@ -11,7 +11,7 @@ import { useData, ROLE_PERMISSIONS } from '../context/DataContext';
 import { api } from '../services/api';
 import { AppRole, Permission } from '../types';
 import PermissionGuard from '../components/auth/PermissionGuard';
-import { ShieldIcon, UsersIcon, SparklesIcon } from '../components/icons/Icons';
+import { ShieldIcon, UsersIcon, SparklesIcon, CameraIcon } from '../components/icons/Icons';
 import { ensureSuperAdminExists, isCurrentUserSuperAdminEmail } from '../utils/ensureSuperAdmin';
 import { seedDatabase } from '../utils/seedDatabase';
 import { loadRealChurchData } from '../utils/loadRealData';
@@ -75,7 +75,8 @@ const SettingsPage: React.FC = () => {
       city: 'Lubumbashi',
       pastor: 'Dr Jean-Clément Diambilay',
       email: 'contact@ncd.cd',
-      serviceTimes: 'Dimanche 8h00, 10h30 | Mercredi 17h00 | Vendredi 17h00'
+      serviceTimes: 'Dimanche 8h00, 10h30 | Mercredi 17h00 | Vendredi 17h00',
+      logoUrl: '/logo.png'
     };
   });
 
@@ -89,6 +90,25 @@ const SettingsPage: React.FC = () => {
   useEffect(() => {
     api.system.checkHealth().then(setHealth);
   }, []);
+
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setChurchInfo({ ...churchInfo, logoUrl: event.target?.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // In a real app we would upload to storage, here we just show success and could set local state if we want.
+      showSuccess("Support de l'avatar en cours d'implémentation (Backend nécessaire).");
+    }
+  };
 
   const handleExport = () => {
     const data = exportData();
@@ -127,7 +147,7 @@ const SettingsPage: React.FC = () => {
           <h2 className="text-4xl font-extrabold text-primary dark:text-white font-display tracking-tight leading-none">Paramètres</h2>
           <p className="text-slate-500 dark:text-slate-400 font-medium mt-2">Gestion globale & Sécurité du Sanctuaire</p>
         </div>
-        <div className="flex bg-slate-100 p-1.5 rounded-2xl overflow-x-auto max-w-full">
+        <div className="flex bg-slate-100 p-1.5 rounded-lg overflow-x-auto max-w-full">
           {[
             { id: 'church', label: 'Identité Église', icon: <UsersIcon className="w-3 h-3 mr-2" /> },
             { id: 'security', label: 'Sécurité & Rôles', icon: <ShieldIcon className="w-3 h-3 mr-2" /> },
@@ -136,7 +156,7 @@ const SettingsPage: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-6 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all whitespace-nowrap flex items-center ${activeTab === tab.id ? 'bg-card dark:bg-card-dark text-primary shadow-sm dark:shadow-none' : 'text-slate-400 hover:text-slate-600 dark:text-slate-400'}`}
+              className={`px-6 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all whitespace-nowrap flex items-center ${activeTab === tab.id ? 'bg-card dark:bg-card-dark text-primary shadow-sm dark:shadow-none' : 'text-slate-400 hover:text-slate-600 dark:text-slate-400'}`}
             >
               {tab.icon}
               {tab.label}
@@ -149,29 +169,31 @@ const SettingsPage: React.FC = () => {
         <div className="lg:col-span-2 space-y-8">
 
           {activeTab === 'church' && (
-            <Card className="border-none shadow-premium dark:shadow-none rounded-[2.5rem] p-8" title="Identité de l'Église">
+            <Card className="p-6" title="Identité de l'Église">
               {/* Branding Mock */}
-              <div className="mb-8 flex flex-col md:flex-row items-center gap-8 bg-slate-50 dark:bg-white/[0.02]/50 p-6 rounded-[2rem] border border-slate-100 dark:border-dark">
-                <div className="w-24 h-24 rounded-full bg-white border-[3px] border-slate-200 dark:border-dark shadow-lg dark:shadow-none flex items-center justify-center relative group cursor-pointer transition-all duration-300">
-                  <img src="/logo.png" alt="NCD Logo" className="w-14 h-14 object-contain" />
-                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-[9px] font-black text-white uppercase tracking-widest text-center">Modifier<br />Logo</span>
-                  </div>
+              <div className="mb-8 flex flex-col md:flex-row items-center gap-6 bg-slate-50 p-6 rounded-lg border border-slate-200">
+                <div className="w-24 h-24 rounded-full bg-white border border-slate-200 flex items-center justify-center relative overflow-hidden">
+                  <img src={churchInfo.logoUrl || "/logo.png"} alt="NCD Logo" className="w-[80%] h-[80%] object-contain" />
                 </div>
                 <div className="flex-1 text-center md:text-left">
-                  <h4 className="font-bold text-slate-800 dark:text-white">Identité Visuelle</h4>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-3">Ce logo apparaîtra sur tous les rapports officiels et l'interface.</p>
-                  <Button size="sm" variant="secondary" className="text-[10px] rounded-xl">Téléverser une image</Button>
+                  <h4 className="font-bold text-slate-800">Identité Visuelle</h4>
+                  <p className="text-xs text-slate-500 mt-1 mb-3">Ce logo apparaîtra sur tous les rapports officiels et l'interface.</p>
+                  <label className="relative inline-flex cursor-pointer">
+                    <input type="file" accept="image/*" onChange={handleLogoUpload} className="sr-only" />
+                    <div className="bg-white border border-slate-200 shadow-sm hover:bg-slate-50 text-slate-800 text-xs font-bold px-4 py-2 rounded-md transition-colors">
+                      Téléverser une image
+                    </div>
+                  </label>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                <Input label="Désignation Officielle" value={churchInfo.name} onChange={e => setChurchInfo({ ...churchInfo, name: e.target.value })} className="rounded-2xl" />
-                <Input label="Pasteur Titulaire" value={churchInfo.pastor} onChange={e => setChurchInfo({ ...churchInfo, pastor: e.target.value })} className="rounded-2xl" />
-                <Input label="Ville de Siège" value={churchInfo.city} onChange={e => setChurchInfo({ ...churchInfo, city: e.target.value })} className="rounded-2xl" />
-                <Input label="E-mail de Contact" value={churchInfo.email} onChange={e => setChurchInfo({ ...churchInfo, email: e.target.value })} className="rounded-2xl" />
+                <Input label="Désignation Officielle" value={churchInfo.name} onChange={e => setChurchInfo({ ...churchInfo, name: e.target.value })} className="rounded-lg" />
+                <Input label="Pasteur Titulaire" value={churchInfo.pastor} onChange={e => setChurchInfo({ ...churchInfo, pastor: e.target.value })} className="rounded-lg" />
+                <Input label="Ville de Siège" value={churchInfo.city} onChange={e => setChurchInfo({ ...churchInfo, city: e.target.value })} className="rounded-lg" />
+                <Input label="E-mail de Contact" value={churchInfo.email} onChange={e => setChurchInfo({ ...churchInfo, email: e.target.value })} className="rounded-lg" />
                 <div className="md:col-span-2">
-                  <Input label="Horaires des Cultes (Texte libre)" value={churchInfo.serviceTimes} onChange={e => setChurchInfo({ ...churchInfo, serviceTimes: e.target.value })} className="rounded-2xl" />
+                  <Input label="Horaires des Cultes (Texte libre)" value={churchInfo.serviceTimes} onChange={e => setChurchInfo({ ...churchInfo, serviceTimes: e.target.value })} className="rounded-lg" />
                 </div>
                 <div className="md:col-span-2 mt-2 flex justify-end">
                   <Button
@@ -179,7 +201,7 @@ const SettingsPage: React.FC = () => {
                       localStorage.setItem('ncd_church_info', JSON.stringify(churchInfo));
                       showSuccess('Paramètres sauvegardés avec succès');
                     }}
-                    className="rounded-xl px-8"
+                    className="rounded-lg px-8"
                   >
                     Enregistrer les Modifications
                   </Button>
@@ -189,7 +211,7 @@ const SettingsPage: React.FC = () => {
           )}
 
           {activeTab === 'security' && (
-            <Card className="border-none shadow-premium dark:shadow-none rounded-[2.5rem] p-8" noPadding title="Matrice des Rôles & Permissions">
+            <Card className="p-0 overflow-hidden" title="Matrice des Rôles & Permissions">
               <div className="overflow-x-auto custom-scrollbar pb-4">
                 <table className="min-w-full divide-y divide-slate-100">
                   <thead>
@@ -232,7 +254,7 @@ const SettingsPage: React.FC = () => {
 
               {/* Super Admin Bootstrap - Only visible to admin@ncd.com */}
               {isCurrentUserSuperAdminEmail() && (
-                <div className="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 border-t border-indigo-100 flex items-start gap-4">
+                <div className="p-6 bg-indigo-50 border-t border-indigo-100 flex items-start gap-4">
                   <ShieldIcon className="w-5 h-5 text-indigo-600 dark:text-indigo-300 shrink-0 mt-0.5" />
                   <div className="flex-1">
                     <p className="text-xs text-indigo-800 dark:text-indigo-100 font-bold mb-1">Bootstrap Super Admin</p>
@@ -255,7 +277,7 @@ const SettingsPage: React.FC = () => {
                           alert(`❌ Erreur: ${error.message}`);
                         }
                       }}
-                      className="text-[10px] rounded-xl bg-indigo-600 hover:bg-indigo-700"
+                      className="text-[10px] rounded-lg bg-indigo-600 hover:bg-indigo-700"
                     >
                       Activer SUPER_ADMIN
                     </Button>
@@ -263,7 +285,7 @@ const SettingsPage: React.FC = () => {
                 </div>
               )}
 
-              <div className="p-6 bg-amber-50 dark:bg-amber-900/20 rounded-b-[2.5rem] border-t border-amber-100 flex items-start gap-4">
+              <div className="p-6 bg-amber-50 dark:bg-amber-900/20 rounded-b-lg border-t border-amber-100 flex items-start gap-4">
                 <ShieldIcon className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                 <div>
                   <p className="text-xs text-amber-800 font-bold mb-1">Architecture de Sécurité Verrouillée</p>
@@ -278,7 +300,7 @@ const SettingsPage: React.FC = () => {
           {activeTab === 'system' && (
             <div className="space-y-8">
               {/* Language Selection */}
-              <Card className="border-none shadow-premium dark:shadow-none rounded-[2.5rem] p-8" title="Langue de l'Interface">
+              <Card className="p-6" title="Langue de l'Interface">
                 <p className="text-xs text-slate-500 dark:text-slate-400 mb-6 font-medium">Choisissez la langue d'affichage globale pour l'administration.</p>
                 <div className="flex flex-wrap gap-4">
                   {[
@@ -289,7 +311,7 @@ const SettingsPage: React.FC = () => {
                     <button
                       key={lang.code}
                       onClick={() => changeLanguage(lang.code)}
-                      className={`px-8 py-3 rounded-2xl font-bold text-sm transition-all border ${i18n.language === lang.code ? 'bg-primary text-white border-primary shadow-md dark:shadow-none' : 'bg-card dark:bg-card-dark text-slate-600 dark:text-slate-400 border-slate-200 dark:border-dark hover:border-primary/30 hover:bg-slate-50'}`}
+                      className={`px-8 py-3 rounded-lg font-bold text-sm transition-all border ${i18n.language === lang.code ? 'bg-primary text-white border-primary shadow-md dark:shadow-none' : 'bg-card dark:bg-card-dark text-slate-600 dark:text-slate-400 border-slate-200 dark:border-dark hover:border-primary/30 hover:bg-slate-50'}`}
                     >
                       {lang.label}
                     </button>
@@ -298,9 +320,9 @@ const SettingsPage: React.FC = () => {
               </Card>
 
               {/* AI Configuration */}
-              <Card className="border-none shadow-premium dark:shadow-none rounded-[2.5rem] p-8" title="Configuration Assistant IA">
-                <div className="flex items-start gap-6 bg-gradient-to-br from-indigo-50 to-purple-50 p-6 rounded-[2rem] border border-indigo-100 mb-8">
-                  <div className="w-12 h-12 rounded-2xl bg-card dark:bg-card-dark shadow-lg dark:shadow-none flex items-center justify-center text-indigo-600 dark:text-indigo-300">
+              <Card className="p-6" title="Configuration Assistant IA">
+                <div className="flex items-start gap-6 bg-indigo-50 p-6 rounded-lg border border-indigo-100 mb-8">
+                  <div className="w-12 h-12 rounded-lg bg-card dark:bg-card-dark shadow-md flex items-center justify-center text-indigo-600 dark:text-indigo-300">
                     <SparklesIcon className="w-6 h-6" />
                   </div>
                   <div>
@@ -316,7 +338,7 @@ const SettingsPage: React.FC = () => {
                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Tonalité des Réponses</label>
                     <div className="space-y-3">
                       {['Pastoral', 'Formel', 'Analytique'].map(tone => (
-                        <label key={tone} className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 dark:border-dark cursor-pointer hover:bg-slate-50 dark:bg-white/[0.02] transition-colors">
+                        <label key={tone} className="flex items-center gap-3 p-3 rounded-lg border border-slate-100 dark:border-dark cursor-pointer hover:bg-slate-50 dark:bg-white/[0.02] transition-colors">
                           <input
                             type="radio"
                             name="tone"
@@ -335,7 +357,7 @@ const SettingsPage: React.FC = () => {
                     <select
                       value={aiConfig.formality}
                       onChange={(e) => setAiConfig({ ...aiConfig, formality: e.target.value })}
-                      className="w-full p-4 rounded-xl border border-slate-200 dark:border-dark bg-card dark:bg-card-dark text-sm font-bold text-slate-700 dark:text-white outline-none focus:border-primary/30"
+                      className="w-full p-4 rounded-lg border border-slate-200 dark:border-dark bg-card dark:bg-card-dark text-sm font-bold text-slate-700 dark:text-white outline-none focus:border-primary/30"
                     >
                       <option>Soutenu</option>
                       <option>Courant</option>
@@ -355,7 +377,7 @@ const SettingsPage: React.FC = () => {
                             const newKey = e.target.value;
                             setAiConfig(prev => ({ ...prev }));
                           }}
-                          className="w-full p-4 rounded-xl border border-slate-200 dark:border-dark bg-card dark:bg-card-dark text-xs font-mono text-slate-600 dark:text-slate-400 outline-none focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all"
+                          className="w-full p-4 rounded-lg border border-slate-200 dark:border-dark bg-card dark:bg-card-dark text-xs font-mono text-slate-600 dark:text-slate-400 outline-none focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all"
                         />
                       </div>
                       <p className="text-[9px] text-slate-400 font-medium mt-2">
@@ -368,7 +390,7 @@ const SettingsPage: React.FC = () => {
                       <textarea
                         value={aiConfig.systemPrompt}
                         onChange={(e) => setAiConfig({ ...aiConfig, systemPrompt: e.target.value })}
-                        className="w-full p-4 rounded-xl border border-slate-200 dark:border-dark bg-card dark:bg-card-dark text-xs text-slate-600 dark:text-slate-400 leading-relaxed outline-none focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all text-justify"
+                        className="w-full p-4 rounded-lg border border-slate-200 dark:border-dark bg-card dark:bg-card-dark text-xs text-slate-600 dark:text-slate-400 leading-relaxed outline-none focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all text-justify"
                         rows={4}
                       />
                     </div>
@@ -376,29 +398,29 @@ const SettingsPage: React.FC = () => {
                 </div>
               </Card>
 
-              <Card className="border-none shadow-premium dark:shadow-none rounded-[2.5rem] p-8" title="Maintenance des Données">
+              <Card className="p-6" title="Maintenance des Données">
                 <div className="space-y-4 mt-2">
                   {/* Existing maintenance items kept concise */}
-                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-slate-50 dark:bg-white/[0.02] rounded-[2rem] border border-slate-100 dark:border-dark gap-4">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-slate-50 dark:bg-white/[0.02] rounded-lg border border-slate-100 dark:border-dark gap-4">
                     <div>
                       <p className="text-xs font-black text-primary dark:text-white uppercase tracking-widest">Sauvegarde .JSON</p>
                       <p className="text-[10px] text-slate-500 dark:text-slate-400 font-bold mt-1">Export complet.</p>
                     </div>
-                    <Button onClick={handleExport} variant="secondary" size="sm" className="rounded-xl px-6 text-[10px]">Exporter</Button>
+                    <Button onClick={handleExport} variant="secondary" size="sm" className="rounded-lg px-6 text-[10px]">Exporter</Button>
                   </div>
-                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-slate-50 dark:bg-white/[0.02] rounded-[2rem] border border-slate-100 dark:border-dark gap-4">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-slate-50 dark:bg-white/[0.02] rounded-lg border border-slate-100 dark:border-dark gap-4">
                     <div>
                       <p className="text-xs font-black text-primary dark:text-white uppercase tracking-widest">Restauration</p>
                       <p className="text-[10px] text-slate-500 dark:text-slate-400 font-bold mt-1">Import de sauvegarde.</p>
                     </div>
                     <div className="relative">
                       <input type="file" onChange={handleImport} className="absolute inset-0 opacity-0 cursor-pointer" accept=".json" />
-                      <Button variant="white" size="sm" className="rounded-xl px-6 text-[10px]">Importer</Button>
+                      <Button variant="white" size="sm" className="rounded-lg px-6 text-[10px]">Importer</Button>
                     </div>
                   </div>
 
                   {/* Load Real Church Data Button */}
-                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-blue-50 rounded-[2rem] border border-blue-200 gap-4">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-blue-50 rounded-lg border border-blue-200 gap-4">
                     <div>
                       <p className="text-xs font-black text-blue-700 uppercase tracking-widest">📋 Données Réelles NCD</p>
                       <p className="text-[10px] text-blue-600 font-bold mt-1">57 membres + 29 départements réels</p>
@@ -423,7 +445,7 @@ const SettingsPage: React.FC = () => {
                       }}
                       variant="secondary"
                       size="sm"
-                      className="rounded-xl px-6 text-[10px] bg-blue-600 text-white hover:bg-blue-700"
+                      className="rounded-lg px-6 text-[10px] bg-blue-600 text-white hover:bg-blue-700"
                     >
                       Charger Données Réelles
                     </Button>
@@ -431,7 +453,7 @@ const SettingsPage: React.FC = () => {
 
 
                   {/* Update Programme Button */}
-                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-purple-50 rounded-[2rem] border border-purple-200 gap-4">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-purple-50 rounded-lg border border-purple-200 gap-4">
                     <div>
                       <p className="text-xs font-black text-purple-700 uppercase tracking-widest">📅 Programme des Cultes</p>
                       <p className="text-[10px] text-purple-600 font-bold mt-1">Générer 6 mois de services récurrents</p>
@@ -468,14 +490,14 @@ const SettingsPage: React.FC = () => {
                       }}
                       variant="secondary"
                       size="sm"
-                      className="rounded-xl px-6 text-[10px] bg-purple-600 text-white hover:bg-purple-700"
+                      className="rounded-lg px-6 text-[10px] bg-purple-600 text-white hover:bg-purple-700"
                     >
                       Mettre à Jour Programme
                     </Button>
                   </div>
 
                   {/* Import Departments Button */}
-                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-green-50 rounded-[2rem] border border-green-200 gap-4">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-green-50 rounded-lg border border-green-200 gap-4">
                     <div>
                       <p className="text-xs font-black text-green-700 uppercase tracking-widest">🏛️ Départements & Leaders</p>
                       <p className="text-[10px] text-green-600 font-bold mt-1">Importer 29 départements avec leaders officiels</p>
@@ -512,14 +534,14 @@ const SettingsPage: React.FC = () => {
                       }}
                       variant="secondary"
                       size="sm"
-                      className="rounded-xl px-6 text-[10px] bg-green-600 text-white hover:bg-green-700"
+                      className="rounded-lg px-6 text-[10px] bg-green-600 text-white hover:bg-green-700"
                     >
                       Importer Départements
                     </Button>
                   </div>
 
                   {/* Clean Duplicate Departments Button */}
-                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-yellow-50 rounded-[2rem] border border-yellow-200 gap-4">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-yellow-50 rounded-lg border border-yellow-200 gap-4">
                     <div>
                       <p className="text-xs font-black text-yellow-700 uppercase tracking-widest">🧹 Nettoyer Doublons</p>
                       <p className="text-[10px] text-yellow-600 font-bold mt-1">Supprimer les départements en double</p>
@@ -557,7 +579,7 @@ const SettingsPage: React.FC = () => {
                       }}
                       variant="secondary"
                       size="sm"
-                      className="rounded-xl px-6 text-[10px] bg-yellow-600 text-white hover:bg-yellow-700"
+                      className="rounded-lg px-6 text-[10px] bg-yellow-600 text-white hover:bg-yellow-700"
                     >
                       Nettoyer Départements
                     </Button>
@@ -595,14 +617,14 @@ const SettingsPage: React.FC = () => {
                       }}
                       variant="secondary"
                       size="sm"
-                      className="rounded-xl px-6 text-[10px] bg-purple-600 text-white hover:bg-purple-700"
+                      className="rounded-lg px-6 text-[10px] bg-purple-600 text-white hover:bg-purple-700"
                     >
                       Nettoyer Membres
                     </Button>
                   </div>
 
                   {/* Clean Old Members Button */}
-                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-red-50 dark:bg-red-900/20 rounded-[2rem] border border-red-200 gap-4 mt-2">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 gap-4 mt-2">
                     <div>
                       <p className="text-xs font-black text-red-700 uppercase tracking-widest">🗑️ Anciens Membres</p>
                       <p className="text-[10px] text-red-600 font-bold mt-1">Supprimer tous les membres de l'archive via ({(import.meta as any).env.VITE_FIREBASE_PROJECT_ID})</p>
@@ -631,21 +653,21 @@ const SettingsPage: React.FC = () => {
                       }}
                       variant="secondary"
                       size="sm"
-                      className="rounded-xl px-6 text-[10px] bg-red-600 text-white hover:bg-red-700"
+                      className="rounded-lg px-6 text-[10px] bg-red-600 text-white hover:bg-red-700"
                     >
                       Supprimer Tout
                     </Button>
                   </div>
 
-                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-red-50 dark:bg-red-900/20/30 rounded-[2rem] border border-red-100 gap-4">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-red-50 dark:bg-red-900/20/30 rounded-lg border border-red-100 gap-4">
                     <div>
                       <p className="text-xs font-black text-red-600 uppercase tracking-widest">Zone Danger</p>
                       <p className="text-[10px] text-red-400 font-bold mt-1">Réinitialisation usine.</p>
                     </div>
-                    <Button onClick={async () => { const accepted = await confirm({ title: 'Réinitialisation totale ?', message: 'CETTE ACTION EST IRRÉVERSIBLE. Toutes les données seront effacées définitivement.', confirmLabel: 'Tout effacer', variant: 'danger' }); if (accepted) resetDatabase(); }} variant="danger" size="sm" className="rounded-xl px-6 text-[10px] bg-red-500">Reset</Button>
+                    <Button onClick={async () => { const accepted = await confirm({ title: 'Réinitialisation totale ?', message: 'CETTE ACTION EST IRRÉVERSIBLE. Toutes les données seront effacées définitivement.', confirmLabel: 'Tout effacer', variant: 'danger' }); if (accepted) resetDatabase(); }} variant="danger" size="sm" className="rounded-lg px-6 text-[10px] bg-red-500">Reset</Button>
                   </div>
 
-                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-orange-50/30 rounded-[2rem] border border-orange-100 gap-4 mt-2">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-orange-50/30 rounded-lg border border-orange-100 gap-4 mt-2">
                     <div>
                       <p className="text-xs font-black text-orange-600 uppercase tracking-widest">Nettoyage Finances</p>
                       <p className="text-[10px] text-orange-400 font-bold mt-1">Supprime toutes les transactions.</p>
@@ -671,7 +693,7 @@ const SettingsPage: React.FC = () => {
                       }}
                       variant="danger"
                       size="sm"
-                      className="rounded-xl px-6 text-[10px] bg-orange-500"
+                      className="rounded-lg px-6 text-[10px] bg-orange-500"
                     >
                       Purger Finances
                     </Button>
@@ -683,26 +705,37 @@ const SettingsPage: React.FC = () => {
         </div>
 
         <div className="space-y-8">
-          <Card className="border-none bg-primary text-white shadow-premium dark:shadow-none rounded-[2.5rem] p-8">
-            <div className="text-center mb-8">
-              <div className="w-24 h-24 rounded-[2rem] mx-auto border-4 border-white/10 mb-4 shadow-2xl dark:shadow-none overflow-hidden relative">
-                <img src={currentUser?.avatarUrl} className="w-full h-full object-cover" alt="Avatar" />
+          <Card className="p-6 overflow-hidden relative">
+            <div className="absolute top-0 left-0 right-0 h-24 bg-blue-600"></div>
+            <div className="relative text-center mt-8 mb-6">
+              <div className="w-24 h-24 mx-auto rounded-full border-4 border-white mb-4 shadow-sm overflow-hidden relative group bg-indigo-100 flex items-center justify-center">
+                {currentUser?.avatarUrl ? (
+                  <img src={currentUser.avatarUrl} className="w-full h-full object-cover" alt="Avatar" />
+                ) : (
+                  <span className="text-4xl font-bold text-indigo-500 uppercase">{currentUser?.name?.charAt(0) || 'U'}</span>
+                )}
+                {/* Upload Overlay */}
+                <label className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity">
+                  <input type="file" accept="image/*" className="sr-only" onChange={handleAvatarUpload} />
+                  <CameraIcon className="w-6 h-6 text-white mb-1" />
+                  <span className="text-[10px] font-bold text-white uppercase">Modifier</span>
+                </label>
               </div>
-              <h3 className="font-black text-xl font-display">{currentUser?.name}</h3>
-              <p className="text-[10px] text-white/50 font-black uppercase tracking-widest mt-1">{currentUser?.role}</p>
+              <h3 className="font-bold text-lg text-slate-800">{currentUser?.name}</h3>
+              <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mt-1">{currentUser?.role}</p>
             </div>
-            <div className="space-y-3">
-              <Button variant="danger" className="w-full rounded-2xl py-4 bg-red-500/10 border border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white" onClick={logout}>Déconnexion</Button>
+            <div className="space-y-3 px-4">
+              <Button variant="danger" className="w-full text-xs" onClick={logout}>Déconnexion</Button>
             </div>
           </Card>
 
-          <Card className="border-none shadow-premium dark:shadow-none rounded-[2.5rem] p-8" title="Santé Backend">
+          <Card className="p-6" title="Santé Backend">
             <div className="space-y-4 mt-4">
-              <div className="flex justify-between items-center p-4 bg-slate-50 dark:bg-white/[0.02] rounded-2xl">
+              <div className="flex justify-between items-center p-4 bg-slate-50 dark:bg-white/[0.02] rounded-lg">
                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Latence</span>
                 <span className="text-sm font-bold text-primary dark:text-white">{health?.latency || '--'}</span>
               </div>
-              <div className="flex justify-between items-center p-4 bg-slate-50 dark:bg-white/[0.02] rounded-2xl">
+              <div className="flex justify-between items-center p-4 bg-slate-50 dark:bg-white/[0.02] rounded-lg">
                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Sync</span>
                 <span className="text-sm font-bold text-green-500">{isLoading ? 'En cours...' : 'Terminé'}</span>
               </div>

@@ -11,16 +11,16 @@ interface BadgeProps {
 
 const Badge: React.FC<BadgeProps> = ({ children, variant = 'default', className = '' }) => {
   const variants = {
-    default: 'bg-gray-100 text-gray-800',
-    primary: 'bg-indigo-100 text-indigo-800',
-    success: 'bg-green-100 text-green-800',
-    warning: 'bg-amber-100 text-amber-800',
-    danger: 'bg-rose-100 text-rose-800',
-    outline: 'bg-transparent border border-gray-200 text-gray-600',
+    default: 'badge bg-slate-100 text-slate-800',
+    primary: 'badge bg-blue-100 text-blue-800',
+    success: 'badge badge-success',
+    warning: 'badge badge-pending',
+    danger: 'badge badge-danger',
+    outline: 'badge bg-transparent border border-border text-slate-600',
   };
 
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${variants[variant]} ${className}`}>
+    <span className={`${variants[variant]} ${className}`}>
       {children}
     </span>
   );

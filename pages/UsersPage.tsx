@@ -80,7 +80,7 @@ const UsersPage: React.FC = () => {
             await updateUserRole(userId, newRole);
             // Success feedback
             const toast = document.createElement('div');
-            toast.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 animate-fade-in';
+            toast.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-md z-50 animate-fade-in';
             toast.innerHTML = `✅ Rôle de ${userName} mis à jour: ${getRoleLabel(newRole)}`;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
@@ -108,7 +108,7 @@ const UsersPage: React.FC = () => {
         try {
             await updateUserStatus(userId, newStatus);
             const toast = document.createElement('div');
-            toast.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 animate-fade-in';
+            toast.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-md z-50 animate-fade-in';
             toast.innerHTML = `✅ Compte de ${userName} ${newStatus ? 'activé' : 'désactivé'}`;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
@@ -138,7 +138,7 @@ const UsersPage: React.FC = () => {
         try {
             await deleteUser(userId);
             const toast = document.createElement('div');
-            toast.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 animate-fade-in';
+            toast.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-md z-50 animate-fade-in';
             toast.innerHTML = `✅ Utilisateur ${userName} supprimé`;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
@@ -169,7 +169,7 @@ const UsersPage: React.FC = () => {
             });
             setEditingUser(null);
             const toast = document.createElement('div');
-            toast.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 animate-fade-in';
+            toast.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-md z-50 animate-fade-in';
             toast.innerHTML = `✅ Profil mis à jour`;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
@@ -203,7 +203,7 @@ const UsersPage: React.FC = () => {
                     { label: 'Admins', value: (stats.SUPER_ADMIN || 0), color: 'bg-purple-500' },
                     { label: 'Pasteurs', value: (stats.PASTOR || 0), color: 'bg-blue-500' },
                 ].map((stat, i) => (
-                    <Card key={i} className="border-none shadow-soft dark:shadow-none rounded-2xl p-6">
+                    <Card key={i} className="border-none shadow-sm rounded-lg p-6">
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">
@@ -213,7 +213,7 @@ const UsersPage: React.FC = () => {
                                     {stat.value}
                                 </p>
                             </div>
-                            <div className={`w-12 h-12 rounded-xl ${stat.color} flex items-center justify-center`}>
+                            <div className={`w-12 h-12 rounded-lg ${stat.color} flex items-center justify-center`}>
                                 <UsersIcon className="w-6 h-6 text-white" />
                             </div>
                         </div>
@@ -231,13 +231,13 @@ const UsersPage: React.FC = () => {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Rechercher par nom ou email..."
-                        className="pl-12 rounded-2xl py-4"
+                        className="pl-12 rounded-lg py-4"
                     />
                 </div>
                 <select
                     value={roleFilter}
                     onChange={(e) => setRoleFilter(e.target.value as AppRole | 'ALL')}
-                    className="px-6 py-4 rounded-2xl border border-slate-200 dark:border-dark bg-card dark:bg-card-dark text-sm font-bold text-slate-700 dark:text-white outline-none focus:border-primary/30 focus:ring-4 focus:ring-primary/5"
+                    className="px-6 py-4 rounded-lg border border-slate-200 dark:border-dark bg-card dark:bg-card-dark text-sm font-bold text-slate-700 dark:text-white outline-none focus:border-primary/30 focus:ring-4 focus:ring-primary/5"
                 >
                     <option value="ALL">Tous les rôles</option>
                     {(['SUPER_ADMIN', 'PASTOR', 'STAFF_ADMIN', 'FINANCE_ADMIN', 'DEPT_LEADER', 'VOLUNTEER', 'MEMBER', 'VIEWER'] as AppRole[]).map(role => (
@@ -247,7 +247,7 @@ const UsersPage: React.FC = () => {
                 <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value as 'ALL' | 'ACTIVE' | 'INACTIVE')}
-                    className="px-6 py-4 rounded-2xl border border-slate-200 dark:border-dark bg-card dark:bg-card-dark text-sm font-bold text-slate-700 dark:text-white outline-none focus:border-primary/30 focus:ring-4 focus:ring-primary/5"
+                    className="px-6 py-4 rounded-lg border border-slate-200 dark:border-dark bg-card dark:bg-card-dark text-sm font-bold text-slate-700 dark:text-white outline-none focus:border-primary/30 focus:ring-4 focus:ring-primary/5"
                 >
                     <option value="ALL">Tous les statuts</option>
                     <option value="ACTIVE">Actifs</option>
@@ -256,7 +256,7 @@ const UsersPage: React.FC = () => {
             </div>
 
             {/* Users Table */}
-            <Card className="border-none shadow-premium dark:shadow-none rounded-3xl overflow-hidden">
+            <Card className="border-none shadow-admin rounded-lg overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead className="bg-slate-50 dark:bg-white/[0.02] border-b border-slate-100 dark:border-dark">
@@ -303,7 +303,7 @@ const UsersPage: React.FC = () => {
                                         <tr key={user.id} className={`hover:bg-slate-50 dark:bg-white/[0.02]/50 transition-colors ${!isActive ? 'opacity-60' : ''}`}>
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-sm">
+                                                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">
                                                         {user.name?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase()}
                                                     </div>
                                                     <div>
@@ -329,7 +329,7 @@ const UsersPage: React.FC = () => {
                                                         value={user.role}
                                                         onChange={(e) => handleRoleChange(user.id, e.target.value as AppRole, user.name || user.email || '')}
                                                         disabled={isUpdating === user.id || user.id === currentUser?.id}
-                                                        className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wide border-none outline-none cursor-pointer transition-all ${getRoleColorClasses(user.role)} ${isUpdating === user.id ? 'opacity-50 cursor-wait' : 'hover:shadow-md dark:shadow-none'} ${user.id === currentUser?.id ? 'cursor-not-allowed opacity-75' : ''}`}
+                                                        className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide border-none outline-none cursor-pointer transition-all ${getRoleColorClasses(user.role)} ${isUpdating === user.id ? 'opacity-50 cursor-wait' : 'hover:shadow-md dark:shadow-none'} ${user.id === currentUser?.id ? 'cursor-not-allowed opacity-75' : ''}`}
                                                     >
                                                         {(['SUPER_ADMIN', 'PASTOR', 'STAFF_ADMIN', 'SECRETARY', 'FINANCE_ADMIN', 'DEPT_LEADER', 'VOLUNTEER', 'MEMBER', 'VIEWER'] as AppRole[]).map((role) => (
                                                             <option key={role} value={role}>{getRoleLabel(role)}</option>
@@ -356,7 +356,7 @@ const UsersPage: React.FC = () => {
                                                 }>
                                                     <div className="relative group">
                                                         <button
-                                                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors"
+                                                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors"
                                                             disabled={isUpdating === user.id}
                                                         >
                                                             {(user.departmentIds || []).length > 0
@@ -365,7 +365,7 @@ const UsersPage: React.FC = () => {
                                                             }
                                                             <svg className="w-3 h-3" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
                                                         </button>
-                                                        <div className="absolute z-50 left-0 top-full mt-1 w-64 max-h-48 overflow-y-auto bg-white dark:bg-card-dark rounded-xl shadow-2xl border border-slate-200 dark:border-dark hidden group-hover:block">
+                                                        <div className="absolute z-50 left-0 top-full mt-1 w-64 max-h-48 overflow-y-auto bg-white dark:bg-card-dark rounded-lg shadow-admin border border-slate-200 dark:border-dark hidden group-hover:block">
                                                             {departments.map(dept => {
                                                                 const isAssigned = (user.departmentIds || []).includes(dept.id);
                                                                 return (
@@ -397,7 +397,7 @@ const UsersPage: React.FC = () => {
                                                     <button
                                                         onClick={() => handleStatusToggle(user.id, user.name || user.email || '', isActive)}
                                                         disabled={isUpdating === user.id || user.id === currentUser?.id}
-                                                        className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${isActive ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200' : 'bg-slate-100 text-slate-500 dark:text-slate-400 hover:bg-slate-200'} ${isUpdating === user.id ? 'opacity-50 cursor-wait' : ''} ${user.id === currentUser?.id ? 'cursor-not-allowed opacity-75' : ''}`}
+                                                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all ${isActive ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200' : 'bg-slate-100 text-slate-500 dark:text-slate-400 hover:bg-slate-200'} ${isUpdating === user.id ? 'opacity-50 cursor-wait' : ''} ${user.id === currentUser?.id ? 'cursor-not-allowed opacity-75' : ''}`}
                                                     >
                                                         {isActive ? (
                                                             <>
@@ -423,7 +423,7 @@ const UsersPage: React.FC = () => {
                                                     <PermissionGuard permission="MANAGE_ROLES">
                                                         <button
                                                             onClick={() => openEditModal(user)}
-                                                            className="p-2 rounded-xl text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors"
+                                                            className="p-2 rounded-lg text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors"
                                                             title="Modifier"
                                                         >
                                                             <EditIcon className="w-4 h-4" />
@@ -431,7 +431,7 @@ const UsersPage: React.FC = () => {
                                                         <button
                                                             onClick={() => handleDeleteUser(user.id, user.name || user.email || '')}
                                                             disabled={user.id === currentUser?.id || isUpdating === user.id}
-                                                            className={`p-2 rounded-xl text-red-600 bg-red-50 hover:bg-red-100 transition-colors ${user.id === currentUser?.id ? 'opacity-30 cursor-not-allowed' : ''}`}
+                                                            className={`p-2 rounded-lg text-red-600 bg-red-50 hover:bg-red-100 transition-colors ${user.id === currentUser?.id ? 'opacity-30 cursor-not-allowed' : ''}`}
                                                             title="Supprimer"
                                                         >
                                                             <TrashIcon className="w-4 h-4" />
@@ -449,7 +449,7 @@ const UsersPage: React.FC = () => {
             </Card>
 
             {/* Info Banner */}
-            <div className="mt-8 bg-amber-50 dark:bg-amber-900/20 border border-amber-100 rounded-2xl p-6 flex items-start gap-4">
+            <div className="mt-8 bg-amber-50 dark:bg-amber-900/20 border border-amber-100 rounded-lg p-6 flex items-start gap-4">
                 <ShieldIcon className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                 <div>
                     <p className="text-xs text-amber-800 font-bold mb-1">Gestion des Rôles</p>

@@ -20,7 +20,7 @@ const AccountBalancesStrip: React.FC<AccountBalancesStripProps> = ({
     <div className={`w-full ${className}`}>
       {error && (
         <p
-          className="mb-4 text-sm font-medium text-red-600 bg-red-50 dark:bg-red-900/20 border border-red-200 rounded-xl px-4 py-3"
+          className="mb-4 text-sm font-medium text-red-600 bg-red-50 dark:bg-red-900/20 border border-red-200 rounded-lg px-4 py-3"
           role="alert"
         >
           Erreur de chargement des soldes. {error}

@@ -112,7 +112,7 @@ const EditServiceModal: React.FC<{
       <div className="space-y-8">
 
         {/* ATTENDANCE SECTION */}
-        <div className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-xl border border-slate-100 dark:border-dark">
+        <div className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-lg border border-slate-100 dark:border-dark">
           <h3 className="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Présences</h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -370,16 +370,16 @@ const SundayOverviewPage: React.FC = () => {
               />
             )}
           </div>
-          <div className="flex bg-slate-100 p-1 rounded-xl w-fit">
+          <div className="flex bg-slate-100 p-1 rounded-lg w-fit">
             <button
               onClick={() => setServiceFilter('ALL')}
-              className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${serviceFilter === 'ALL' ? 'bg-card dark:bg-card-dark text-primary shadow-sm dark:shadow-none border border-primary dark:border-white/20/20' : 'bg-transparent text-slate-600 dark:text-slate-400 hover:text-primary hover:bg-slate-50' }`}
+              className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${serviceFilter === 'ALL' ? 'bg-card dark:bg-card-dark text-primary shadow-sm dark:shadow-none border border-primary dark:border-white/20/20' : 'bg-transparent text-slate-600 dark:text-slate-400 hover:text-primary hover:bg-slate-50'}`}
             >
               Tous
             </button>
             <button
               onClick={() => setServiceFilter('SUNDAY')}
-              className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${serviceFilter === 'SUNDAY' ? 'bg-primary text-white shadow-sm dark:shadow-none' : 'bg-transparent text-slate-600 dark:text-slate-400 hover:text-primary hover:bg-slate-50 dark:bg-white/[0.02]' }`}
+              className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${serviceFilter === 'SUNDAY' ? 'bg-primary text-white shadow-sm dark:shadow-none' : 'bg-transparent text-slate-600 dark:text-slate-400 hover:text-primary hover:bg-slate-50 dark:bg-white/[0.02]'}`}
             >
               Dimanche
             </button>
@@ -387,7 +387,7 @@ const SundayOverviewPage: React.FC = () => {
         </div>
 
         {filteredSundays.length === 0 ? (
-          <div className="h-64 flex flex-col items-center justify-center text-slate-400 bg-slate-50 dark:bg-white/[0.02]/50 rounded-[2rem] border border-slate-100 dark:border-dark">
+          <div className="h-64 flex flex-col items-center justify-center text-slate-400 bg-slate-50 dark:bg-white/[0.02]/50 rounded-lg border border-slate-200 dark:border-dark">
             <p className="font-bold text-sm">Aucune donnée disponible</p>
             <p className="text-xs mt-1">
               Les cultes apparaîtront ici dès que des présences et des offrandes seront saisies.
@@ -398,11 +398,11 @@ const SundayOverviewPage: React.FC = () => {
             {filteredSundays.map(sunday => (
               <Card
                 key={sunday.date}
-                className="bg-card dark:bg-card-dark rounded-[2rem] border border-slate-100 dark:border-dark shadow-sm dark:shadow-none overflow-hidden"
+                className="bg-white dark:bg-card-dark rounded-lg border border-border dark:border-dark shadow-admin dark:shadow-none overflow-hidden p-0"
               >
-                <div className="px-6 py-4 border-b border-slate-100 dark:border-dark flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-slate-50 dark:bg-white/[0.02]/60">
+                <div className="px-6 py-4 border-b border-border dark:border-dark flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-slate-50 dark:bg-white/[0.02]/60">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary dark:text-white">
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary dark:text-white">
                       <CalendarIcon className="w-5 h-5" />
                     </div>
                     <div>
@@ -415,19 +415,19 @@ const SundayOverviewPage: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex gap-3 text-xs">
-                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-900 text-white">
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-900 text-white">
                       <UsersIcon className="w-4 h-4" />
                       <span className="font-black uppercase tracking-widest">
                         {sunday.totals.attendance.toLocaleString()} Présences
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700">
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700">
                       <DollarSignIcon className="w-4 h-4" />
                       <span className="font-black uppercase tracking-widest">
                         FC {sunday.totals.offeringsCDF.toLocaleString()}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-50 dark:bg-amber-900/20 text-amber-700">
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-50 dark:bg-amber-900/20 text-amber-700">
                       <DollarSignIcon className="w-4 h-4" />
                       <span className="font-black uppercase tracking-widest">
                         $ {sunday.totals.offeringsUSD.toLocaleString()}
@@ -440,7 +440,7 @@ const SundayOverviewPage: React.FC = () => {
                   {sunday.services.map(service => (
                     <div
                       key={service.serviceName}
-                      className="border border-slate-100 dark:border-dark rounded-2xl p-4 bg-slate-50 dark:bg-white/[0.02]/40 group relative"
+                      className="border border-border dark:border-dark rounded-lg p-4 bg-slate-50 dark:bg-white/[0.02]/40 group relative"
                     >
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-2">
@@ -525,7 +525,7 @@ const SundayOverviewPage: React.FC = () => {
 
                         {service.offerings.totals.CDF > 0 ||
                           service.offerings.totals.USD > 0 ? (
-                          <div className="mt-3 pt-2 border-t border-slate-100 dark:border-dark flex items-center justify-between">
+                          <div className="mt-3 pt-2 border-t border-border dark:border-dark flex items-center justify-between">
                             <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
                               Total
                             </span>

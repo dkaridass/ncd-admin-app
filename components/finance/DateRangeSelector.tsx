@@ -42,7 +42,7 @@ const DateRangeSelector: React.FC<Props> = ({
                         key={preset.value}
                         onClick={() => onPresetChange(preset.value)}
                         type="button"
-                        className={`px-6 py-3 rounded-xl text-sm font-bold transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${ activePreset === preset.value ? 'bg-primary text-white shadow-md dark:shadow-none' : 'bg-card dark:bg-card-dark border-2 border-slate-200 dark:border-dark text-slate-700 dark:text-white hover:border-primary/50 hover:text-primary hover:bg-slate-50' }`}
+                        className={`px-6 py-3 rounded-lg text-sm font-bold transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${ activePreset === preset.value ? 'bg-primary text-white shadow-md dark:shadow-none' : 'bg-card dark:bg-card-dark border border-slate-200 dark:border-dark text-slate-700 dark:text-white hover:border-primary/50 hover:text-primary hover:bg-slate-50' }`}
                     >
                         {preset.label}
                     </button>
@@ -51,14 +51,14 @@ const DateRangeSelector: React.FC<Props> = ({
 
             {/* Custom Date Inputs */}
             {activePreset === 'custom' && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6 bg-slate-50 dark:bg-white/[0.02] rounded-2xl border border-slate-100 dark:border-dark">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6 bg-slate-50 dark:bg-white/[0.02] rounded-lg border border-slate-100 dark:border-dark">
                     <div>
                         <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-2">Date de Début</label>
                         <Input
                             type="date"
                             value={startDate}
                             onChange={(e) => onStartDateChange(e.target.value)}
-                            className="rounded-xl"
+                            className="rounded-lg"
                         />
                     </div>
                     <div>
@@ -67,7 +67,7 @@ const DateRangeSelector: React.FC<Props> = ({
                             type="date"
                             value={endDate}
                             onChange={(e) => onEndDateChange(e.target.value)}
-                            className="rounded-xl"
+                            className="rounded-lg"
                         />
                     </div>
                 </div>

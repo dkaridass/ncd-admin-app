@@ -67,7 +67,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                        className="absolute inset-0 bg-black/60 "
                         onClick={onCancel}
                     />
 
@@ -77,12 +77,12 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
                         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                        className="relative bg-white dark:bg-[#0D1117] rounded-2xl shadow-2xl dark:shadow-none border border-slate-200 dark:border-white/10 w-full max-w-md overflow-hidden"
+                        className="relative bg-white dark:bg-[#0D1117] rounded-lg shadow-admin dark:shadow-none border border-slate-200 dark:border-white/10 w-full max-w-md overflow-hidden"
                     >
                         <div className="p-6">
                             {/* Icon + Title */}
                             <div className="flex items-start gap-4">
-                                <div className={`flex-shrink-0 w-11 h-11 rounded-xl ${styles.iconBg} ${styles.iconColor} flex items-center justify-center`}>
+                                <div className={`flex-shrink-0 w-11 h-11 rounded-lg ${styles.iconBg} ${styles.iconColor} flex items-center justify-center`}>
                                     {styles.icon}
                                 </div>
                                 <div className="flex-1 min-w-0">
@@ -100,13 +100,13 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                         <div className="flex items-center justify-end gap-3 px-6 py-4 bg-slate-50 dark:bg-white/[0.02] border-t border-slate-100 dark:border-white/5">
                             <button
                                 onClick={onCancel}
-                                className="px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl hover:bg-slate-50 dark:hover:bg-white/10 transition-all duration-200 active:scale-[0.97]"
+                                className="px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg hover:bg-slate-50 dark:hover:bg-white/10 transition-all duration-200 active:scale-[0.97]"
                             >
                                 {cancelLabel}
                             </button>
                             <button
                                 onClick={onConfirm}
-                                className={`px-5 py-2.5 text-sm font-semibold text-white rounded-xl ${styles.confirmBg} transition-all duration-200 active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-[#0D1117]`}
+                                className={`px-5 py-2.5 text-sm font-semibold text-white rounded-lg ${styles.confirmBg} transition-all duration-200 active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-[#0D1117]`}
                             >
                                 {confirmLabel}
                             </button>

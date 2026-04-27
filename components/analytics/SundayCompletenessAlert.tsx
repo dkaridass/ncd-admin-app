@@ -88,37 +88,43 @@ const SundayCompletenessAlert: React.FC = () => {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="mb-6 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-2xl p-5 shadow-sm dark:shadow-none"
+                className="mb-6 bg-white border border-border shadow-admin rounded-lg overflow-hidden"
             >
-                <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-500/20 flex items-center justify-center shrink-0">
-                        <span className="text-lg">⚠️</span>
-                    </div>
-                    <div className="flex-1">
-                        <h3 className="text-sm font-bold text-amber-800 dark:text-amber-300 mb-1">
-                            Rapports Incomplets — {formattedDate}
-                        </h3>
-                        <div className="space-y-1.5 mt-3">
+                <div className="flex">
+                    {/* Severity colored strip */}
+                    <div className="w-1.5 bg-[#D81124] shrink-0" />
+
+                    <div className="p-4 flex-1">
+                        <div className="flex items-center gap-2 mb-4">
+                            <svg className="w-4 h-4 text-[#D81124]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                            <h3 className="text-sm font-bold text-slate-800 tracking-wide uppercase">
+                                Action Requise : Rapports Manquants
+                            </h3>
+                            <span className="ml-auto text-xs font-semibold text-slate-500 uppercase tracking-widest">
+                                {formattedDate}
+                            </span>
+                        </div>
+
+                        <div className="space-y-0">
                             {missing.map((gap, i) => (
-                                <div
-                                    key={i}
-                                    className="flex items-center gap-2 text-xs text-amber-700 dark:text-amber-400"
-                                >
-                                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />
-                                    <span className="font-bold">{gap.service}:</span>
-                                    <span>
-                                        {gap.missingAttendance && gap.missingFinance
-                                            ? 'présences et offrandes manquantes'
-                                            : gap.missingAttendance
-                                                ? 'rapport de présences manquant'
-                                                : 'rapport d\'offrandes manquant'}
-                                    </span>
+                                <div key={i} className="flex justify-between items-center py-2 border-b border-slate-100 last:border-0">
+                                    <div className="flex items-center gap-2 text-sm text-slate-700">
+                                        <span className="font-semibold text-slate-800">{gap.service}</span>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        {gap.missingAttendance && <span className="text-[10px] uppercase font-bold tracking-widest text-[#D81124] bg-red-50 border border-red-100 px-2.5 py-1 rounded">Présences</span>}
+                                        {gap.missingFinance && <span className="text-[10px] uppercase font-bold tracking-widest text-[#D81124] bg-red-50 border border-red-100 px-2.5 py-1 rounded">Offrandes</span>}
+                                    </div>
                                 </div>
                             ))}
                         </div>
-                        <p className="text-[10px] text-amber-500 dark:text-amber-600 mt-3 font-medium">
-                            Utilisez le bouton ⊕ pour saisir rapidement les données manquantes
-                        </p>
+                        <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                            <p className="text-xs text-slate-500 font-medium">
+                                Saisissez les données urgemment pour clôturer les métriques du dimanche.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </motion.div>

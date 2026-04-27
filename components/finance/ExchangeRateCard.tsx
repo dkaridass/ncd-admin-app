@@ -40,7 +40,7 @@ const ExchangeRateCard: React.FC<ExchangeRateCardProps> = ({ className = '' }) =
 
     if (isLoading) {
         return (
-            <div className={`bg-gradient-to-br from-emerald-50 to-teal-50 p-4 rounded-2xl border border-emerald-100 ${className}`}>
+            <div className={`bg-emerald-50 p-4 rounded-lg border border-emerald-100 ${className}`}>
                 <div className="animate-pulse">
                     <div className="h-4 bg-emerald-200 rounded w-1/2 mb-2"></div>
                     <div className="h-8 bg-emerald-200 rounded w-3/4"></div>
@@ -51,7 +51,7 @@ const ExchangeRateCard: React.FC<ExchangeRateCardProps> = ({ className = '' }) =
 
     if (error || rate === null) {
         return (
-            <div className={`bg-gradient-to-br from-gray-50 to-gray-100 p-4 rounded-2xl border border-gray-200 ${className}`}>
+            <div className={`bg-gray-50 p-4 rounded-lg border border-gray-200 ${className}`}>
                 <div className="flex items-center justify-between">
                     <div>
                         <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Taux USD/CDF</p>
@@ -72,7 +72,7 @@ const ExchangeRateCard: React.FC<ExchangeRateCardProps> = ({ className = '' }) =
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`bg-gradient-to-br from-emerald-50 to-teal-50 p-4 rounded-2xl border border-emerald-100 shadow-sm dark:shadow-none hover:shadow-md dark:shadow-none transition-shadow ${className}`}
+            className={`bg-emerald-50 p-4 rounded-lg border border-emerald-100 shadow-sm dark:shadow-none hover:shadow-md dark:shadow-none transition-shadow ${className}`}
         >
             <div className="flex items-start justify-between">
                 <div className="flex-1">

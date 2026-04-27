@@ -43,7 +43,7 @@ const RevenueChart: React.FC<Props> = ({ records, periodLabel }) => {
 
     if (chartData.length === 0) {
         return (
-            <Card className="border-none shadow-soft dark:shadow-none rounded-2xl p-8">
+            <Card className="border-none shadow-sm rounded-lg p-8">
                 <h3 className="text-lg font-bold text-slate-700 dark:text-white mb-4">Tendances des Revenus</h3>
                 <div className="flex flex-col items-center justify-center py-12 text-center">
                     <p className="text-sm text-slate-400">Aucune donnée de revenus pour cette période</p>
@@ -53,7 +53,7 @@ const RevenueChart: React.FC<Props> = ({ records, periodLabel }) => {
     }
 
     return (
-        <Card className="border-none shadow-soft dark:shadow-none rounded-2xl p-8">
+        <Card className="border-none shadow-sm rounded-lg p-8">
             <h3 className="text-lg font-bold text-slate-700 dark:text-white mb-6">Tendances des Revenus - {periodLabel}</h3>
 
             <div className="h-[300px] w-full">

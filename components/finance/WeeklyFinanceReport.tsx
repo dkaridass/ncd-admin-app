@@ -180,7 +180,7 @@ const WeeklyFinanceReport: React.FC<WeeklyFinanceReportProps> = ({ records, onCl
                         />
                     </div>
 
-                    <Button onClick={handlePrint} className="bg-primary text-white gap-2 rounded-xl text-sm px-6">
+                    <Button onClick={handlePrint} className="bg-primary text-white gap-2 rounded-lg text-sm px-6">
                         <PrinterIcon className="w-4 h-4" /> Imprimer
                     </Button>
                 </div>
@@ -188,7 +188,7 @@ const WeeklyFinanceReport: React.FC<WeeklyFinanceReportProps> = ({ records, onCl
 
             {/* Main Print Container */}
             <div className="flex-1 overflow-y-auto p-4 md:p-8 print:p-0 print:bg-white custom-scrollbar bg-slate-100 dark:bg-slate-900">
-                <div className="max-w-[1100px] mx-auto bg-white p-10 md:p-16 print:p-8 shadow-2xl print:shadow-none min-h-screen text-slate-800">
+                <div className="max-w-[1100px] mx-auto bg-white p-10 md:p-16 print:p-8 shadow-admin print:shadow-none min-h-screen text-slate-800">
 
                     {/* Print Styles */}
                     <style>{`
@@ -202,7 +202,7 @@ const WeeklyFinanceReport: React.FC<WeeklyFinanceReportProps> = ({ records, onCl
                     {/* Official Letterhead */}
                     <div className="flex justify-between items-start mb-12 pb-8 border-b-2 border-slate-100">
                         <div className="flex items-center gap-5">
-                            <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg print:border-2 print:border-primary">
+                            <div className="w-16 h-16 bg-primary rounded-lg flex items-center justify-center text-white font-black text-2xl shadow-md print:border-2 print:border-primary">
                                 NCD
                             </div>
                             <div>
@@ -354,7 +354,7 @@ const WeeklyFinanceReport: React.FC<WeeklyFinanceReportProps> = ({ records, onCl
                     </div>
 
                     {/* SOLDE CAISSE */}
-                    <div className="bg-slate-900 text-white rounded-3xl p-8 flex flex-col md:flex-row justify-between items-center mb-16 print:bg-white print:text-black print:border-4 print:border-slate-900 print:rounded-2xl shadow-xl print:shadow-none relative overflow-hidden">
+                    <div className="bg-slate-900 text-white rounded-lg p-8 flex flex-col md:flex-row justify-between items-center mb-16 print:bg-white print:text-black print:border-4 print:border-slate-900 print:rounded-lg shadow-xl print:shadow-none relative overflow-hidden">
                         <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/5 rounded-full blur-3xl print:hidden"></div>
                         <div className="relative z-10 text-center md:text-left">
                             <p className="text-[10px] text-slate-400 print:text-slate-500 font-black uppercase tracking-widest mb-1 mt-1">Solde de Caisse (Bilan Final)</p>

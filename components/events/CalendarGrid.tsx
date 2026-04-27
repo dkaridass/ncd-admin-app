@@ -59,7 +59,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ events, currentDate, onEven
     };
 
     return (
-        <div className="bg-card dark:bg-card-dark rounded-[3rem] shadow-premium dark:shadow-none overflow-hidden border border-slate-100 dark:border-dark">
+        <div className="bg-card dark:bg-card-dark rounded-lg shadow-admin overflow-hidden border border-slate-100 dark:border-dark">
             <div className="bg-slate-50 dark:bg-white/[0.02] p-6 flex justify-between items-center border-b border-slate-100 dark:border-dark">
                 <h3 className="text-xl font-black text-primary dark:text-white font-display uppercase italic">{monthLabel}</h3>
                 <div className="flex gap-2">

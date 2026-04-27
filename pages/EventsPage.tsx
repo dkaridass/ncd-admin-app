@@ -52,8 +52,8 @@ const EventsPage: React.FC = () => {
   });
 
   const filteredEvents = (events && Array.isArray(events) ? events : []).filter(event => {
-    if (activeTab === 'archives') return new Date(event.start) < new Date();
-    if (activeTab === 'prochains') return new Date(event.start) >= new Date();
+    if (activeTab === 'archives') return new Date(event.end) < new Date();
+    if (activeTab === 'prochains') return new Date(event.end) >= new Date();
     return true;
   });
 
@@ -196,28 +196,28 @@ const EventsPage: React.FC = () => {
           <p className="text-slate-500 dark:text-slate-400 font-medium italic opacity-80 uppercase tracking-widest text-[10px]">Planification Stratégique</p>
         </div>
         <div className="flex flex-col xl:flex-row gap-4">
-          <div className="bg-slate-100 dark:bg-white/[0.02] p-1 rounded-2xl flex items-center overflow-x-auto hide-scrollbar max-w-full">
+          <div className="bg-slate-100 p-1 rounded-lg flex items-center overflow-x-auto hide-scrollbar max-w-full">
             <button
               onClick={() => setViewMode('calendar')}
-              className={`whitespace-nowrap px-4 md:px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'calendar' ? 'bg-card dark:bg-card-dark shadow-sm dark:shadow-none text-primary dark:text-white' : 'text-slate-400 hover:text-slate-600 dark:text-slate-400'}`}
+              className={`whitespace-nowrap px-4 md:px-6 py-2 rounded-md text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'calendar' ? 'bg-white shadow-sm text-primary' : 'text-slate-400 hover:text-slate-600'}`}
             >
               Calendrier
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={`whitespace-nowrap px-4 md:px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'list' ? 'bg-card dark:bg-card-dark shadow-sm dark:shadow-none text-primary dark:text-white' : 'text-slate-400 hover:text-slate-600 dark:text-slate-400'}`}
+              className={`whitespace-nowrap px-4 md:px-6 py-2 rounded-md text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'list' ? 'bg-white shadow-sm text-primary' : 'text-slate-400 hover:text-slate-600'}`}
             >
               Liste
             </button>
             <button
               onClick={() => setIsAttendanceModalOpen(true)}
-              className="ml-1 md:ml-2 whitespace-nowrap px-4 md:px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-primary dark:text-white hover:bg-card dark:bg-card-dark transition-all"
+              className="ml-1 md:ml-2 whitespace-nowrap px-4 md:px-6 py-3 rounded-lg text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-primary dark:text-white hover:bg-card dark:bg-card-dark transition-all"
             >
               Saisir Effectifs
             </button>
           </div>
           <PermissionGuard permission="MANAGE_EVENTS">
-            <Button onClick={() => setIsEventModalOpen(true)} className="rounded-[2rem] shadow-premium dark:shadow-none px-8 py-4 bg-primary text-white w-full xl:w-auto">
+            <Button onClick={() => setIsEventModalOpen(true)} className="rounded-lg px-8 py-3 bg-primary text-white w-full xl:w-auto">
               <PlusCircleIcon className="w-5 h-5 mr-3" />
               Nouvel Événement
             </Button>
@@ -272,7 +272,7 @@ const EventsPage: React.FC = () => {
                     <Button
                       onClick={handleInitializeProgramme}
                       disabled={isInitializing}
-                      className="bg-primary text-white rounded-xl px-8 py-3 uppercase font-black tracking-widest text-[10px] disabled:opacity-50"
+                      className="bg-primary text-white rounded-lg px-8 py-3 uppercase font-black tracking-widest text-[10px] disabled:opacity-50"
                     >
                       {isInitializing ? 'Initialisation...' : 'Initialiser les Services Hebdomadaires'}
                     </Button>
@@ -284,16 +284,16 @@ const EventsPage: React.FC = () => {
                     const dayServices = (weeklyServices && Array.isArray(weeklyServices) ? weeklyServices : []).filter(s => s.dayOfWeek === day && s.isActive);
                     if (dayServices.length === 0) return null;
                     return (
-                      <Card key={day} className="p-6 rounded-[2.5rem] bg-card dark:bg-card-dark border border-slate-100 dark:border-dark hover:border-primary/20 transition-all">
+                      <Card key={day} className="p-6 rounded-lg bg-white shadow-admin border border-slate-200 hover:border-primary/20 transition-all">
                         <div className="flex items-center gap-6">
-                          <div className="w-20 h-20 rounded-3xl bg-primary/10 flex items-center justify-center border-2 border-primary dark:border-white/20/20">
-                            <span className="text-xs font-black text-primary dark:text-white uppercase">{day.substring(0, 3)}</span>
+                          <div className="w-16 h-16 rounded-lg bg-slate-50 flex items-center justify-center border border-slate-200">
+                            <span className="text-xs font-black text-slate-500 uppercase">{day.substring(0, 3)}</span>
                           </div>
                           <div className="flex-1">
                             <h4 className="text-lg font-black text-primary dark:text-white uppercase mb-3">{day}</h4>
                             <div className="space-y-2">
                               {dayServices.map(service => (
-                                <div key={service.id} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-white/[0.02] rounded-xl">
+                                <div key={service.id} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-white/[0.02] rounded-lg">
                                   <div>
                                     <p className="text-sm font-bold text-slate-800 dark:text-white">{service.serviceName}</p>
                                     <p className="text-xs text-slate-500 dark:text-slate-400">{service.description || service.location}</p>
@@ -324,7 +324,7 @@ const EventsPage: React.FC = () => {
                       onClick={handleInitializeProgramme}
                       isLoading={isInitializing}
                       disabled={isInitializing}
-                      className="bg-primary text-white rounded-xl px-8 py-3 uppercase font-black tracking-widest text-[10px] disabled:opacity-50"
+                      className="bg-primary text-white rounded-lg px-8 py-3 uppercase font-black tracking-widest text-[10px] disabled:opacity-50"
                     >
                       Initialiser le Programme (Hebdomadaire + Annuel 2026)
                     </Button>
@@ -339,13 +339,13 @@ const EventsPage: React.FC = () => {
                       const endDate = new Date(event.endDate);
                       const isSameDay = event.startDate === event.endDate;
                       return (
-                        <Card key={event.id} className="p-6 rounded-[2.5rem] bg-card dark:bg-card-dark border border-slate-100 dark:border-dark hover:border-primary/20 transition-all hover:shadow-lg dark:shadow-none">
+                        <Card key={event.id} className="p-6 rounded-lg bg-white shadow-admin border border-slate-200 hover:border-primary/20 transition-all hover:shadow-md">
                           <div className="flex items-start gap-6">
-                            <div className="w-20 h-20 rounded-3xl bg-slate-50 dark:bg-white/[0.02] flex flex-col items-center justify-center border border-slate-100 dark:border-dark">
+                            <div className="w-16 h-16 rounded-lg bg-slate-50 flex flex-col items-center justify-center border border-slate-200">
                               <span className="text-[10px] font-black text-slate-400 uppercase">
                                 {startDate.toLocaleDateString('fr-FR', { month: 'short' })}
                               </span>
-                              <span className="text-2xl font-black font-display">
+                              <span className="text-xl font-black font-display text-slate-700">
                                 {startDate.getDate()}
                               </span>
                             </div>
@@ -392,13 +392,13 @@ const EventsPage: React.FC = () => {
           ) : (
             <div className="space-y-4">
               {sortedEvents.map(event => (
-                <Card key={event.id} className="group p-6 rounded-[2.5rem] bg-card dark:bg-card-dark border border-slate-100 dark:border-dark hover:border-primary/20 transition-all hover:shadow-lg dark:shadow-none flex justify-between items-center cursor-pointer">
+                <Card key={event.id} className="group p-6 rounded-lg bg-white shadow-admin border border-slate-200 hover:border-primary/20 transition-all hover:shadow-md flex justify-between items-center cursor-pointer">
                   <div className="flex items-center gap-6">
-                    <div className="w-20 h-20 rounded-3xl bg-slate-50 dark:bg-white/[0.02] flex flex-col items-center justify-center border border-slate-100 dark:border-dark group-hover:bg-primary group-hover:text-white transition-colors">
-                      <span className="text-[10px] font-black uppercase tracking-widest opacity-60">
+                    <div className="w-16 h-16 rounded-lg bg-slate-50 flex flex-col items-center justify-center border border-slate-200 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-colors">
+                      <span className="text-[10px] font-black uppercase tracking-widest opacity-80">
                         {event.start.toLocaleDateString('fr-FR', { month: 'short' })}
                       </span>
-                      <span className="text-2xl font-black font-display">
+                      <span className="text-xl font-black font-display text-slate-700 group-hover:text-white">
                         {event.start.getDate()}
                       </span>
                     </div>
@@ -421,7 +421,7 @@ const EventsPage: React.FC = () => {
                   </div>
 
                   <div className="flex items-center gap-4">
-                    <Badge variant={event.type === 'Culte' ? 'primary' : 'secondary'} className="px-4 py-2 rounded-xl text-[9px] font-black uppercase">
+                    <Badge variant={event.type === 'Culte' ? 'primary' : 'secondary'} className="px-4 py-2 rounded-lg text-[9px] font-black uppercase">
                       {event.type}
                     </Badge>
                   </div>
@@ -433,8 +433,7 @@ const EventsPage: React.FC = () => {
 
         <div className="lg:w-1/4 space-y-8">
           {/* Prochain Culte Highlight */}
-          <div className="bg-card dark:bg-card-dark p-8 rounded-[2.5rem] border border-slate-100 dark:border-dark shadow-premium dark:shadow-none relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-[4rem]" />
+          <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-admin relative overflow-hidden group">
             <div className="relative z-10">
               <h3 className="text-[10px] font-black uppercase text-slate-400 tracking-[0.3em] mb-6">Prochain Culte</h3>
 
@@ -446,29 +445,44 @@ const EventsPage: React.FC = () => {
                 const dayOrder = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
 
                 // Find next service from weekly schedule
+                let nextServiceDate: Date | null = null;
                 let nextService: WeeklyService | null = null;
                 for (let i = 0; i < 7; i++) {
                   const checkDay = (currentDay + i) % 7;
                   const dayName = days[checkDay];
                   const dayServices = (weeklyServices && Array.isArray(weeklyServices) ? weeklyServices : []).filter(s => s.dayOfWeek === dayName && s.isActive).sort((a, b) => (a.order || 0) - (b.order || 0));
                   if (dayServices.length > 0) {
-                    // If it's today, check if time hasn't passed
                     if (i === 0) {
                       const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
                       const futureService = dayServices.find(s => s.startTime > currentTime);
                       if (futureService) {
                         nextService = futureService;
+                        nextServiceDate = new Date(now);
+                        const [hours, mins] = futureService.startTime.split(':').map(Number);
+                        nextServiceDate.setHours(hours, mins, 0, 0);
                         break;
                       }
                     } else {
                       nextService = dayServices[0];
+                      nextServiceDate = new Date(now);
+                      nextServiceDate.setDate(now.getDate() + i);
+                      const [hours, mins] = nextService.startTime.split(':').map(Number);
+                      nextServiceDate.setHours(hours, mins, 0, 0);
                       break;
                     }
                   }
                 }
 
-                // Fallback to events if no weekly service found
-                const nextEvent = nextService ? null : sortedEvents.find(e => e.start > now && e.type === 'Culte');
+                // Check for upcoming special events
+                const nextEvent = sortedEvents.find(e => e.start > now);
+
+                // Determine whether to show the next service or the next event
+                let displayingEvent = false;
+                if (nextEvent && (!nextServiceDate || nextEvent.start < nextServiceDate)) {
+                  displayingEvent = true;
+                  // Ignore weekly service if event comes earlier
+                  nextService = null;
+                }
 
                 if (nextService) {
                   const serviceDayIndex = dayOrder.indexOf(nextService.dayOfWeek);
@@ -489,7 +503,7 @@ const EventsPage: React.FC = () => {
                         {nextService.serviceName} - {nextService.dayOfWeek}
                       </p>
 
-                      <div className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-2xl flex items-center justify-between mb-8">
+                      <div className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-lg flex items-center justify-between mb-8">
                         <div className="text-center flex-1 border-r border-slate-200 dark:border-dark">
                           <span className="block text-[9px] font-black text-slate-400 uppercase">Début</span>
                           <span className="text-lg font-black text-indigo-600 dark:text-indigo-300">{nextService.startTime}</span>
@@ -513,7 +527,7 @@ const EventsPage: React.FC = () => {
                       </div>
                       <p className="text-lg font-bold text-slate-700 dark:text-white italic border-l-4 border-secondary pl-4 mb-6">{nextEvent.title}</p>
 
-                      <div className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-2xl flex items-center justify-between mb-8">
+                      <div className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-lg flex items-center justify-between mb-8">
                         <div className="text-center flex-1 border-r border-slate-200 dark:border-dark">
                           <span className="block text-[9px] font-black text-slate-400 uppercase">Début</span>
                           <span className="text-lg font-black text-indigo-600 dark:text-indigo-300">{nextEvent.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
@@ -545,7 +559,7 @@ const EventsPage: React.FC = () => {
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                   console.log('✅ Scrolled to top');
                 }}
-                className="w-full py-4 rounded-xl bg-primary text-white text-[10px] font-black uppercase tracking-widest shadow-lg dark:shadow-none"
+                className="w-full py-4 rounded-lg bg-primary text-white text-[10px] font-black uppercase tracking-widest shadow-md"
               >
                 Voir le Programme
               </Button>
@@ -553,9 +567,9 @@ const EventsPage: React.FC = () => {
           </div>
 
           {/* Stats / Quick Info */}
-          <div className="bg-indigo-900 p-8 rounded-[2.5rem] shadow-lg dark:shadow-none text-white relative overflow-hidden">
+          <div className="bg-indigo-900 p-6 rounded-lg shadow-admin text-white relative overflow-hidden">
             <SparklesIcon className="absolute -top-4 -right-4 w-32 h-32 text-white/5" />
-            <h3 className="text-[10px] font-black uppercase text-indigo-200 tracking-[0.3em] mb-8 relative z-10">Métriques du Mois</h3>
+            <h3 className="text-[10px] font-black uppercase text-indigo-200 tracking-[0.3em] mb-6 relative z-10">Métriques du Mois</h3>
 
             <div className="space-y-6 relative z-10">
               <div className="flex justify-between items-center pb-4 border-b border-white/10">
@@ -574,23 +588,23 @@ const EventsPage: React.FC = () => {
       {/* Modals placed at end of return */}
       {/* Event Creation Modal */}
       {isEventModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 animate-fade-in">
-          <div className="bg-card dark:bg-card-dark rounded-[2.5rem] shadow-2xl dark:shadow-none w-full max-w-2xl overflow-hidden animate-slide-up">
-            <div className="p-8 border-b border-slate-100 dark:border-dark flex justify-between items-center bg-slate-50 dark:bg-white/[0.02]/50">
-              <h3 className="text-xl font-black text-primary dark:text-white uppercase tracking-tight">Nouvel Événement</h3>
-              <button onClick={() => setIsEventModalOpen(false)} className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-600 dark:text-slate-400 transition-colors">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50  p-4 animate-fade-in">
+          <div className="bg-white rounded-lg shadow-admin w-full max-w-2xl overflow-hidden animate-slide-up">
+            <div className="p-6 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+              <h3 className="text-xl font-black text-primary uppercase tracking-tight">Nouvel Événement</h3>
+              <button onClick={() => setIsEventModalOpen(false)} className="w-8 h-8 rounded-lg bg-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-300 transition-colors">
                 ✕
               </button>
             </div>
-            <form onSubmit={handleCreateEvent} className="p-8 space-y-6">
+            <form onSubmit={handleCreateEvent} className="p-6 space-y-4">
               <div>
                 <label className="block text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Titre</label>
-                <input autoFocus type="text" value={newEvent.title} onChange={e => setNewEvent({ ...newEvent, title: e.target.value })} className="w-full px-4 py-3 rounded-xl border-2 border-slate-100 dark:border-dark font-bold focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all" placeholder="Titre de l'événement" required />
+                <input autoFocus type="text" value={newEvent.title} onChange={e => setNewEvent({ ...newEvent, title: e.target.value })} className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark font-bold focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all" placeholder="Titre de l'événement" required />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Type</label>
-                  <select value={newEvent.type} onChange={e => setNewEvent({ ...newEvent, type: e.target.value })} className="w-full px-4 py-3 rounded-xl border-2 border-slate-100 dark:border-dark font-bold focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all">
+                  <select value={newEvent.type} onChange={e => setNewEvent({ ...newEvent, type: e.target.value })} className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark font-bold focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all">
                     <option value="Culte">Culte</option>
                     <option value="Programme Spécial">Programme Spécial</option>
                     <option value="Réunion">Réunion</option>
@@ -599,26 +613,26 @@ const EventsPage: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Lieu</label>
-                  <input type="text" value={newEvent.location} onChange={e => setNewEvent({ ...newEvent, location: e.target.value })} className="w-full px-4 py-3 rounded-xl border-2 border-slate-100 dark:border-dark font-bold focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all" />
+                  <input type="text" value={newEvent.location} onChange={e => setNewEvent({ ...newEvent, location: e.target.value })} className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark font-bold focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Début</label>
-                  <input type="datetime-local" value={newEvent.start ? newEvent.start.toISOString().slice(0, 16) : ''} onChange={e => setNewEvent({ ...newEvent, start: new Date(e.target.value) })} className="w-full px-4 py-3 rounded-xl border-2 border-slate-100 dark:border-dark font-bold focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all" />
+                  <input type="datetime-local" value={newEvent.start ? newEvent.start.toISOString().slice(0, 16) : ''} onChange={e => setNewEvent({ ...newEvent, start: new Date(e.target.value) })} className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark font-bold focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all" />
                 </div>
                 <div>
                   <label className="block text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Fin</label>
-                  <input type="datetime-local" value={newEvent.end ? newEvent.end.toISOString().slice(0, 16) : ''} onChange={e => setNewEvent({ ...newEvent, end: new Date(e.target.value) })} className="w-full px-4 py-3 rounded-xl border-2 border-slate-100 dark:border-dark font-bold focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all" />
+                  <input type="datetime-local" value={newEvent.end ? newEvent.end.toISOString().slice(0, 16) : ''} onChange={e => setNewEvent({ ...newEvent, end: new Date(e.target.value) })} className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark font-bold focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all" />
                 </div>
               </div>
               <div>
                 <label className="block text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Description</label>
-                <textarea rows={3} value={newEvent.description} onChange={e => setNewEvent({ ...newEvent, description: e.target.value })} className="w-full px-4 py-3 rounded-xl border-2 border-slate-100 dark:border-dark font-bold focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all resize-none" placeholder="Détails de l'événement..." />
+                <textarea rows={3} value={newEvent.description} onChange={e => setNewEvent({ ...newEvent, description: e.target.value })} className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark font-bold focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all resize-none" placeholder="Détails de l'événement..." />
               </div>
               <div className="pt-4 flex justify-end gap-3">
-                <button type="button" onClick={() => setIsEventModalOpen(false)} className="px-6 py-3 rounded-xl font-bold text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:bg-white/[0.02] transition-colors">Annuler</button>
-                <button type="submit" className="px-8 py-3 rounded-xl bg-primary text-white font-black uppercase tracking-widest hover:bg-primary/90 transition-colors shadow-lg dark:shadow-none">Créer Événement</button>
+                <button type="button" onClick={() => setIsEventModalOpen(false)} className="px-6 py-3 rounded-lg font-bold text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:bg-white/[0.02] transition-colors">Annuler</button>
+                <button type="submit" className="px-8 py-3 rounded-lg bg-primary text-white font-black uppercase tracking-widest hover:bg-primary/90 transition-colors shadow-md">Créer Événement</button>
               </div>
             </form>
           </div>
@@ -627,23 +641,23 @@ const EventsPage: React.FC = () => {
 
       {/* Attendance Modal */}
       {isAttendanceModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 animate-fade-in">
-          <div className="bg-card dark:bg-card-dark rounded-[2.5rem] shadow-2xl dark:shadow-none w-full max-w-lg overflow-hidden animate-slide-up">
-            <div className="p-8 border-b border-slate-100 dark:border-dark flex justify-between items-center bg-slate-50 dark:bg-white/[0.02]/50">
-              <h3 className="text-xl font-black text-primary dark:text-white uppercase tracking-tight">Saisir Effectifs</h3>
-              <button onClick={() => setIsAttendanceModalOpen(false)} className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-600 dark:text-slate-400 transition-colors">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50  p-4 animate-fade-in">
+          <div className="bg-white rounded-lg shadow-admin w-full max-w-lg overflow-hidden animate-slide-up">
+            <div className="p-6 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+              <h3 className="text-xl font-black text-primary uppercase tracking-tight">Saisir Effectifs</h3>
+              <button onClick={() => setIsAttendanceModalOpen(false)} className="w-8 h-8 rounded-lg bg-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-300 transition-colors">
                 ✕
               </button>
             </div>
-            <form onSubmit={handleSubmitAttendance} className="p-8 space-y-6">
+            <form onSubmit={handleSubmitAttendance} className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Date</label>
-                  <input type="date" value={attendanceForm.date} onChange={e => setAttendanceForm({ ...attendanceForm, date: e.target.value })} className="w-full px-4 py-3 rounded-xl border-2 border-slate-100 dark:border-dark font-bold focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all" required />
+                  <input type="date" value={attendanceForm.date} onChange={e => setAttendanceForm({ ...attendanceForm, date: e.target.value })} className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark font-bold focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all" required />
                 </div>
                 <div>
                   <label className="block text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Session</label>
-                  <select value={attendanceForm.sessionName} onChange={e => setAttendanceForm({ ...attendanceForm, sessionName: e.target.value })} className="w-full px-4 py-3 rounded-xl border-2 border-slate-100 dark:border-dark font-bold focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all">
+                  <select value={attendanceForm.sessionName} onChange={e => setAttendanceForm({ ...attendanceForm, sessionName: e.target.value })} className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark font-bold focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all">
                     <option value="1er Culte">1er Culte</option>
                     <option value="2ème Culte">2ème Culte</option>
                     <option value="3ème Culte">3ème Culte</option>
@@ -654,18 +668,18 @@ const EventsPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-slate-50 dark:bg-white/[0.02] p-6 rounded-2xl space-y-4">
+              <div className="bg-slate-50 dark:bg-white/[0.02] p-6 rounded-lg space-y-4">
                 <div className="flex items-center justify-between">
                   <label className="text-sm font-bold text-slate-700 dark:text-white">Hommes</label>
-                  <input type="number" min="0" value={attendanceForm.menCount} onChange={e => setAttendanceForm({ ...attendanceForm, menCount: parseInt(e.target.value) || 0 })} className="w-24 px-4 py-2 rounded-xl border-2 border-slate-200 dark:border-dark font-black text-center outline-none focus:border-primary text-primary dark:text-white" />
+                  <input type="number" min="0" value={attendanceForm.menCount} onChange={e => setAttendanceForm({ ...attendanceForm, menCount: parseInt(e.target.value) || 0 })} className="w-24 px-4 py-2 rounded-lg border border-slate-200 dark:border-dark font-black text-center outline-none focus:border-primary text-primary dark:text-white" />
                 </div>
                 <div className="flex items-center justify-between">
                   <label className="text-sm font-bold text-slate-700 dark:text-white">Femmes</label>
-                  <input type="number" min="0" value={attendanceForm.womenCount} onChange={e => setAttendanceForm({ ...attendanceForm, womenCount: parseInt(e.target.value) || 0 })} className="w-24 px-4 py-2 rounded-xl border-2 border-slate-200 dark:border-dark font-black text-center outline-none focus:border-primary text-primary dark:text-white" />
+                  <input type="number" min="0" value={attendanceForm.womenCount} onChange={e => setAttendanceForm({ ...attendanceForm, womenCount: parseInt(e.target.value) || 0 })} className="w-24 px-4 py-2 rounded-lg border border-slate-200 dark:border-dark font-black text-center outline-none focus:border-primary text-primary dark:text-white" />
                 </div>
                 <div className="flex items-center justify-between">
                   <label className="text-sm font-bold text-slate-700 dark:text-white">Enfants</label>
-                  <input type="number" min="0" value={attendanceForm.childrenCount} onChange={e => setAttendanceForm({ ...attendanceForm, childrenCount: parseInt(e.target.value) || 0 })} className="w-24 px-4 py-2 rounded-xl border-2 border-slate-200 dark:border-dark font-black text-center outline-none focus:border-primary text-primary dark:text-white" />
+                  <input type="number" min="0" value={attendanceForm.childrenCount} onChange={e => setAttendanceForm({ ...attendanceForm, childrenCount: parseInt(e.target.value) || 0 })} className="w-24 px-4 py-2 rounded-lg border border-slate-200 dark:border-dark font-black text-center outline-none focus:border-primary text-primary dark:text-white" />
                 </div>
                 <div className="border-t border-slate-200 dark:border-dark pt-4 flex items-center justify-between">
                   <label className="text-sm font-black uppercase tracking-widest text-slate-400">Total</label>
@@ -674,8 +688,8 @@ const EventsPage: React.FC = () => {
               </div>
 
               <div className="pt-4 flex justify-end gap-3">
-                <button type="button" onClick={() => setIsAttendanceModalOpen(false)} className="px-6 py-3 rounded-xl font-bold text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:bg-white/[0.02] transition-colors">Annuler</button>
-                <button type="submit" className="px-8 py-3 rounded-xl bg-primary text-white font-black uppercase tracking-widest hover:bg-primary/90 transition-colors shadow-lg dark:shadow-none">Enregistrer</button>
+                <button type="button" onClick={() => setIsAttendanceModalOpen(false)} className="px-6 py-3 rounded-lg font-bold text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:bg-white/[0.02] transition-colors">Annuler</button>
+                <button type="submit" className="px-8 py-3 rounded-lg bg-primary text-white font-black uppercase tracking-widest hover:bg-primary/90 transition-colors shadow-md">Enregistrer</button>
               </div>
             </form>
           </div>

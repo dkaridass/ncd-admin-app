@@ -115,7 +115,7 @@ const CommunicationsPage: React.FC = () => {
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`flex-1 min-w-[120px] py-4 px-6 rounded-2xl text-sm font-bold uppercase tracking-widest transition-all ${activeTab === tab.id ? 'bg-primary text-white shadow-lg dark:shadow-none' : 'bg-card dark:bg-card-dark border-2 border-slate-200 dark:border-dark text-slate-600 dark:text-slate-400 hover:border-primary/30'}`}
+                                className={`flex-1 min-w-[120px] py-4 px-6 rounded-lg text-sm font-bold uppercase tracking-widest transition-all ${activeTab === tab.id ? 'bg-primary text-white shadow-md' : 'bg-card dark:bg-card-dark border border-slate-200 dark:border-dark text-slate-600 dark:text-slate-400 hover:border-primary/30'}`}
                             >
                                 {tab.label}
                             </button>
@@ -137,7 +137,7 @@ const CommunicationsPage: React.FC = () => {
                                     onSend={handleSendMessage}
                                     isLoading={isSending}
                                 />
-                                <div className="mt-6 p-6 bg-blue-50 border-2 border-blue-200 rounded-2xl">
+                                <div className="mt-6 p-6 bg-blue-50 border-2 border-blue-200 rounded-lg">
                                     <div className="flex items-start gap-4">
                                         <span className="text-2xl">ℹ️</span>
                                         <div>

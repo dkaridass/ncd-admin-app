@@ -71,7 +71,7 @@ const DailyRhemaAdminTab: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <div className="bg-white dark:bg-card-dark p-6 rounded-2xl border border-slate-100 dark:border-white/[0.04] shadow-sm">
+            <div className="bg-white dark:bg-card-dark p-6 rounded-lg border border-slate-100 dark:border-white/[0.04] shadow-sm">
                 <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
                     <SparklesIcon className="w-5 h-5 text-indigo-500" />
                     Générateur de Verset (Groq AI)
@@ -82,7 +82,7 @@ const DailyRhemaAdminTab: React.FC = () => {
                         <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Date cible</label>
                         <input
                             type="date"
-                            className="w-full bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2 text-slate-800 dark:text-white"
+                            className="w-full bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 rounded-lg px-4 py-2 text-slate-800 dark:text-white"
                             value={targetDate}
                             onChange={(e) => setTargetDate(e.target.value)}
                         />
@@ -91,14 +91,14 @@ const DailyRhemaAdminTab: React.FC = () => {
                     <Button
                         onClick={handleGenerate}
                         disabled={isGenerating || !targetDate}
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-6 py-2 h-[42px] flex items-center justify-center min-w-[200px]"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-6 py-2 h-[42px] flex items-center justify-center min-w-[200px]"
                     >
                         {isGenerating ? 'Génération en cours...' : 'Générer via AI'}
                     </Button>
                 </div>
             </div>
 
-            <div className="bg-white dark:bg-card-dark rounded-2xl border border-slate-100 dark:border-white/[0.04] shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-card-dark rounded-lg border border-slate-100 dark:border-white/[0.04] shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-slate-100 dark:border-white/[0.04]">
                     <h3 className="text-lg font-bold text-slate-800 dark:text-white">Versets Programmés</h3>
                 </div>

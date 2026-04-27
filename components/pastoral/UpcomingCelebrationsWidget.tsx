@@ -87,30 +87,25 @@ const UpcomingCelebrationsWidget: React.FC = () => {
     if (celebrations.length === 0) return null;
 
     return (
-        <Card title="Célébrations de la Semaine" className="border-none shadow-premium dark:shadow-none rounded-[2.5rem] p-6 lg:p-8 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-50 dark:bg-amber-900/20 rounded-full blur-3xl -mr-10 -mt-10 opacity-50"></div>
-
-            <div className="space-y-4 relative z-10 mt-6">
+        <Card title="Célébrations de la Semaine">
+            <div className="space-y-0">
                 {celebrations.map((c, idx) => (
                     <div
                         key={`${c.member.id}-${c.type}`}
-                        className={`p-4 rounded-2xl border ${c.type === 'Mariage' ? 'border-rose-100 bg-rose-50/30' : 'border-amber-100 bg-amber-50 dark:bg-amber-900/20/30'} flex items-start gap-4 hover:shadow-sm dark:shadow-none transition-all`}
+                        className={`p-3 border-b border-border last:border-0 ${c.type === 'Mariage' ? 'hover:bg-rose-50/20' : 'hover:bg-amber-50/20'} flex items-center gap-3 transition-colors`}
                     >
-                        <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${c.type === 'Mariage' ? 'bg-rose-100 text-rose-500' : 'bg-amber-100 text-amber-500'}`}>
-                            {c.type === 'Mariage' ? <HeartIcon className="w-6 h-6" /> : <CalendarIcon className="w-6 h-6" />}
+                        <div className={`w-10 h-10 rounded shrink-0 border flex items-center justify-center ${c.type === 'Mariage' ? 'bg-rose-50 border-rose-100 text-rose-500' : 'bg-amber-50 border-amber-100 text-amber-500'}`}>
+                            {c.type === 'Mariage' ? <HeartIcon className="w-5 h-5" /> : <CalendarIcon className="w-5 h-5" />}
                         </div>
-                        <div className="flex-1">
-                            <h4 className="font-bold text-slate-800 dark:text-white text-sm flex items-center justify-between">
-                                {c.member.name}
-                                <span className={`text-[10px] uppercase font-black tracking-widest px-2 py-0.5 rounded-full ${c.type === 'Mariage' ? 'bg-rose-100 text-rose-700' : 'bg-amber-100 text-amber-700'}`}>
+                        <div className="flex-1 min-w-0 flex flex-col justify-center">
+                            <h4 className="font-bold text-slate-800 text-sm flex items-center justify-between">
+                                <span className="truncate pr-2">{c.member.name}</span>
+                                <span className={`text-[9px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded border ${c.type === 'Mariage' ? 'bg-rose-50 border-rose-100 text-rose-700' : 'bg-amber-50 border-amber-100 text-amber-700'}`}>
                                     {c.daysUntil === 0 ? "Aujourd'hui" : `Dans ${c.daysUntil}j`}
                                 </span>
                             </h4>
-                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                            <p className="text-xs text-slate-500 mt-0.5">
                                 {c.type} • {c.years} {c.years > 1 ? 'ans' : 'an'}
-                            </p>
-                            <p className="text-[10px] text-slate-400 mt-1 uppercase tracking-widest font-bold">
-                                Le {c.date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}
                             </p>
                         </div>
                     </div>

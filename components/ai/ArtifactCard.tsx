@@ -52,7 +52,7 @@ const ArtifactCard: React.FC<ArtifactCardProps> = ({ title, type, content, onExp
                     )}
 
                     {content.scripture && (
-                        <div className="p-3 bg-slate-50 dark:bg-white/[0.02] rounded-xl border border-slate-100 dark:border-dark">
+                        <div className="p-3 bg-slate-50 dark:bg-white/[0.02] rounded-lg border border-slate-100 dark:border-dark">
                             <p className="text-xs font-serif italic text-slate-600 dark:text-slate-400">"{content.scripture}"</p>
                         </div>
                     )}
@@ -100,13 +100,13 @@ export const SermonStudioOverlay: React.FC<{ isOpen: boolean; onClose: () => voi
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-10 bg-[#0f1035]/90 backdrop-blur-xl"
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-10 bg-[#0f1035]/90 "
                 >
                     <motion.div
                         initial={{ scale: 0.9, y: 20 }}
                         animate={{ scale: 1, y: 0 }}
                         exit={{ scale: 0.9, y: 20 }}
-                        className="w-full max-w-4xl h-full max-h-[90vh] bg-card dark:bg-card-dark rounded-[2rem] shadow-2xl dark:shadow-none flex overflow-hidden relative"
+                        className="w-full max-w-4xl h-full max-h-[90vh] bg-card dark:bg-card-dark rounded-lg shadow-admin dark:shadow-none flex overflow-hidden relative"
                     >
                         {/* Close Button */}
                         <button onClick={onClose} className="absolute top-4 right-4 z-20 p-2 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors">
@@ -155,7 +155,7 @@ export const SermonStudioOverlay: React.FC<{ isOpen: boolean; onClose: () => voi
                                     </div>
 
                                     {content.scripture && (
-                                        <blockquote className="p-6 bg-indigo-50 dark:bg-indigo-900/20/50 rounded-2xl border border-indigo-100 border-l-4 border-l-indigo-500 relative">
+                                        <blockquote className="p-6 bg-indigo-50 dark:bg-indigo-900/20/50 rounded-lg border border-indigo-100 border-l-4 border-l-indigo-500 relative">
                                             <SparklesIcon className="absolute top-4 left-4 w-4 h-4 text-indigo-300 opacity-50" />
                                             <p className="text-lg font-serif italic text-slate-700 dark:text-white text-center leading-relaxed">"{content.scripture}"</p>
                                         </blockquote>
@@ -184,7 +184,7 @@ export const SermonStudioOverlay: React.FC<{ isOpen: boolean; onClose: () => voi
                                         )}
 
                                         {content.conclusion && (
-                                            <section className="bg-slate-100 p-6 rounded-2xl">
+                                            <section className="bg-slate-100 p-6 rounded-lg">
                                                 <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-3">Conclusion & Appel</h3>
                                                 <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{content.conclusion}</p>
                                             </section>
@@ -232,13 +232,13 @@ export const BriefingStudioOverlay: React.FC<{ isOpen: boolean; onClose: () => v
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-10 bg-[#0f1035]/90 backdrop-blur-xl"
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-10 bg-[#0f1035]/90 "
                 >
                     <motion.div
                         initial={{ scale: 0.9, y: 20 }}
                         animate={{ scale: 1, y: 0 }}
                         exit={{ scale: 0.9, y: 20 }}
-                        className="w-full max-w-4xl h-full max-h-[90vh] bg-card dark:bg-card-dark rounded-[2rem] shadow-xl flex flex-col overflow-hidden relative"
+                        className="w-full max-w-4xl h-full max-h-[90vh] bg-card dark:bg-card-dark rounded-lg shadow-xl flex flex-col overflow-hidden relative"
                     >
                         {/* Close Button */}
                         <button onClick={onClose} className="absolute top-4 right-4 z-20 p-2 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors">
@@ -259,7 +259,7 @@ export const BriefingStudioOverlay: React.FC<{ isOpen: boolean; onClose: () => v
 
                         {/* Document Content */}
                         <div className="flex-1 overflow-y-auto p-12 bg-slate-50">
-                            <div className="max-w-2xl mx-auto space-y-8 bg-white p-8 rounded-xl shadow-sm border border-slate-100">
+                            <div className="max-w-2xl mx-auto space-y-8 bg-white p-8 rounded-lg shadow-sm border border-slate-100">
                                 <h1 className="text-2xl font-black text-slate-900 border-b pb-4">Briefing Quotidien</h1>
 
                                 <p className="text-slate-600 leading-relaxed italic">{content.overview}</p>
@@ -267,7 +267,7 @@ export const BriefingStudioOverlay: React.FC<{ isOpen: boolean; onClose: () => v
                                 {Object.keys(content.keyMetrics || {}).length > 0 && (
                                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                                         {Object.entries(content.keyMetrics).map(([k, v]: [string, any], i) => (
-                                            <div key={i} className="bg-indigo-50 p-4 rounded-xl">
+                                            <div key={i} className="bg-indigo-50 p-4 rounded-lg">
                                                 <p className="text-[10px] uppercase font-bold text-indigo-500">{k}</p>
                                                 <p className="text-xl font-black text-indigo-900">{v}</p>
                                             </div>
@@ -289,7 +289,7 @@ export const BriefingStudioOverlay: React.FC<{ isOpen: boolean; onClose: () => v
                                     </ul>
                                 </div>
 
-                                <div className="space-y-4 bg-purple-50 p-6 rounded-xl border border-purple-100">
+                                <div className="space-y-4 bg-purple-50 p-6 rounded-lg border border-purple-100">
                                     <h3 className="font-bold text-slate-800 uppercase text-xs tracking-widest text-purple-600">Points de Prière</h3>
                                     <ul className="list-disc list-inside space-y-2 text-slate-700">
                                         {(content.prayerFocus || []).map((t: string, i: number) => <li key={i}>{t}</li>)}

@@ -193,7 +193,7 @@ const LedgerTable: React.FC<LedgerTableProps> = ({ records, approvalFilter = 'AL
                                     <div key={record.id} className="p-5 flex flex-col gap-4 bg-card dark:bg-card-dark relative hover:bg-slate-50/50 transition-colors pl-8 border-l-4 border-l-transparent hover:border-l-primary/20">
                                         <div className="flex justify-between items-start gap-4">
                                             <div className="flex items-start gap-3 overflow-hidden">
-                                                <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-sm ${record.type === 'Dépense' ? 'bg-red-50 text-red-500 dark:bg-red-500/10' :
+                                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 shadow-sm ${record.type === 'Dépense' ? 'bg-red-50 text-red-500 dark:bg-red-500/10' :
                                                     record.type === 'Action de grâce' ? 'bg-amber-50 text-amber-500 dark:bg-amber-500/10' :
                                                         record.type === 'Dons' ? 'bg-emerald-50 text-emerald-500 dark:bg-emerald-500/10' :
                                                             'bg-blue-50 text-blue-500 dark:bg-blue-500/10'

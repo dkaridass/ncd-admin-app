@@ -150,16 +150,16 @@ const MemberDrawer: React.FC<MemberDrawerProps> = ({ isOpen, onClose, member, on
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={onClose}
-                            className="fixed inset-0 bg-primary/20 backdrop-blur-sm z-40"
+                            className="fixed inset-0 bg-slate-900/20  z-40"
                         />
 
                         {/* Drawer */}
                         <motion.div
                             {...settings}
-                            className="fixed inset-y-0 right-0 w-full md:w-[600px] bg-card dark:bg-card-dark shadow-2xl dark:shadow-none z-50 overflow-y-auto border-l border-slate-100 dark:border-dark flex flex-col"
+                            className="fixed inset-y-0 right-0 w-full md:w-[600px] bg-card dark:bg-card-dark shadow-admin dark:shadow-none z-50 overflow-y-auto border-l border-slate-100 dark:border-dark flex flex-col"
                         >
                             {/* Header */}
-                            <div className="px-8 py-6 border-b border-slate-100 dark:border-dark flex justify-between items-center bg-card dark:bg-card-dark sticky top-0 backdrop-blur-md z-10">
+                            <div className="px-8 py-6 border-b border-slate-100 dark:border-dark flex justify-between items-center bg-card dark:bg-card-dark sticky top-0  z-10">
                                 <div>
                                     <h2 className="text-xl font-display font-black text-primary dark:text-white uppercase italic tracking-tight">
                                         {isEditing ? `Dossier: ${formData.name}` : 'Nouveau Profil'}
@@ -192,7 +192,7 @@ const MemberDrawer: React.FC<MemberDrawerProps> = ({ isOpen, onClose, member, on
                                         </div>
                                         <div>
                                             <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest">Genre</label>
-                                            <select id="gender" value={formData.gender} onChange={handleInputChange} className="w-full px-5 py-3 rounded-xl border-2 border-slate-100 dark:border-dark bg-card dark:bg-card-dark font-bold text-xs text-primary dark:text-white focus:border-primary/20 outline-none">
+                                            <select id="gender" value={formData.gender} onChange={handleInputChange} className="w-full px-5 py-3 rounded-lg border border-slate-200 dark:border-dark bg-card dark:bg-card-dark font-bold text-xs text-primary dark:text-white focus:border-primary/20 outline-none">
                                                 <option value="Homme">Homme</option>
                                                 <option value="Femme">Femme</option>
                                             </select>
@@ -258,11 +258,11 @@ const MemberDrawer: React.FC<MemberDrawerProps> = ({ isOpen, onClose, member, on
                                 </section>
 
                                 {/* Spiritual Section */}
-                                <section className="space-y-6 bg-slate-50 dark:bg-white/[0.02] p-6 rounded-3xl border border-slate-100 dark:border-dark">
+                                <section className="space-y-6 bg-slate-50 dark:bg-white/[0.02] p-6 rounded-lg border border-slate-100 dark:border-dark">
                                     <h4 className="flex items-center text-[10px] font-black uppercase text-slate-400 tracking-[0.3em]">
                                         <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mr-2"></span> Vie Spirituelle & Service
                                     </h4>
-                                    <div className="flex items-center justify-between bg-card dark:bg-card-dark p-4 rounded-xl border border-slate-100 dark:border-dark">
+                                    <div className="flex items-center justify-between bg-card dark:bg-card-dark p-4 rounded-lg border border-slate-100 dark:border-dark">
                                         <label htmlFor="isBaptised" className="text-xs font-bold text-primary dark:text-white">Baptisé par Immersion</label>
                                         <input
                                             type="checkbox"
@@ -276,7 +276,7 @@ const MemberDrawer: React.FC<MemberDrawerProps> = ({ isOpen, onClose, member, on
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
                                             <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest">Statut Membre</label>
-                                            <select id="status" value={formData.status} onChange={handleInputChange} className="w-full px-5 py-3 rounded-xl border-2 border-slate-100 dark:border-dark bg-card dark:bg-card-dark font-bold text-xs text-primary dark:text-white focus:border-primary/20 outline-none">
+                                            <select id="status" value={formData.status} onChange={handleInputChange} className="w-full px-5 py-3 rounded-lg border border-slate-200 dark:border-dark bg-card dark:bg-card-dark font-bold text-xs text-primary dark:text-white focus:border-primary/20 outline-none">
                                                 <option value="Fidèle">Fidèle</option>
                                                 <option value="Visiteur">Visiteur</option>
                                                 <option value="Archivé">Archivé</option>
@@ -284,7 +284,7 @@ const MemberDrawer: React.FC<MemberDrawerProps> = ({ isOpen, onClose, member, on
                                         </div>
                                         <div>
                                             <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest">Qualité / Titre</label>
-                                            <select id="role" value={formData.role} onChange={handleInputChange} className="w-full px-5 py-3 rounded-xl border-2 border-slate-100 dark:border-dark bg-card dark:bg-card-dark font-bold text-xs text-primary dark:text-white focus:border-primary/20 outline-none">
+                                            <select id="role" value={formData.role} onChange={handleInputChange} className="w-full px-5 py-3 rounded-lg border border-slate-200 dark:border-dark bg-card dark:bg-card-dark font-bold text-xs text-primary dark:text-white focus:border-primary/20 outline-none">
                                                 <option value="Fidèle">Fidèle</option>
                                                 <option value="Frère">Frère</option>
                                                 <option value="Sœur">Sœur</option>
@@ -310,7 +310,7 @@ const MemberDrawer: React.FC<MemberDrawerProps> = ({ isOpen, onClose, member, on
                                             id="churchFunction"
                                             value={formData.churchFunction || ''}
                                             onChange={handleInputChange}
-                                            className="w-full px-5 py-3 rounded-xl border-2 border-slate-100 dark:border-dark bg-card dark:bg-card-dark font-bold text-xs text-primary dark:text-white focus:border-primary/20 outline-none"
+                                            className="w-full px-5 py-3 rounded-lg border border-slate-200 dark:border-dark bg-card dark:bg-card-dark font-bold text-xs text-primary dark:text-white focus:border-primary/20 outline-none"
                                         >
                                             <option value="">Aucune fonction</option>
                                             <option value="Pasteur principal">Pasteur principal</option>
@@ -335,7 +335,7 @@ const MemberDrawer: React.FC<MemberDrawerProps> = ({ isOpen, onClose, member, on
                                             id="primaryDepartmentId"
                                             value={formData.primaryDepartmentId || ''}
                                             onChange={handleInputChange}
-                                            className="w-full px-5 py-3 rounded-xl border-2 border-slate-100 dark:border-dark bg-card dark:bg-card-dark font-bold text-xs text-primary dark:text-white focus:border-primary/20 outline-none"
+                                            className="w-full px-5 py-3 rounded-lg border border-slate-200 dark:border-dark bg-card dark:bg-card-dark font-bold text-xs text-primary dark:text-white focus:border-primary/20 outline-none"
                                         >
                                             <option value="">Aucun département</option>
                                             {departments.map(dept => (
@@ -345,7 +345,7 @@ const MemberDrawer: React.FC<MemberDrawerProps> = ({ isOpen, onClose, member, on
                                     </div>
 
                                     {/* Leadership Toggle */}
-                                    <div className="p-4 bg-indigo-50 dark:bg-indigo-900/20/50 rounded-xl border border-indigo-100 space-y-4">
+                                    <div className="p-4 bg-indigo-50 dark:bg-indigo-900/20/50 rounded-lg border border-indigo-100 space-y-4">
                                         <div className="flex items-center justify-between">
                                             <label htmlFor="isLeader" className="text-xs font-bold text-indigo-900 dark:text-white">Responsabilité / Leadership</label>
                                             <input
@@ -386,7 +386,7 @@ const MemberDrawer: React.FC<MemberDrawerProps> = ({ isOpen, onClose, member, on
                                     </div>
 
                                     {/* Volunteer Section */}
-                                    <div className="p-4 bg-green-50/50 rounded-xl border border-green-100 space-y-4">
+                                    <div className="p-4 bg-green-50/50 rounded-lg border border-green-100 space-y-4">
                                         <div className="flex items-center justify-between">
                                             <label htmlFor="isVolunteer" className="text-xs font-bold text-green-900">Bénévole</label>
                                             <input
@@ -506,7 +506,7 @@ const MemberDrawer: React.FC<MemberDrawerProps> = ({ isOpen, onClose, member, on
                                         type="submit"
                                         isLoading={isSubmitting}
                                         disabled={isSubmitting}
-                                        className="px-10 py-4 bg-primary text-white rounded-xl shadow-premium dark:shadow-none uppercase font-black tracking-widest text-xs hover:scale-[1.02] transition-transform"
+                                        className="px-10 py-4 bg-primary text-white rounded-lg shadow-admin uppercase font-black tracking-widest text-xs transition-colors"
                                     >
                                         Enregistrer le Profil
                                     </Button>

@@ -71,7 +71,7 @@ const PendingApprovalsTab: React.FC<PendingApprovalsTabProps> = ({ records, onAp
     };
 
     const RecordRow: React.FC<{ record: FinanceRecord; showActions?: boolean }> = ({ record, showActions = true }) => (
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 bg-white dark:bg-card-dark rounded-2xl border border-slate-100 dark:border-dark hover:shadow-md transition-shadow">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 bg-white dark:bg-card-dark rounded-lg border border-slate-100 dark:border-dark hover:shadow-md transition-shadow">
             <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-3 mb-1">
                     <span className={`inline-block w-2.5 h-2.5 rounded-full ${record.type === 'Dépense' ? 'bg-red-500' : 'bg-emerald-500'}`} />
@@ -102,14 +102,14 @@ const PendingApprovalsTab: React.FC<PendingApprovalsTabProps> = ({ records, onAp
                     <Button
                         onClick={() => handleApprove(record)}
                         disabled={loadingId === record.id}
-                        className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-black uppercase tracking-widest rounded-xl transition-colors"
+                        className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-black uppercase tracking-widest rounded-lg transition-colors"
                     >
                         {loadingId === record.id ? '...' : '✓ Approuver'}
                     </Button>
                     <Button
                         onClick={() => openRejectModal(record)}
                         disabled={loadingId === record.id}
-                        className="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 text-[10px] font-black uppercase tracking-widest rounded-xl transition-colors"
+                        className="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 text-[10px] font-black uppercase tracking-widest rounded-lg transition-colors"
                     >
                         ✗ Rejeter
                     </Button>
@@ -119,7 +119,7 @@ const PendingApprovalsTab: React.FC<PendingApprovalsTabProps> = ({ records, onAp
                 <Button
                     onClick={() => handleDelete(record.id)}
                     disabled={loadingId === record.id}
-                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-[10px] font-black uppercase tracking-widest rounded-xl transition-colors"
+                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-[10px] font-black uppercase tracking-widest rounded-lg transition-colors"
                 >
                     Supprimer
                 </Button>
@@ -178,7 +178,7 @@ const PendingApprovalsTab: React.FC<PendingApprovalsTabProps> = ({ records, onAp
             <Modal isOpen={rejectModalOpen} onClose={() => setRejectModalOpen(false)} title="Motif du Rejet">
                 <div className="space-y-4">
                     {rejectTarget && (
-                        <div className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-xl">
+                        <div className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-lg">
                             <p className="text-sm font-black text-slate-900 dark:text-white">{rejectTarget.type} — {rejectTarget.currency === 'CDF' ? 'FC' : '$'} {rejectTarget.amount.toLocaleString()}</p>
                             <p className="text-xs text-slate-500">Par : {rejectTarget.recordedBy} • {rejectTarget.date}</p>
                         </div>
@@ -188,16 +188,16 @@ const PendingApprovalsTab: React.FC<PendingApprovalsTabProps> = ({ records, onAp
                         onChange={(e) => setRejectReason(e.target.value)}
                         placeholder="Indiquez le motif du rejet (obligatoire)..."
                         rows={3}
-                        className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 dark:border-dark bg-white dark:bg-card-dark text-sm font-medium focus:border-red-500 focus:ring-4 focus:ring-red-500/10 outline-none transition-all resize-none"
+                        className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark bg-white dark:bg-card-dark text-sm font-medium focus:border-red-500 focus:ring-4 focus:ring-red-500/10 outline-none transition-all resize-none"
                     />
                     <div className="flex gap-3 justify-end">
-                        <Button onClick={() => setRejectModalOpen(false)} variant="secondary" className="rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest">
+                        <Button onClick={() => setRejectModalOpen(false)} variant="secondary" className="rounded-lg px-6 py-3 text-xs font-black uppercase tracking-widest">
                             Annuler
                         </Button>
                         <Button
                             onClick={handleReject}
                             disabled={!rejectReason.trim() || loadingId === rejectTarget?.id}
-                            className="rounded-xl px-6 py-3 bg-red-600 hover:bg-red-700 text-white text-xs font-black uppercase tracking-widest"
+                            className="rounded-lg px-6 py-3 bg-red-600 hover:bg-red-700 text-white text-xs font-black uppercase tracking-widest"
                         >
                             {loadingId === rejectTarget?.id ? '...' : 'Confirmer le Rejet'}
                         </Button>

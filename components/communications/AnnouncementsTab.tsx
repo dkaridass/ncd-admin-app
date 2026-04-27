@@ -42,7 +42,7 @@ const AnnouncementsTab: React.FC = () => {
 
     if (selectedAnnouncement) {
         return (
-            <div className="bg-card dark:bg-card-dark rounded-2xl shadow-soft dark:shadow-none min-h-[600px] overflow-hidden relative">
+            <div className="bg-card dark:bg-card-dark rounded-lg shadow-sm min-h-[600px] overflow-hidden relative">
                 <AnnouncementDetail
                     announcement={selectedAnnouncement}
                     onClose={() => setSelectedAnnouncement(null)}
@@ -75,7 +75,7 @@ const AnnouncementsTab: React.FC = () => {
                         <Card
                             key={announcement.id}
                             onClick={() => setSelectedAnnouncement(announcement)}
-                            className="cursor-pointer hover:shadow-lg dark:shadow-none transition-all group relative overflow-hidden border-2 border-transparent hover:border-primary dark:border-white/20/10"
+                            className="cursor-pointer hover:shadow-md transition-all group relative overflow-hidden border-2 border-transparent hover:border-primary dark:border-white/20/10"
                         >
                             <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <button

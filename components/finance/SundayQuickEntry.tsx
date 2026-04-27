@@ -25,11 +25,11 @@ interface OfferingLine {
 }
 
 const serviceOptions = [
-    { value: '1er Culte (Dim)', label: '1er Culte', time: '08h00', icon: '🌅' },
-    { value: '2ème Culte (Dim)', label: '2ème Culte', time: '11h00', icon: '☀️' },
-    { value: '3ème Culte (Dim)', label: '3ème Culte', time: '16h00', icon: '🌇' },
-    { value: 'Culte Mercredi', label: 'Culte Mercredi', time: '18h00', icon: '📖' },
-    { value: 'Culte Vendredi', label: 'Culte Vendredi', time: '18h00', icon: '🙏' },
+    { value: '1er Culte (Dim)', label: '1er Culte', time: '08h00' },
+    { value: '2ème Culte (Dim)', label: '2ème Culte', time: '11h00' },
+    { value: '3ème Culte (Dim)', label: '3ème Culte', time: '16h00' },
+    { value: 'Culte Mercredi', label: 'Culte Mercredi', time: '18h00' },
+    { value: 'Culte Vendredi', label: 'Culte Vendredi', time: '18h00' },
 ];
 
 const SundayQuickEntry: React.FC<SundayQuickEntryProps> = ({ isOpen, onClose }) => {
@@ -96,6 +96,7 @@ const SundayQuickEntry: React.FC<SundayQuickEntryProps> = ({ isOpen, onClose }) 
                 childrenCount: parseInt(attForm.children) || 0,
                 visitorCount: parseInt(attForm.visitors) || 0,
                 totalCount: totalAttendance,
+                serviceType: selectedService.includes('Séminaire') || selectedService.includes('Convention') ? 'Spécial' : 'Culte',
             };
             await addAttendance(attendanceRecord as AttendanceRecord);
 
@@ -116,7 +117,7 @@ const SundayQuickEntry: React.FC<SundayQuickEntryProps> = ({ isOpen, onClose }) 
                 await addFinanceRecord(financeRecord);
             }
 
-            showSuccess(`✅ Culte enregistré : ${totalAttendance} présents, ${validOfferings.length} offrandes`);
+            showSuccess(`Culte enregistré : ${totalAttendance} présents, ${validOfferings.length} lignes d'offrandes.`);
             resetAndClose();
         } catch (error: any) {
             showError(`Erreur: ${error?.message || 'Erreur inconnue'}`);
@@ -154,99 +155,103 @@ const SundayQuickEntry: React.FC<SundayQuickEntryProps> = ({ isOpen, onClose }) 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[100] flex items-center justify-center px-4"
+                className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 "
             >
-                {/* Backdrop */}
-                <div onClick={resetAndClose} className="absolute inset-0 bg-primary/40 dark:bg-black/60 backdrop-blur-sm" />
+                {/* Backdrop handler */}
+                <div onClick={resetAndClose} className="absolute inset-0" />
 
-                {/* Panel */}
+                {/* Main Panel */}
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                    initial={{ opacity: 0, scale: 0.98, y: 10 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                    className="bg-card dark:bg-card-dark rounded-[2rem] shadow-2xl dark:shadow-none w-full max-w-lg overflow-hidden relative z-10 border border-slate-100 dark:border-slate-700"
+                    exit={{ opacity: 0, scale: 0.98, y: 10 }}
+                    className="bg-white rounded-lg shadow-admin w-full max-w-xl overflow-hidden relative z-10 border border-border"
                 >
                     {/* Header */}
-                    <div className="px-8 pt-6 pb-4 border-b border-slate-50 dark:border-slate-700">
-                        <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-primary dark:text-gold">
-                                ⚡ Saisie Rapide Culte
-                            </h2>
-                            <button
-                                onClick={resetAndClose}
-                                className="text-slate-300 dark:text-slate-600 hover:text-primary dark:hover:text-white transition-colors text-2xl font-light"
-                            >
-                                &times;
-                            </button>
-                        </div>
+                    <div className="px-6 py-4 border-b border-border bg-slate-50 flex items-center justify-between">
+                        <h2 className="text-sm font-bold tracking-wide text-slate-800 uppercase">
+                            Saisie Rapide : Culte
+                        </h2>
+                        <button
+                            onClick={resetAndClose}
+                            className="text-slate-400 hover:text-slate-600 transition-colors text-xl leading-none font-light p-1"
+                        >
+                            &times;
+                        </button>
+                    </div>
 
-                        {/* Progress Steps */}
-                        <div className="flex items-center gap-1">
+                    {/* Progress Steps Header */}
+                    <div className="px-6 py-3 border-b border-border bg-white flex items-center justify-between">
+                        <div className="flex items-center gap-2 w-full">
                             {steps.map((s, i) => (
                                 <React.Fragment key={s.key}>
-                                    <div
-                                        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider transition-all ${i <= currentStepIndex ? 'bg-primary/10 dark:bg-gold/10 text-primary dark:text-gold' : 'text-slate-300 dark:text-slate-600' }`}
-                                    >
-                                        <span
-                                            className={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black ${i < currentStepIndex ? 'bg-emerald-500 text-white' : i === currentStepIndex ? 'bg-primary dark:bg-gold text-white dark:text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-400' }`}
+                                    <div className="flex items-center gap-2 relative">
+                                        <div
+                                            className={`w-6 h-6 rounded flex items-center justify-center text-xs font-bold border transition-colors ${i < currentStepIndex
+                                                ? 'bg-primary border-primary text-white'
+                                                : i === currentStepIndex
+                                                    ? 'bg-slate-800 border-slate-800 text-white'
+                                                    : 'bg-white border-slate-200 text-slate-400'
+                                                }`}
                                         >
                                             {i < currentStepIndex ? '✓' : s.num}
+                                        </div>
+                                        <span className={`text-[10px] uppercase font-bold tracking-widest hidden sm:block ${i <= currentStepIndex ? 'text-slate-800' : 'text-slate-400'}`}>
+                                            {s.label}
                                         </span>
-                                        <span className="hidden sm:inline">{s.label}</span>
                                     </div>
                                     {i < steps.length - 1 && (
-                                        <div className={`flex-1 h-px ${i < currentStepIndex ? 'bg-emerald-300 dark:bg-emerald-600' : 'bg-slate-100 dark:bg-slate-700'}`} />
+                                        <div className={`flex-1 h-px ${i < currentStepIndex ? 'bg-primary' : 'bg-slate-200'}`} />
                                     )}
                                 </React.Fragment>
                             ))}
                         </div>
                     </div>
 
-                    {/* Content */}
-                    <div className="p-8 max-h-[60vh] overflow-y-auto">
+                    {/* Content Area */}
+                    <div className="p-6 max-h-[60vh] overflow-y-auto bg-white">
                         <AnimatePresence mode="wait">
                             {/* Step 1: Service Selection */}
                             {step === 'service' && (
                                 <motion.div
                                     key="service"
-                                    initial={{ opacity: 0, x: 20 }}
+                                    initial={{ opacity: 0, x: 10 }}
                                     animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
+                                    exit={{ opacity: 0, x: -10 }}
                                     className="space-y-6"
                                 >
                                     <div>
-                                        <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest">
-                                            Date du Culte
+                                        <label className="block text-xs font-semibold text-slate-700 mb-2">
+                                            Date de Saisie
                                         </label>
                                         <input
                                             type="date"
                                             value={date}
                                             onChange={e => setDate(e.target.value)}
-                                            className="w-full px-4 py-3 border-2 border-slate-200 dark:border-slate-600 rounded-xl bg-white dark:bg-white/5 text-slate-900 dark:text-white text-sm focus:border-primary dark:focus:border-gold focus:ring-2 focus:ring-primary/20 dark:focus:ring-gold/20 outline-none transition-all"
+                                            className="w-full px-3 py-2 border border-border rounded text-sm text-slate-800 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                                         />
                                     </div>
 
                                     <div>
-                                        <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest">
-                                            Quel culte ?
+                                        <label className="block text-xs font-semibold text-slate-700 mb-2">
+                                            Sélection du Culte
                                         </label>
-                                        <div className="grid grid-cols-1 gap-3">
+                                        <div className="grid grid-cols-1 gap-2">
                                             {serviceOptions.map(option => (
                                                 <button
                                                     key={option.value}
                                                     onClick={() => setSelectedService(option.value)}
-                                                    className={`flex items-center gap-4 p-4 rounded-2xl border-2 transition-all text-left ${selectedService === option.value ? 'border-primary dark:border-gold bg-primary/5 dark:bg-gold/5 shadow-sm dark:shadow-none' : 'border-slate-100 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600' }`}
+                                                    className={`flex items-center justify-between p-3 rounded border transition-all text-left ${selectedService === option.value ? 'border-primary bg-blue-50/50' : 'border-border hover:border-slate-300 bg-white'}`}
                                                 >
-                                                    <span className="text-2xl">{option.icon}</span>
-                                                    <div className="flex-1">
-                                                        <p className={`text-sm font-bold ${selectedService === option.value ? 'text-primary dark:text-gold' : 'text-slate-700 dark:text-slate-200'}`}>
+                                                    <div>
+                                                        <p className={`text-sm font-semibold ${selectedService === option.value ? 'text-primary' : 'text-slate-800'}`}>
                                                             {option.label}
                                                         </p>
-                                                        <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">{option.time}</p>
+                                                        <p className="text-[10px] text-slate-500 font-medium tracking-wide mt-0.5">{option.time}</p>
                                                     </div>
                                                     {selectedService === option.value && (
-                                                        <div className="w-6 h-6 rounded-full bg-primary dark:bg-gold flex items-center justify-center">
-                                                            <svg className="w-4 h-4 text-white dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <div className="w-5 h-5 rounded bg-primary flex items-center justify-center">
+                                                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                                                             </svg>
                                                         </div>
@@ -262,71 +267,69 @@ const SundayQuickEntry: React.FC<SundayQuickEntryProps> = ({ isOpen, onClose }) 
                             {step === 'attendance' && (
                                 <motion.div
                                     key="attendance"
-                                    initial={{ opacity: 0, x: 20 }}
+                                    initial={{ opacity: 0, x: 10 }}
                                     animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
+                                    exit={{ opacity: 0, x: -10 }}
                                     className="space-y-6"
                                 >
-                                    <div className="text-center mb-6">
-                                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 dark:bg-indigo-500/10 rounded-full">
-                                            <UsersIcon className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                                            <span className="text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">Présences — {selectedService}</span>
-                                        </div>
+                                    <div className="p-3 bg-slate-50 border border-border rounded-md">
+                                        <p className="text-xs text-slate-600 font-semibold mb-1">Culte sélectionné</p>
+                                        <p className="text-sm font-bold text-slate-800">{selectedService}</p>
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
-                                            <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-2 uppercase tracking-widest">👨 Hommes</label>
+                                            <label className="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wide">Hommes</label>
                                             <input
                                                 type="number"
                                                 min="0"
                                                 value={attForm.men}
                                                 onChange={e => setAttForm(p => ({ ...p, men: e.target.value }))}
-                                                className="w-full text-center text-2xl font-black text-primary dark:text-white p-4 border-2 border-slate-200 dark:border-slate-600 rounded-2xl bg-white dark:bg-white/5 outline-none focus:border-primary dark:focus:border-gold transition-all"
+                                                className="w-full text-center text-xl font-bold text-slate-800 p-2.5 border border-border rounded outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                                                 placeholder="0"
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-2 uppercase tracking-widest">👩 Femmes</label>
+                                            <label className="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wide">Femmes</label>
                                             <input
                                                 type="number"
                                                 min="0"
                                                 value={attForm.women}
                                                 onChange={e => setAttForm(p => ({ ...p, women: e.target.value }))}
-                                                className="w-full text-center text-2xl font-black text-primary dark:text-white p-4 border-2 border-slate-200 dark:border-slate-600 rounded-2xl bg-white dark:bg-white/5 outline-none focus:border-primary dark:focus:border-gold transition-all"
+                                                className="w-full text-center text-xl font-bold text-slate-800 p-2.5 border border-border rounded outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                                                 placeholder="0"
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-2 uppercase tracking-widest">👶 Enfants</label>
+                                            <label className="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wide">Enfants</label>
                                             <input
                                                 type="number"
                                                 min="0"
                                                 value={attForm.children}
                                                 onChange={e => setAttForm(p => ({ ...p, children: e.target.value }))}
-                                                className="w-full text-center text-2xl font-black text-primary dark:text-white p-4 border-2 border-slate-200 dark:border-slate-600 rounded-2xl bg-white dark:bg-white/5 outline-none focus:border-primary dark:focus:border-gold transition-all"
+                                                className="w-full text-center text-xl font-bold text-slate-800 p-2.5 border border-border rounded outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                                                 placeholder="0"
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-2 uppercase tracking-widest">🙋 Visiteurs</label>
+                                            <label className="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wide">Visiteurs</label>
                                             <input
                                                 type="number"
                                                 min="0"
                                                 value={attForm.visitors}
                                                 onChange={e => setAttForm(p => ({ ...p, visitors: e.target.value }))}
-                                                className="w-full text-center text-2xl font-black text-primary dark:text-white p-4 border-2 border-slate-200 dark:border-slate-600 rounded-2xl bg-white dark:bg-white/5 outline-none focus:border-primary dark:focus:border-gold transition-all"
+                                                className="w-full text-center text-xl font-bold text-slate-800 p-2.5 border border-border rounded outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                                                 placeholder="0"
                                             />
                                         </div>
                                     </div>
 
                                     {/* Live Total */}
-                                    <div className="text-center p-4 bg-emerald-50 dark:bg-emerald-500/10 rounded-2xl border border-emerald-100 dark:border-emerald-500/20">
-                                        <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest mb-1">Total Présents</p>
-                                        <p className="text-4xl font-display font-black text-emerald-700 dark:text-emerald-300">
+                                    <div className="flex items-center justify-between p-4 bg-slate-50 border border-border rounded-md mt-4">
+                                        <span className="text-xs font-bold text-slate-600 uppercase tracking-widest">Total Présents</span>
+                                        <span className="text-3xl font-bold text-primary">
                                             <AnimatedCounter value={totalAttendance} />
-                                        </p>
+                                        </span>
                                     </div>
                                 </motion.div>
                             )}
@@ -335,28 +338,21 @@ const SundayQuickEntry: React.FC<SundayQuickEntryProps> = ({ isOpen, onClose }) 
                             {step === 'offering' && (
                                 <motion.div
                                     key="offering"
-                                    initial={{ opacity: 0, x: 20 }}
+                                    initial={{ opacity: 0, x: 10 }}
                                     animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
+                                    exit={{ opacity: 0, x: -10 }}
                                     className="space-y-4"
                                 >
-                                    <div className="text-center mb-4">
-                                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 dark:bg-amber-500/10 rounded-full">
-                                            <DollarSignIcon className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-                                            <span className="text-xs font-black text-amber-600 dark:text-amber-400 uppercase tracking-wider">Offrandes & Dîmes</span>
-                                        </div>
-                                    </div>
-
                                     {offerings.map((o, idx) => (
-                                        <div key={o.id} className="p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-3">
+                                        <div key={o.id} className="p-4 bg-white border border-border shadow-sm rounded-md space-y-3 relative">
                                             <div className="flex items-center justify-between">
-                                                <span className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-                                                    Ligne {idx + 1}
+                                                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-slate-100 px-2 py-0.5 rounded">
+                                                    Entrée {idx + 1}
                                                 </span>
                                                 {offerings.length > 1 && (
                                                     <button
                                                         onClick={() => removeOfferingLine(o.id)}
-                                                        className="text-[9px] font-black text-red-400 hover:text-red-600 uppercase tracking-wider"
+                                                        className="text-[10px] font-bold text-[#D81124] hover:underline uppercase tracking-wider"
                                                     >
                                                         Supprimer
                                                     </button>
@@ -364,54 +360,63 @@ const SundayQuickEntry: React.FC<SundayQuickEntryProps> = ({ isOpen, onClose }) 
                                             </div>
 
                                             <div className="grid grid-cols-2 gap-3">
-                                                <select
-                                                    value={o.type}
-                                                    onChange={e => updateOffering(o.id, 'type', e.target.value)}
-                                                    className="p-3 border border-slate-200 dark:border-slate-600 rounded-xl text-xs font-bold bg-white dark:bg-white/5 text-slate-700 dark:text-slate-200 outline-none"
-                                                >
-                                                    <option value="Offrande">Offrande</option>
-                                                    <option value="Dîme">Dîme</option>
-                                                    <option value="Action de grâce">Action de Grâce</option>
-                                                    <option value="Offrande du prophète">Off. Prophète</option>
-                                                    <option value="Dons">Dons</option>
-                                                </select>
-                                                <select
-                                                    value={o.account}
-                                                    onChange={e => updateOffering(o.id, 'account', e.target.value)}
-                                                    className="p-3 border border-slate-200 dark:border-slate-600 rounded-xl text-xs font-bold bg-white dark:bg-white/5 text-slate-700 dark:text-slate-200 outline-none"
-                                                >
-                                                    <option value="Cash">Cash</option>
-                                                    <option value="Rawbank">Rawbank</option>
-                                                    <option value="Equity">Equity</option>
-                                                    <option value="Mpesa">M-Pesa</option>
-                                                    <option value="OrangeMoney">Orange Money</option>
-                                                </select>
+                                                <div>
+                                                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Catégorie</label>
+                                                    <select
+                                                        value={o.type}
+                                                        onChange={e => updateOffering(o.id, 'type', e.target.value)}
+                                                        className="w-full p-2 border border-border rounded text-sm text-slate-800 outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                                                    >
+                                                        <option value="Offrande">Offrande</option>
+                                                        <option value="Dîme">Dîme</option>
+                                                        <option value="Action de grâce">Action de Grâce</option>
+                                                        <option value="Offrande du prophète">Off. Prophète</option>
+                                                        <option value="Dons">Dons</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Compte Cible</label>
+                                                    <select
+                                                        value={o.account}
+                                                        onChange={e => updateOffering(o.id, 'account', e.target.value)}
+                                                        className="w-full p-2 border border-border rounded text-sm text-slate-800 outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                                                    >
+                                                        <option value="Cash">Cash</option>
+                                                        <option value="Rawbank">Rawbank</option>
+                                                        <option value="Equity">Equity</option>
+                                                        <option value="Mpesa">M-Pesa</option>
+                                                        <option value="OrangeMoney">Orange Money</option>
+                                                    </select>
+                                                </div>
                                             </div>
 
-                                            <div className="flex gap-3">
-                                                <input
-                                                    type="number"
-                                                    min="0"
-                                                    value={o.amount}
-                                                    onChange={e => updateOffering(o.id, 'amount', e.target.value)}
-                                                    className="flex-1 text-lg font-black text-primary dark:text-white p-3 border border-slate-200 dark:border-slate-600 rounded-xl bg-white dark:bg-white/5 outline-none focus:border-primary dark:focus:border-gold transition-all"
-                                                    placeholder="Montant"
-                                                />
-                                                <div className="flex rounded-xl overflow-hidden border border-slate-200 dark:border-slate-600">
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => updateOffering(o.id, 'currency', 'CDF')}
-                                                        className={`px-3 py-2 text-[10px] font-black transition-colors ${o.currency === 'CDF' ? 'bg-primary dark:bg-gold text-white dark:text-white' : 'bg-white dark:bg-white/5 text-slate-400' }`}
-                                                    >
-                                                        CDF
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => updateOffering(o.id, 'currency', 'USD')}
-                                                        className={`px-3 py-2 text-[10px] font-black transition-colors ${o.currency === 'USD' ? 'bg-primary dark:bg-gold text-white dark:text-white' : 'bg-white dark:bg-white/5 text-slate-400' }`}
-                                                    >
-                                                        USD
-                                                    </button>
+                                            <div>
+                                                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Montant & Devise</label>
+                                                <div className="flex gap-2">
+                                                    <input
+                                                        type="number"
+                                                        min="0"
+                                                        value={o.amount}
+                                                        onChange={e => updateOffering(o.id, 'amount', e.target.value)}
+                                                        className="flex-1 text-sm font-bold text-slate-900 p-2 border border-border rounded outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                                                        placeholder="Saisir montant"
+                                                    />
+                                                    <div className="flex rounded overflow-hidden border border-border bg-slate-50 p-0.5">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => updateOffering(o.id, 'currency', 'CDF')}
+                                                            className={`px-3 py-1.5 text-[10px] font-bold tracking-widest rounded-sm transition-colors ${o.currency === 'CDF' ? 'bg-primary text-white shadow-sm' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-200'}`}
+                                                        >
+                                                            CDF
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => updateOffering(o.id, 'currency', 'USD')}
+                                                            className={`px-3 py-1.5 text-[10px] font-bold tracking-widest rounded-sm transition-colors ${o.currency === 'USD' ? 'bg-primary text-white shadow-sm' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-200'}`}
+                                                        >
+                                                            USD
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -419,9 +424,9 @@ const SundayQuickEntry: React.FC<SundayQuickEntryProps> = ({ isOpen, onClose }) 
 
                                     <button
                                         onClick={addOfferingLine}
-                                        className="w-full p-3 border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-2xl text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider hover:border-primary dark:hover:border-gold hover:text-primary dark:hover:text-gold transition-all"
+                                        className="w-full p-2.5 border border-dashed border-slate-300 rounded-md text-xs font-bold text-slate-500 uppercase tracking-wider hover:border-primary hover:text-primary transition-colors bg-slate-50/50 hover:bg-blue-50/30"
                                     >
-                                        + Ajouter une ligne
+                                        + Ajouter une ligne de réception
                                     </button>
                                 </motion.div>
                             )}
@@ -430,47 +435,45 @@ const SundayQuickEntry: React.FC<SundayQuickEntryProps> = ({ isOpen, onClose }) 
                             {step === 'summary' && (
                                 <motion.div
                                     key="summary"
-                                    initial={{ opacity: 0, x: 20 }}
+                                    initial={{ opacity: 0, x: 10 }}
                                     animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
-                                    className="space-y-6"
+                                    exit={{ opacity: 0, x: -10 }}
+                                    className="space-y-4"
                                 >
-                                    <div className="text-center">
-                                        <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center mx-auto mb-4">
-                                            <span className="text-3xl">✅</span>
+                                    <div className="p-4 bg-white border border-border rounded-md shadow-sm">
+                                        <div className="flex justify-between items-center mb-3">
+                                            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Informations du Culte</h3>
+                                            <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 font-bold uppercase rounded">Étape finale</span>
                                         </div>
-                                        <h3 className="text-lg font-display font-bold text-primary dark:text-white mb-1">Vérification</h3>
-                                        <p className="text-xs text-slate-400 dark:text-slate-500">Confirmez les données avant envoi</p>
+                                        <p className="text-sm font-bold text-slate-800">{selectedService}</p>
+                                        <p className="text-xs text-slate-500 mt-0.5">{new Date(date).toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
                                     </div>
 
-                                    <div className="space-y-3">
-                                        <div className="p-4 bg-blue-50 dark:bg-blue-500/10 rounded-2xl border border-blue-100 dark:border-blue-500/20">
-                                            <p className="text-[9px] font-black text-blue-400 uppercase tracking-widest mb-1">Culte</p>
-                                            <p className="text-sm font-bold text-blue-700 dark:text-blue-300">{selectedService} — {new Date(date).toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                                        </div>
-
-                                        <div className="p-4 bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl border border-indigo-100 dark:border-indigo-500/20">
-                                            <p className="text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-2">Présences</p>
-                                            <div className="flex justify-between text-sm">
-                                                <span className="text-slate-600 dark:text-slate-400">👨 {attForm.men || 0} · 👩 {attForm.women || 0} · 👶 {attForm.children || 0} · 🙋 {attForm.visitors || 0}</span>
-                                                <span className="font-black text-indigo-700 dark:text-indigo-300">{totalAttendance}</span>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="p-4 bg-white border border-border rounded-md shadow-sm">
+                                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Répartition Présences</p>
+                                            <div className="space-y-1.5 text-xs text-slate-700">
+                                                <div className="flex justify-between"><span>Hommes:</span> <span className="font-bold">{attForm.men || 0}</span></div>
+                                                <div className="flex justify-between"><span>Femmes:</span> <span className="font-bold">{attForm.women || 0}</span></div>
+                                                <div className="flex justify-between"><span>Enfants:</span> <span className="font-bold">{attForm.children || 0}</span></div>
+                                                <div className="flex justify-between"><span>Visiteurs:</span> <span className="font-bold text-primary">{attForm.visitors || 0}</span></div>
+                                                <div className="pt-2 border-t border-slate-100 mt-2 flex justify-between">
+                                                    <span className="font-bold uppercase tracking-wide text-slate-800">Total:</span>
+                                                    <span className="font-bold text-slate-800">{totalAttendance}</span>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div className="p-4 bg-amber-50 dark:bg-amber-500/10 rounded-2xl border border-amber-100 dark:border-amber-500/20">
-                                            <p className="text-[9px] font-black text-amber-400 uppercase tracking-widest mb-2">Offrandes</p>
-                                            {offerings.filter(o => parseFloat(o.amount) > 0).map((o, idx) => (
-                                                <div key={o.id} className="flex justify-between text-sm mb-1">
-                                                    <span className="text-slate-600 dark:text-slate-400">{o.type} ({o.account})</span>
-                                                    <span className="font-bold text-amber-700 dark:text-amber-300">{parseFloat(o.amount).toLocaleString()} {o.currency}</span>
+                                        <div className="p-4 bg-white border border-border rounded-md shadow-sm flex flex-col">
+                                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Totaux Financiers</p>
+                                            <div className="flex-1 flex flex-col justify-center space-y-3">
+                                                <div>
+                                                    <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wider mb-0.5">Total CDF</p>
+                                                    <p className="text-lg font-bold text-slate-800 leading-none">FC {totalOfferingsCDF.toLocaleString()}</p>
                                                 </div>
-                                            ))}
-                                            <div className="border-t border-amber-200 dark:border-amber-500/30 mt-2 pt-2 flex justify-between text-sm">
-                                                <span className="font-black text-amber-600 dark:text-amber-400">Totaux</span>
-                                                <div className="text-right">
-                                                    {totalOfferingsCDF > 0 && <p className="font-black text-amber-700 dark:text-amber-300">FC {totalOfferingsCDF.toLocaleString()}</p>}
-                                                    {totalOfferingsUSD > 0 && <p className="font-black text-amber-700 dark:text-amber-300">${totalOfferingsUSD.toLocaleString()}</p>}
-                                                    {totalOfferingsCDF === 0 && totalOfferingsUSD === 0 && <p className="text-slate-400">Aucune offrande</p>}
+                                                <div>
+                                                    <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wider mb-0.5">Total USD</p>
+                                                    <p className="text-lg font-bold text-slate-800 leading-none">${totalOfferingsUSD.toLocaleString()}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -481,61 +484,58 @@ const SundayQuickEntry: React.FC<SundayQuickEntryProps> = ({ isOpen, onClose }) 
                     </div>
 
                     {/* Footer Actions */}
-                    <div className="px-8 py-5 border-t border-slate-50 dark:border-slate-700 bg-slate-50/50 dark:bg-white/[0.02] flex items-center justify-between gap-3">
+                    <div className="px-6 py-4 border-t border-border bg-slate-50 flex items-center justify-between">
                         {step !== 'service' ? (
-                            <Button
-                                variant="ghost"
-                                size="sm"
+                            <button
                                 onClick={() => {
                                     const prevSteps: Record<Step, Step> = { service: 'service', attendance: 'service', offering: 'attendance', summary: 'offering' };
                                     setStep(prevSteps[step]);
                                 }}
-                                className="text-slate-500 dark:text-slate-400"
+                                className="px-4 py-2 text-xs font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-200 rounded transition-colors uppercase tracking-wide"
                             >
-                                ← Retour
-                            </Button>
+                                Retour
+                            </button>
                         ) : (
                             <div />
                         )}
 
                         {step === 'service' && (
-                            <Button
+                            <button
                                 onClick={() => setStep('attendance')}
                                 disabled={!canProceedFromService}
-                                className="ml-auto"
+                                className="px-6 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold uppercase tracking-widest rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                Présences →
-                            </Button>
+                                Suivant
+                            </button>
                         )}
 
                         {step === 'attendance' && (
-                            <Button
+                            <button
                                 onClick={() => setStep('offering')}
                                 disabled={!canProceedFromAttendance}
-                                className="ml-auto"
+                                className="px-6 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold uppercase tracking-widest rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                Offrandes →
-                            </Button>
+                                Suivant
+                            </button>
                         )}
 
                         {step === 'offering' && (
-                            <Button
+                            <button
                                 onClick={() => setStep('summary')}
-                                className="ml-auto"
+                                className="px-6 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold uppercase tracking-widest rounded transition-colors"
                             >
-                                Vérifier →
-                            </Button>
+                                Valider
+                            </button>
                         )}
 
                         {step === 'summary' && (
-                            <Button
+                            <button
                                 onClick={handleSubmit}
-                                isLoading={isSubmitting}
                                 disabled={isSubmitting}
-                                className="ml-auto bg-emerald-600 dark:bg-emerald-500 hover:bg-emerald-700 dark:hover:bg-emerald-400 text-white shadow-lg shadow-emerald-200 dark:shadow-emerald-500/20"
+                                className="px-6 py-2 bg-[#10B981] hover:bg-[#059669] text-white text-xs font-bold uppercase tracking-widest rounded shadow-sm transition-colors disabled:opacity-50 flex items-center gap-2"
                             >
-                                ✓ Enregistrer le Culte
-                            </Button>
+                                {isSubmitting ? 'Traitement...' : 'Clôturer le Culte'}
+                            </button>
                         )}
                     </div>
                 </motion.div>

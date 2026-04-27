@@ -55,7 +55,7 @@ const DocumentsPage: React.FC = () => {
         try {
             await uploadDocument(file);
             const toast = document.createElement('div');
-            toast.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 animate-fade-in';
+            toast.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-md z-50 animate-fade-in';
             toast.innerHTML = `✅ Document "${file.name}" ajouté avec succès`;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 4000);
@@ -89,7 +89,7 @@ const DocumentsPage: React.FC = () => {
         try {
             await deleteDocument(id, url);
             const toast = document.createElement('div');
-            toast.className = 'fixed top-4 right-4 bg-amber-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 animate-fade-in';
+            toast.className = 'fixed top-4 right-4 bg-amber-500 text-white px-6 py-3 rounded-lg shadow-md z-50 animate-fade-in';
             toast.innerHTML = `🗑️ Document supprimé`;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 4000);
@@ -106,9 +106,9 @@ const DocumentsPage: React.FC = () => {
 
     const getFileIcon = (name: string) => {
         if (name.toLowerCase().endsWith('.pdf')) {
-            return <div className="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center"><FileTextIcon className="w-5 h-5" /></div>;
+            return <div className="w-10 h-10 rounded-lg bg-red-100 text-red-600 flex items-center justify-center"><FileTextIcon className="w-5 h-5" /></div>;
         }
-        return <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center"><FileTextIcon className="w-5 h-5" /></div>;
+        return <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center"><FileTextIcon className="w-5 h-5" /></div>;
     };
 
     return (
@@ -123,7 +123,7 @@ const DocumentsPage: React.FC = () => {
                 <div className="lg:col-span-1">
                     <Card className="p-6 sticky top-6">
                         <div
-                            className={`border-2 border-dashed rounded-2xl p-8 text-center transition-all ${dragActive ? 'border-primary bg-primary/5' : 'border-slate-300 dark:border-dark hover:border-primary/50'} ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}
+                            className={`border-2 border-dashed rounded-lg p-8 text-center transition-all ${dragActive ? 'border-primary bg-primary/5' : 'border-slate-300 dark:border-dark hover:border-primary/50'} ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}
                             onDragEnter={handleDrag}
                             onDragLeave={handleDrag}
                             onDragOver={handleDrag}
@@ -156,7 +156,7 @@ const DocumentsPage: React.FC = () => {
                             )}
                         </div>
 
-                        <div className="mt-6 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl flex items-start gap-3">
+                        <div className="mt-6 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg flex items-start gap-3">
                             <InformationCircleIcon className="w-5 h-5 text-blue-600 mt-0.5" />
                             <div className="text-xs text-blue-800 dark:text-blue-300">
                                 <p className="font-bold mb-1">Espace Documentaire Sécurisé</p>

@@ -152,7 +152,7 @@ const ReportsAdminPage: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 {/* Filters Sidebar */}
                 <div className="lg:col-span-1 space-y-6">
-                    <Card className="p-6 rounded-3xl border border-slate-100 dark:border-dark shadow-sm dark:shadow-none sticky top-24">
+                    <Card className="p-6 rounded-lg border border-slate-200 shadow-admin sticky top-24 bg-white">
                         <h3 className="text-xs font-black uppercase text-slate-400 tracking-widest mb-4 flex items-center gap-2">
                             <FilterIcon className="w-3 h-3" /> Filtres
                         </h3>
@@ -161,10 +161,10 @@ const ReportsAdminPage: React.FC = () => {
                                 <button
                                     key={status}
                                     onClick={() => setFilterStatus(status as any)}
-                                    className={`w-full text-left px-4 py-3 rounded-xl text-sm font-bold transition-all flex justify-between items-center ${filterStatus === status ? 'bg-primary text-white shadow-lg dark:shadow-none shadow-primary dark:shadow-none/30' : 'bg-slate-50 dark:bg-white/[0.02] text-slate-600 dark:text-slate-400 hover:bg-slate-100'}`}
+                                    className={`w-full text-left px-4 py-3 rounded-lg text-sm font-bold transition-all flex justify-between items-center ${filterStatus === status ? 'bg-primary text-white shadow-md' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'}`}
                                 >
                                     <span>{status === 'All' ? 'Tous les rapports' : status}</span>
-                                    <Badge className={`bg-card dark:bg-card-dark text-current ${filterStatus === status ? 'text-white' : 'text-slate-500 dark:text-slate-400'}`}>
+                                    <Badge className={`bg-white text-current ${filterStatus === status ? 'text-primary' : 'text-slate-500'}`}>
                                         {departmentReports.filter(r => status === 'All' ? true : r.status === status).length}
                                     </Badge>
                                 </button>
@@ -175,7 +175,7 @@ const ReportsAdminPage: React.FC = () => {
 
                 {/* Reports List */}
                 <div className="lg:col-span-3">
-                    <Card className="bg-card dark:bg-card-dark border border-slate-100 dark:border-dark rounded-3xl shadow-sm dark:shadow-none overflow-hidden">
+                    <Card className="bg-white border border-slate-200 rounded-lg shadow-admin overflow-hidden p-0">
                         <div className="overflow-x-auto">
                             <table className="w-full">
                                 <thead className="bg-slate-50 dark:bg-white/[0.02]/50 border-b border-slate-100 dark:border-dark">
@@ -261,7 +261,7 @@ const ReportsAdminPage: React.FC = () => {
             <Modal isOpen={!!viewReport} onClose={() => setViewReport(null)} title={`Rapport - ${viewReport ? getDepartmentName(viewReport.departmentId) : ''}`}>
                 {viewReport && (
                     <div className="space-y-6">
-                        <div className="flex justify-between items-start p-4 bg-slate-50 dark:bg-white/[0.02] rounded-xl">
+                        <div className="flex justify-between items-start p-4 bg-slate-50 rounded-lg border border-slate-200">
                             <div>
                                 <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Période</p>
                                 <p className="font-bold text-lg capitalize">{viewReport.month} {viewReport.year}</p>
@@ -285,9 +285,9 @@ const ReportsAdminPage: React.FC = () => {
                         {isEditing ? (
                             <div className="space-y-4">
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Contenu du rapport</label>
+                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Contenu du rapport</label>
                                     <textarea
-                                        className="w-full h-64 p-4 border border-slate-200 dark:border-dark rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                                        className="w-full h-64 p-4 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                                         value={editForm.content}
                                         onChange={(e) => setEditForm(prev => ({ ...prev, content: e.target.value }))}
                                     />
@@ -324,7 +324,7 @@ const ReportsAdminPage: React.FC = () => {
                             <>
                                 <div>
                                     <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Contenu</p>
-                                    <div className="p-4 bg-card dark:bg-card-dark border border-slate-200 dark:border-dark rounded-xl text-sm leading-relaxed text-slate-700 dark:text-white whitespace-pre-wrap">
+                                    <div className="p-4 bg-white border border-slate-200 rounded-lg text-sm leading-relaxed text-slate-700 whitespace-pre-wrap shadow-sm">
                                         {viewReport.content}
                                     </div>
                                 </div>
@@ -336,9 +336,9 @@ const ReportsAdminPage: React.FC = () => {
                                             href={viewReport.fileUrl}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="flex items-center gap-3 p-4 bg-blue-50 border border-blue-100 rounded-xl text-blue-700 hover:bg-blue-100 transition-colors group"
+                                            className="flex items-center gap-3 p-4 bg-blue-50 border border-blue-100 rounded-lg text-blue-700 hover:bg-blue-100 transition-colors group"
                                         >
-                                            <div className="w-10 h-10 bg-card dark:bg-card-dark rounded-lg flex items-center justify-center text-blue-500 shadow-sm dark:shadow-none">
+                                            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-blue-500 shadow-sm border border-slate-100">
                                                 <FileTextIcon className="w-5 h-5" />
                                             </div>
                                             <div className="flex-1">

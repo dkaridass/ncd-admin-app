@@ -96,7 +96,7 @@ const TemplatesTab: React.FC = () => {
                     </div>
                 ) : (
                     templates.map(template => (
-                        <Card key={template.id} className="relative group hover:shadow-lg dark:shadow-none transition-all border-l-4 border-l-primary/20">
+                        <Card key={template.id} className="relative group hover:shadow-md transition-all border-l-4 border-l-primary/20">
                             <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <button onClick={() => openModal(template)} className="p-1.5 hover:bg-slate-100 rounded text-slate-500 dark:text-slate-400">
                                     <EditIcon className="w-4 h-4" />
@@ -146,7 +146,7 @@ const TemplatesTab: React.FC = () => {
                         <div>
                             <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Catégorie</label>
                             <select
-                                className="w-full p-3 border rounded-xl bg-card dark:bg-card-dark text-sm"
+                                className="w-full p-3 border rounded-lg bg-card dark:bg-card-dark text-sm"
                                 value={formData.category}
                                 onChange={e => setFormData(p => ({ ...p, category: e.target.value as any }))}
                             >
@@ -160,7 +160,7 @@ const TemplatesTab: React.FC = () => {
                         <div>
                             <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Type</label>
                             <select
-                                className="w-full p-3 border rounded-xl bg-card dark:bg-card-dark text-sm"
+                                className="w-full p-3 border rounded-lg bg-card dark:bg-card-dark text-sm"
                                 value={formData.type}
                                 onChange={e => setFormData(p => ({ ...p, type: e.target.value as any }))}
                             >
@@ -183,7 +183,7 @@ const TemplatesTab: React.FC = () => {
                     <div>
                         <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Contenu</label>
                         <textarea
-                            className="w-full p-3 border rounded-xl h-32 text-sm"
+                            className="w-full p-3 border rounded-lg h-32 text-sm"
                             value={formData.content || ''}
                             onChange={e => setFormData(p => ({ ...p, content: e.target.value }))}
                             placeholder="Bonjour {nom}, ..."

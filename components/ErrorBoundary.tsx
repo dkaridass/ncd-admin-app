@@ -24,7 +24,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, ErrorBoundaryStat
     if (this.state.hasError) {
       return (
         <div className="min-h-screen bg-slate-50 dark:bg-white/[0.02] flex items-center justify-center p-8">
-          <div className="max-w-2xl w-full bg-card dark:bg-card-dark rounded-2xl shadow-lg dark:shadow-none p-8 border border-red-100">
+          <div className="max-w-2xl w-full bg-card dark:bg-card-dark rounded-lg shadow-md p-8 border border-red-100">
             <div className="text-center mb-6">
               <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">⚠️</span>
@@ -33,7 +33,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, ErrorBoundaryStat
               <p className="text-slate-600 dark:text-slate-400">Une erreur s'est produite lors du chargement de l'application.</p>
             </div>
             
-            <div className="bg-slate-50 dark:bg-white/[0.02] rounded-xl p-4 mb-6">
+            <div className="bg-slate-50 dark:bg-white/[0.02] rounded-lg p-4 mb-6">
               <p className="text-sm font-mono text-red-600 break-all">
                 {this.state.error?.message || 'Erreur inconnue'}
               </p>
@@ -42,7 +42,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, ErrorBoundaryStat
             <div className="flex gap-4 justify-center">
               <button
                 onClick={() => window.location.reload()}
-                className="px-6 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors"
+                className="px-6 py-3 bg-primary text-white rounded-lg font-bold hover:bg-primary/90 transition-colors"
               >
                 Recharger la Page
               </button>
@@ -50,7 +50,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, ErrorBoundaryStat
                 onClick={() => {
                   this.setState({ hasError: false, error: null });
                 }}
-                className="px-6 py-3 bg-slate-200 text-slate-700 dark:text-white rounded-xl font-bold hover:bg-slate-300 transition-colors"
+                className="px-6 py-3 bg-slate-200 text-slate-700 dark:text-white rounded-lg font-bold hover:bg-slate-300 transition-colors"
               >
                 Réessayer
               </button>

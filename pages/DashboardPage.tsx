@@ -25,6 +25,7 @@ import ActivityFeed from '../components/analytics/ActivityFeed';
 import MemberEngagementScoreboard from '../components/analytics/MemberEngagementScoreboard';
 import AbsenteeFollowUpWidget from '../components/pastoral/AbsenteeFollowUpWidget';
 import UpcomingCelebrationsWidget from '../components/pastoral/UpcomingCelebrationsWidget';
+import OngoingEventsWidget from '../components/events/OngoingEventsWidget';
 import { showSuccess, showError, showInfo } from '../utils/toast';
 
 const DashboardPage: React.FC = () => {
@@ -279,6 +280,7 @@ const DashboardPage: React.FC = () => {
             id: Date.now().toString(),
             date: reportForm.date,
             sessionName: reportForm.sessionName,
+            serviceType: 'Culte',
             menCount: parseInt(reportForm.men) || 0,
             womenCount: parseInt(reportForm.women) || 0,
             childrenCount: parseInt(reportForm.children) || 0,
@@ -322,7 +324,7 @@ const DashboardPage: React.FC = () => {
                             <Button
                                 onClick={handleAIAnalysis}
                                 isLoading={isAnalyzing}
-                                className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-md dark:shadow-none shadow-indigo-500 dark:shadow-none/20 text-sm font-bold"
+                                className="bg-indigo-500  text-white shadow-md dark:shadow-none shadow-indigo-500 dark:shadow-none/20 text-sm font-bold"
                             >
                                 <SparklesIcon className="w-4 h-4 mr-2" />
                                 Synthèse IA
@@ -331,18 +333,18 @@ const DashboardPage: React.FC = () => {
                     </div>
                 </div>
 
-                {/* SUPER ADMIN BOOTSTRAP BANNER - Only visible to admin@ncd.com who is NOT yet SUPER_ADMIN */}
+                {/* SUPER ADMIN BOOTSTRAP BANNER */}
                 {isCurrentUserSuperAdminEmail() && currentUser?.role !== 'SUPER_ADMIN' && (
-                    <div className="mb-8 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl p-8 text-white shadow-2xl dark:shadow-none animate-fade-in">
-                        <div className="flex items-start gap-6">
-                            <div className="w-16 h-16 rounded-2xl bg-card dark:bg-card-dark backdrop-blur-sm flex items-center justify-center shrink-0">
-                                <ShieldIcon className="w-8 h-8 text-white" />
+                    <div className="mb-8 bg-blue-50 border border-blue-200 rounded-lg p-6 text-slate-800">
+                        <div className="flex items-start gap-4">
+                            <div className="w-10 h-10 rounded bg-blue-100 flex items-center justify-center shrink-0 border border-blue-200">
+                                <ShieldIcon className="w-5 h-5 text-blue-700" />
                             </div>
                             <div className="flex-1">
-                                <h3 className="text-2xl font-display font-black mb-2">⚠️ Action Requise: Activer SUPER_ADMIN</h3>
-                                <p className="text-indigo-100 text-sm mb-4 leading-relaxed">
+                                <h3 className="text-sm font-bold text-blue-900 mb-1">Action Requise: Activer SUPER_ADMIN</h3>
+                                <p className="text-blue-800 text-xs mb-4">
                                     Vous êtes connecté en tant que <strong>admin@ncd.com</strong> mais votre rôle actuel est <strong>VIEWER</strong>.
-                                    Cliquez sur le bouton ci-dessous pour activer vos privilèges de Super Administrateur dans la base de données.
+                                    Activez vos privilèges de Super Administrateur dans la base de données.
                                 </p>
                                 <Button
                                     onClick={async () => {
@@ -350,10 +352,10 @@ const DashboardPage: React.FC = () => {
                                         try {
                                             const updated = await ensureSuperAdminExists();
                                             if (updated) {
-                                                showSuccess('✅ Rôle SUPER_ADMIN configuré avec succès! Rechargement de la page...');
+                                                showSuccess('Rôle SUPER_ADMIN configuré avec succès! Rechargement...');
                                                 setTimeout(() => window.location.reload(), 1500);
                                             } else {
-                                                showInfo('✅ Votre rôle SUPER_ADMIN est déjà correct.');
+                                                showInfo('Votre rôle SUPER_ADMIN est déjà correct.');
                                             }
                                         } catch (error: any) {
                                             showError(`Erreur: ${error.message}`);
@@ -363,9 +365,9 @@ const DashboardPage: React.FC = () => {
                                     }}
                                     isLoading={isFixingRole}
                                     disabled={isFixingRole}
-                                    className="bg-card dark:bg-card-dark text-indigo-600 dark:text-indigo-300 font-black text-sm px-8 py-3 rounded-xl hover:bg-indigo-50 shadow-lg dark:shadow-none hover:shadow-xl dark:shadow-none transition-all"
+                                    className="bg-blue-600 text-white font-bold text-xs px-4 py-2 rounded-md hover:bg-blue-700 transition-colors shadow-sm"
                                 >
-                                    🔐 Activer SUPER_ADMIN Maintenant
+                                    Activer SUPER_ADMIN
                                 </Button>
                             </div>
                         </div>
@@ -381,30 +383,30 @@ const DashboardPage: React.FC = () => {
                 </div>
 
                 {/* Quick Actions Bar */}
-                <div className="flex gap-4 mb-10 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-4">
+                <div className="flex gap-3 mb-10 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-2">
                     <Button
                         onClick={() => setIsReportModalOpen(true)}
                         variant="primary"
-                        className="rounded-full px-8 py-3.5 text-xs shadow-lg dark:shadow-glow-primary whitespace-nowrap"
+                        className="rounded-md px-4 py-2 text-xs shadow-sm whitespace-nowrap font-semibold border-none"
                     >
-                        <PlusCircleIcon className="w-4 h-4 mr-2" />
+                        <PlusCircleIcon className="w-3.5 h-3.5 mr-1.5" />
                         Saisir Effectif
                     </Button>
                     <Button
                         onClick={() => setIsMemberModalOpen(true)}
                         variant="white"
-                        className="rounded-full px-8 py-3.5 text-xs whitespace-nowrap border-2 border-slate-100 dark:border-dark"
+                        className="rounded-md px-4 py-2 text-xs whitespace-nowrap border border-border text-slate-700 bg-white hover:bg-slate-50 font-semibold"
                     >
-                        <UsersIcon className="w-4 h-4 mr-2 text-primary" />
+                        <UsersIcon className="w-3.5 h-3.5 mr-1.5 text-slate-500" />
                         Nouveau Fidèle
                     </Button>
                     {hasPermission && hasPermission('VIEW_FINANCES') && (
                         <Button
                             onClick={() => openFinanceModal()}
                             variant="white"
-                            className="rounded-full px-8 py-3.5 text-xs whitespace-nowrap border-2 border-slate-100 dark:border-dark"
+                            className="rounded-md px-4 py-2 text-xs whitespace-nowrap border border-border text-slate-700 bg-white hover:bg-slate-50 font-semibold"
                         >
-                            <DollarSignIcon className="w-4 h-4 mr-2 text-emerald-600" />
+                            <DollarSignIcon className="w-3.5 h-3.5 mr-1.5 text-emerald-600" />
                             Entrer Offrande
                         </Button>
                     )}
@@ -415,7 +417,7 @@ const DashboardPage: React.FC = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ staggerChildren: 0.15 }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-10"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10"
                 >
                     {([
                         {
@@ -426,7 +428,7 @@ const DashboardPage: React.FC = () => {
                             trendUp: memberTrend.isUp,
                             onClick: () => navigate('/members'),
                             isFinance: false,
-                            color: 'text-primary'
+                            color: 'text-slate-800'
                         },
                         {
                             label: 'Dernier Culte',
@@ -436,7 +438,7 @@ const DashboardPage: React.FC = () => {
                             trendUp: trendValue >= 0,
                             onClick: () => navigate('/events'),
                             isFinance: false,
-                            color: 'text-primary'
+                            color: 'text-slate-800'
                         },
                         {
                             label: 'Recettes (USD)',
@@ -446,7 +448,7 @@ const DashboardPage: React.FC = () => {
                             trendUp: financeTrends.usd.isUp,
                             isFinance: true,
                             onClick: () => navigate('/finances'),
-                            color: 'text-emerald-700 dark:text-emerald-400'
+                            color: 'text-slate-800'
                         },
                         {
                             label: 'Recettes (CDF)',
@@ -456,29 +458,29 @@ const DashboardPage: React.FC = () => {
                             trendUp: financeTrends.cdf.isUp,
                             isFinance: true,
                             onClick: () => navigate('/finances'),
-                            color: 'text-emerald-700 dark:text-emerald-400'
+                            color: 'text-slate-800'
                         }
                     ] as const).filter(stat => !stat.isFinance || (hasPermission && hasPermission('VIEW_FINANCES'))).map((stat, i) => (
                         <motion.div
                             key={i}
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
+                            transition={{ duration: 0.3, delay: i * 0.05, ease: "easeOut" }}
                             className="h-full"
                         >
                             <Card
                                 onClick={stat.onClick}
-                                className="p-6 md:p-8 transition-all duration-500 group cursor-pointer hover:-translate-y-1 hover:shadow-2xl dark:hover:shadow-glow-primary border-t-4 border-t-transparent hover:border-t-primary h-full flex flex-col justify-between"
+                                className="p-4 transition-colors hover:border-slate-300 h-full flex flex-col justify-between shadow-sm cursor-pointer"
                             >
                                 <div>
-                                    <div className="flex justify-between items-start mb-6">
-                                        <p className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{stat.label}</p>
-                                        <div className={`p-2 rounded-xl transition-colors ${stat.isFinance ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400 group-hover:bg-emerald-100' : 'bg-primary/5 text-primary dark:bg-primary-light/20 dark:text-primary-accent group-hover:bg-primary/10'}`}>
-                                            <stat.icon className="w-5 h-5" />
+                                    <div className="flex justify-between items-start mb-4">
+                                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{stat.label}</p>
+                                        <div className={`p-1.5 rounded transition-colors ${stat.isFinance ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-slate-50 text-slate-600 border border-border'}`}>
+                                            <stat.icon className="w-4 h-4" />
                                         </div>
                                     </div>
-                                    <div className="flex items-baseline gap-3">
-                                        <h3 className={`text-4xl lg:text-5xl font-serif font-medium ${stat.color} tracking-tight`}>
+                                    <div className="flex items-baseline gap-2">
+                                        <h3 className={`text-2xl font-bold ${stat.color} tracking-tight`}>
                                             {isLoading ? '...' : (
                                                 typeof stat.value === 'number' ? (
                                                     <AnimatedCounter value={stat.value} />
@@ -491,13 +493,13 @@ const DashboardPage: React.FC = () => {
                                         </h3>
                                     </div>
                                 </div>
-                                <div className="mt-6 flex items-center">
-                                    <div className={`flex items-center text-[9px] md:text-xs font-bold px-2 py-1.5 rounded-lg ${stat.trendUp === true ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : stat.trendUp === false ? 'bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400' : 'bg-slate-50 dark:bg-slate-700 text-slate-500'}`}>
+                                <div className="mt-4 flex items-center">
+                                    <div className={`flex items-center text-[10px] font-bold px-1.5 py-0.5 rounded border ${stat.trendUp === true ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : stat.trendUp === false ? 'bg-red-50 text-red-600 border-red-100' : 'bg-slate-50 text-slate-500 border-border'}`}>
                                         {stat.trendUp === true && <TrendingUpIcon className="w-3 h-3 mr-1" />}
                                         {stat.trendUp === false && <TrendingUpIcon className="w-3 h-3 mr-1 rotate-180" />}
                                         {stat.trend}
                                     </div>
-                                    <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium ml-2">vs mois dernier</span>
+                                    <span className="text-[9px] text-slate-400 font-medium ml-2 uppercase tracking-wide">vs mois dernier</span>
                                 </div>
                             </Card>
                         </motion.div>
@@ -548,56 +550,50 @@ const DashboardPage: React.FC = () => {
                         {/* Upcoming Celebrations Widget */}
                         <UpcomingCelebrationsWidget />
 
+                        {/* Ongoing Multi-Day Events (Seminars, 50 Jours, etc) */}
+                        <OngoingEventsWidget />
+
                         {/* Today's Agenda */}
-                        <Card className="bg-card dark:bg-card-dark border border-slate-100 dark:border-dark p-6 rounded-3xl shadow-sm dark:shadow-none" title="Agenda du Jour">
-                            <div className="mt-6 space-y-0">
+                        <Card title="Agenda du Jour">
+                            <div className="space-y-0">
                                 {isLoading ? (
                                     <div className="space-y-4">
                                         {[1, 2, 3].map(i => (
-                                            <div key={i} className="h-16 bg-slate-100 rounded-xl animate-pulse" />
+                                            <div key={i} className="h-12 bg-slate-100 rounded-md animate-pulse" />
                                         ))}
                                     </div>
                                 ) : todayDepts.length > 0 ? todayDepts.slice(0, 5).map((dept, idx) => (
                                     <div
                                         key={dept.id}
                                         onClick={() => navigate(`/departments`)}
-                                        className="relative flex gap-4 pb-6 last:pb-0 cursor-pointer hover:bg-slate-50 dark:bg-white/[0.02]/50 rounded-xl p-2 -m-2 transition-colors group"
+                                        className="relative flex gap-3 cursor-pointer hover:bg-slate-50 rounded-md p-2 transition-colors border-b border-border last:border-0"
                                     >
-                                        {/* Timeline Line */}
-                                        {idx !== todayDepts.length - 1 && (
-                                            <div className="absolute left-[19px] top-8 bottom-0 w-px bg-slate-100"></div>
-                                        )}
-
                                         {/* Time Badge */}
-                                        <div className="w-10 h-10 shrink-0 rounded-xl bg-slate-50 dark:bg-white/[0.02] border border-slate-100 dark:border-dark flex flex-col items-center justify-center z-10 text-primary dark:text-white group-hover:bg-primary group-hover:text-white transition-colors">
+                                        <div className="w-10 h-10 shrink-0 rounded bg-slate-50 border border-slate-200 flex flex-col items-center justify-center text-slate-700">
                                             {dept.meetingTime ? (
                                                 <>
-                                                    <span className="text-[10px] font-black leading-none">{dept.meetingTime.split(':')[0]}</span>
-                                                    <span className="text-[9px] text-slate-400 leading-none mt-0.5 group-hover:text-white/80">{dept.meetingTime.split(':')[1]}</span>
+                                                    <span className="text-[10px] font-bold leading-none">{dept.meetingTime.split(':')[0]}</span>
+                                                    <span className="text-[10px] font-bold text-slate-400 leading-none">{dept.meetingTime.split(':')[1]}</span>
                                                 </>
                                             ) : (
-                                                <span className="text-[9px] font-black">-</span>
+                                                <span className="text-[10px] font-bold">-</span>
                                             )}
                                         </div>
 
                                         {/* Content */}
-                                        <div className="pt-1 flex-1">
-                                            <h4 className="text-sm font-bold text-primary dark:text-white group-hover:text-indigo-600 transition-colors">{dept.name}</h4>
+                                        <div className="flex-1 flex flex-col justify-center">
+                                            <h4 className="text-sm font-bold text-slate-800">{dept.name}</h4>
                                             {dept.leaderName && (
-                                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
-                                                    {dept.leaderName}
-                                                </p>
+                                                <p className="text-xs text-slate-500 mt-0.5">{dept.leaderName}</p>
                                             )}
                                         </div>
                                     </div>
                                 )) : (
-                                    <div className="py-8 text-center text-slate-400">
-                                        <CalendarIcon className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                                    <div className="py-6 text-center text-slate-400">
                                         <p className="text-xs">Aucun événement aujourd'hui</p>
                                         <button
                                             onClick={() => navigate('/departments')}
-                                            className="text-xs text-indigo-600 dark:text-indigo-300 hover:underline mt-2"
+                                            className="text-xs text-primary font-bold hover:underline mt-1"
                                         >
                                             Voir les départements
                                         </button>
@@ -608,8 +604,8 @@ const DashboardPage: React.FC = () => {
 
                         {/* Latest Announcements */}
                         <Card
-                            className="bg-card dark:bg-card-dark border border-slate-100 dark:border-dark p-6 rounded-3xl shadow-sm dark:shadow-none cursor-pointer hover:border-primary/20 dark:hover:border-darkHighlight transition-all"
-                            title={`Annonces Récentes (${(announcements && Array.isArray(announcements) ? announcements : []).filter(a => {
+                            className="hover:border-slate-300 transition-colors cursor-pointer"
+                            title={`Annonces (${(announcements && Array.isArray(announcements) ? announcements : []).filter(a => {
                                 if (!a.isActive || a.isArchived) return false;
                                 const now = new Date();
                                 const startDate = new Date(a.startDate);
@@ -618,11 +614,11 @@ const DashboardPage: React.FC = () => {
                             }).length})`}
                             onClick={() => navigate('/announcements')}
                         >
-                            <div className="mt-4 space-y-3">
+                            <div className="space-y-2">
                                 {isLoading ? (
-                                    <div className="space-y-3">
+                                    <div className="space-y-2">
                                         {[1, 2].map(i => (
-                                            <div key={i} className="h-16 bg-slate-100 rounded-xl animate-pulse" />
+                                            <div key={i} className="h-12 bg-slate-100 rounded-md animate-pulse" />
                                         ))}
                                     </div>
                                 ) : (announcements && Array.isArray(announcements) ? announcements : []).filter(a => {
@@ -645,21 +641,18 @@ const DashboardPage: React.FC = () => {
                                                 e.stopPropagation();
                                                 navigate('/announcements');
                                             }}
-                                            className="p-3 bg-slate-50 dark:bg-white/[0.02] rounded-xl border border-slate-100 dark:border-dark cursor-pointer hover:bg-blue-50 hover:border-blue-100 transition-colors group"
+                                            className="p-3 bg-slate-50 rounded-md border border-slate-100 cursor-pointer hover:border-slate-300 transition-colors"
                                         >
                                             <div className="flex items-start justify-between gap-2 mb-1">
-                                                <h4 className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-blue-700 line-clamp-1 flex-1">{announcement.title}</h4>
-                                                <Badge className="bg-blue-500 text-white text-[9px] px-2 py-0.5">{announcement.category}</Badge>
+                                                <h4 className="text-xs font-bold text-slate-800 line-clamp-1 flex-1">{announcement.title}</h4>
+                                                <span className="bg-slate-200 text-slate-700 font-bold tracking-widest uppercase text-[8px] px-1.5 py-0.5 rounded">{announcement.category}</span>
                                             </div>
-                                            <p className="text-[10px] text-slate-600 dark:text-slate-400 line-clamp-2 mt-1">{announcement.content}</p>
-                                            <p className="text-[9px] text-slate-400 mt-2">{new Date(announcement.startDate).toLocaleDateString('fr-FR')}</p>
+                                            <p className="text-[10px] text-slate-500 line-clamp-2 mt-1">{announcement.content}</p>
                                         </div>
                                     ))
                                 ) : (
-                                    <div className="text-center py-6 text-slate-400 text-xs">
-                                        <FileTextIcon className="w-8 h-8 mx-auto mb-2 opacity-30" />
+                                    <div className="text-center py-4 text-slate-400 text-xs border border-dashed border-border rounded-md bg-slate-50">
                                         <p>Aucune annonce active</p>
-                                        <p className="text-[10px] mt-2 text-slate-300">Cliquez pour voir toutes les annonces</p>
                                     </div>
                                 )}
                             </div>
@@ -667,15 +660,15 @@ const DashboardPage: React.FC = () => {
 
                         {/* Action Items / Pendings */}
                         <Card
-                            className="bg-card dark:bg-card-dark border border-slate-100 dark:border-dark p-6 rounded-3xl shadow-sm dark:shadow-none cursor-pointer hover:border-primary/20 dark:hover:border-darkHighlight transition-all"
+                            className="hover:border-slate-300 transition-colors cursor-pointer"
                             title={`À Faire (${pendingTasks.length})`}
                             onClick={() => navigate('/assistant')}
                         >
-                            <div className="mt-4 space-y-3">
+                            <div className="space-y-2">
                                 {isLoading ? (
-                                    <div className="space-y-3">
+                                    <div className="space-y-2">
                                         {[1, 2, 3].map(i => (
-                                            <div key={i} className="h-12 bg-slate-100 rounded-xl animate-pulse" />
+                                            <div key={i} className="h-10 bg-slate-100 rounded-md animate-pulse" />
                                         ))}
                                     </div>
                                 ) : pendingTasks.length > 0 ? (
@@ -686,20 +679,18 @@ const DashboardPage: React.FC = () => {
                                                 e.stopPropagation();
                                                 updateTask(task.id, 'Terminé');
                                             }}
-                                            className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-white/[0.02] rounded-xl border border-slate-100 dark:border-dark cursor-pointer hover:bg-emerald-50 hover:border-emerald-100 transition-colors group"
+                                            className="flex items-center gap-3 p-3 bg-slate-50 rounded-md border border-slate-100 cursor-pointer hover:border-slate-300 transition-colors"
                                         >
-                                            <div className={`w-2 h-2 rounded-full shrink-0 ${task.priority === 'HIGH' ? 'bg-red-500' : 'bg-slate-400'}`}></div>
-                                            <p className="text-xs font-medium text-slate-700 dark:text-white flex-1 group-hover:text-emerald-700">{task.title}</p>
-                                            <div className="w-4 h-4 rounded-full border border-slate-300 group-hover:bg-emerald-500 group-hover:border-emerald-500 flex items-center justify-center transition-all">
-                                                <svg className="w-3 h-3 text-white opacity-0 group-hover:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                                            <div className={`w-2 h-2 rounded-sm shrink-0 ${task.priority === 'HIGH' ? 'bg-[#D81124]' : 'bg-slate-400'}`}></div>
+                                            <p className="text-xs font-bold text-slate-700 flex-1">{task.title}</p>
+                                            <div className="w-4 h-4 rounded border border-slate-300 flex items-center justify-center">
+                                                <svg className="w-3 h-3 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                                             </div>
                                         </div>
                                     ))
                                 ) : (
-                                    <div className="text-center py-6 text-slate-400 text-xs">
-                                        <FileTextIcon className="w-8 h-8 mx-auto mb-2 opacity-30" />
-                                        <p>Tout est à jour !</p>
-                                        <p className="text-[10px] mt-2 text-slate-300">Cliquez pour voir l'assistant</p>
+                                    <div className="text-center py-4 text-slate-400 text-xs border border-dashed border-border rounded-md bg-slate-50">
+                                        <p>Aucune tâche en attente</p>
                                     </div>
                                 )}
                             </div>
@@ -710,14 +701,14 @@ const DashboardPage: React.FC = () => {
                 <Modal isOpen={isReportModalOpen} onClose={() => setIsReportModalOpen(false)} title="Saisie Rapide Fréquentation">
                     <form onSubmit={handleReportSubmit} className="space-y-6">
                         <div className="grid grid-cols-1 gap-4">
-                            <Input label="Date" type="date" value={reportForm.date} onChange={e => setReportForm({ ...reportForm, date: e.target.value })} required className="rounded-xl py-3 text-sm" />
+                            <Input label="Date" type="date" value={reportForm.date} onChange={e => setReportForm({ ...reportForm, date: e.target.value })} required className="rounded-lg py-3 text-sm" />
                         </div>
                         <div className="grid grid-cols-3 gap-4">
-                            <Input label="Hommes" type="number" placeholder="0" value={reportForm.men} onChange={e => setReportForm({ ...reportForm, men: e.target.value })} required className="rounded-xl text-sm" />
-                            <Input label="Femmes" type="number" placeholder="0" value={reportForm.women} onChange={e => setReportForm({ ...reportForm, women: e.target.value })} required className="rounded-xl text-sm" />
-                            <Input label="Enfants" type="number" placeholder="0" value={reportForm.children} onChange={e => setReportForm({ ...reportForm, children: e.target.value })} required className="rounded-xl text-sm" />
+                            <Input label="Hommes" type="number" placeholder="0" value={reportForm.men} onChange={e => setReportForm({ ...reportForm, men: e.target.value })} required className="rounded-lg text-sm" />
+                            <Input label="Femmes" type="number" placeholder="0" value={reportForm.women} onChange={e => setReportForm({ ...reportForm, women: e.target.value })} required className="rounded-lg text-sm" />
+                            <Input label="Enfants" type="number" placeholder="0" value={reportForm.children} onChange={e => setReportForm({ ...reportForm, children: e.target.value })} required className="rounded-lg text-sm" />
                         </div>
-                        <Button type="submit" isLoading={isReportSubmitting} disabled={isReportSubmitting} className="w-full py-4 bg-primary text-white text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-primary-light transition-colors">Enregistrer</Button>
+                        <Button type="submit" isLoading={isReportSubmitting} disabled={isReportSubmitting} className="w-full py-4 bg-primary text-white text-xs font-bold uppercase tracking-widest rounded-lg hover:bg-primary-light transition-colors">Enregistrer</Button>
                     </form>
                 </Modal>
 
@@ -730,7 +721,7 @@ const DashboardPage: React.FC = () => {
                                     type="number"
                                     value={financeForm.amount}
                                     onChange={e => setFinanceForm({ ...financeForm, amount: e.target.value })}
-                                    className="w-full text-3xl font-black text-primary dark:text-white border-none bg-slate-50 dark:bg-white/[0.02] rounded-2xl p-4 outline-none focus:ring-2 focus:ring-primary/10"
+                                    className="w-full text-3xl font-black text-primary dark:text-white border-none bg-slate-50 dark:bg-white/[0.02] rounded-lg p-4 outline-none focus:ring-2 focus:ring-primary/10"
                                     placeholder="0"
                                     autoFocus
                                 />
@@ -738,12 +729,12 @@ const DashboardPage: React.FC = () => {
                                     <button
                                         type="button"
                                         onClick={() => setFinanceForm(p => ({ ...p, currency: 'CDF' }))}
-                                        className={`px-3 py-2 rounded-xl text-[10px] font-black ${financeForm.currency === 'CDF' ? 'bg-primary text-white' : 'bg-card dark:bg-card-dark text-slate-400'}`}
+                                        className={`px-3 py-2 rounded-lg text-[10px] font-black ${financeForm.currency === 'CDF' ? 'bg-primary text-white' : 'bg-card dark:bg-card-dark text-slate-400'}`}
                                     >CDF</button>
                                     <button
                                         type="button"
                                         onClick={() => setFinanceForm(p => ({ ...p, currency: 'USD' }))}
-                                        className={`px-3 py-2 rounded-xl text-[10px] font-black ${financeForm.currency === 'USD' ? 'bg-primary text-white' : 'bg-card dark:bg-card-dark text-slate-400'}`}
+                                        className={`px-3 py-2 rounded-lg text-[10px] font-black ${financeForm.currency === 'USD' ? 'bg-primary text-white' : 'bg-card dark:bg-card-dark text-slate-400'}`}
                                     >USD</button>
                                 </div>
                             </div>
@@ -755,7 +746,7 @@ const DashboardPage: React.FC = () => {
                                 <select
                                     value={financeForm.type}
                                     onChange={e => setFinanceForm({ ...financeForm, type: e.target.value as any })}
-                                    className="w-full p-4 bg-card dark:bg-card-dark border border-slate-200 dark:border-dark rounded-2xl text-xs font-bold outline-none"
+                                    className="w-full p-4 bg-card dark:bg-card-dark border border-slate-200 dark:border-dark rounded-lg text-xs font-bold outline-none"
                                 >
                                     <option value="Offrande">Offrande</option>
                                     <option value="Dîme">Dîme</option>
@@ -768,7 +759,7 @@ const DashboardPage: React.FC = () => {
                                 <select
                                     value={financeForm.account}
                                     onChange={e => setFinanceForm({ ...financeForm, account: e.target.value as FinanceAccount })}
-                                    className="w-full p-4 bg-card dark:bg-card-dark border border-slate-200 dark:border-dark rounded-2xl text-xs font-bold outline-none"
+                                    className="w-full p-4 bg-card dark:bg-card-dark border border-slate-200 dark:border-dark rounded-lg text-xs font-bold outline-none"
                                 >
                                     <option value="Cash">Cash / Caisse</option>
                                     <option value="Rawbank">Rawbank</option>
@@ -782,7 +773,7 @@ const DashboardPage: React.FC = () => {
 
                         <Input label="Note (Optionnel)" value={financeForm.notes} onChange={e => setFinanceForm({ ...financeForm, notes: e.target.value })} placeholder="Détails..." className="my-2" />
 
-                        <Button type="submit" isLoading={isFinanceSubmitting} disabled={isFinanceSubmitting} className="w-full py-4 bg-emerald-600 text-white text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-emerald-500 transition-colors shadow-lg dark:shadow-none shadow-emerald-200 dark:shadow-none">
+                        <Button type="submit" isLoading={isFinanceSubmitting} disabled={isFinanceSubmitting} className="w-full py-4 bg-emerald-600 text-white text-xs font-bold uppercase tracking-widest rounded-lg hover:bg-emerald-500 transition-colors shadow-md shadow-emerald-200 dark:shadow-none">
                             Valider l'Offrande
                         </Button>
                     </form>
@@ -795,7 +786,7 @@ const DashboardPage: React.FC = () => {
                             value={memberForm.name}
                             onChange={e => setMemberForm({ ...memberForm, name: e.target.value })}
                             required
-                            className="rounded-xl"
+                            className="rounded-lg"
                             placeholder="Prénom et Nom"
                         />
                         <div className="grid grid-cols-2 gap-4">
@@ -804,7 +795,7 @@ const DashboardPage: React.FC = () => {
                                 <select
                                     value={memberForm.gender}
                                     onChange={e => setMemberForm({ ...memberForm, gender: e.target.value as 'Homme' | 'Femme' })}
-                                    className="w-full p-4 bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-dark rounded-xl text-sm font-medium outline-none"
+                                    className="w-full p-4 bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-dark rounded-lg text-sm font-medium outline-none"
                                 >
                                     <option value="Homme">Homme</option>
                                     <option value="Femme">Femme</option>
@@ -815,7 +806,7 @@ const DashboardPage: React.FC = () => {
                                 <select
                                     value={memberForm.status}
                                     onChange={e => setMemberForm({ ...memberForm, status: e.target.value as 'Fidèle' | 'Visiteur' | 'Archivé' })}
-                                    className="w-full p-4 bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-dark rounded-xl text-sm font-medium outline-none"
+                                    className="w-full p-4 bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-dark rounded-lg text-sm font-medium outline-none"
                                 >
                                     <option value="Fidèle">Fidèle</option>
                                     <option value="Visiteur">Visiteur</option>
@@ -827,10 +818,10 @@ const DashboardPage: React.FC = () => {
                             label="Téléphone"
                             value={memberForm.phone}
                             onChange={e => setMemberForm({ ...memberForm, phone: e.target.value })}
-                            className="rounded-xl"
+                            className="rounded-lg"
                             placeholder="+243..."
                         />
-                        <Button type="submit" isLoading={isMemberSubmitting} disabled={isMemberSubmitting} className="w-full py-4 bg-indigo-600 text-white text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-indigo-700 transition-colors shadow-lg dark:shadow-none">
+                        <Button type="submit" isLoading={isMemberSubmitting} disabled={isMemberSubmitting} className="w-full py-4 bg-indigo-600 text-white text-xs font-bold uppercase tracking-widest rounded-lg hover:bg-indigo-700 transition-colors shadow-md">
                             Enregistrer
                         </Button>
                     </form>
@@ -845,7 +836,7 @@ const DashboardPage: React.FC = () => {
                 >
                     {aiInsight && (
                         <div className="p-6 space-y-6">
-                            <div className="bg-gradient-to-br from-indigo-50 to-purple-50 p-6 rounded-[2rem] border border-indigo-100 mb-8">
+                            <div className="bg-indigo-50 p-6 rounded-lg border border-indigo-100 mb-8">
                                 <h3 className="text-xl font-display font-black text-indigo-900 dark:text-white mb-2 flex items-center">
                                     <SparklesIcon className="w-5 h-5 mr-3 text-indigo-600 dark:text-indigo-300" />
                                     L'Intelligence Visionnaire
@@ -854,7 +845,7 @@ const DashboardPage: React.FC = () => {
                             </div>
 
                             <div className="grid grid-cols-1 gap-4">
-                                <div className="bg-emerald-50 dark:bg-emerald-900/20/50 border border-emerald-100 p-5 rounded-2xl">
+                                <div className="bg-emerald-50 dark:bg-emerald-900/20/50 border border-emerald-100 p-5 rounded-lg">
                                     <h4 className="text-sm font-bold text-emerald-800 uppercase tracking-widest mb-2 flex items-center">
                                         <HeartIcon className="w-4 h-4 mr-2" />
                                         Impact Spirituel
@@ -862,7 +853,7 @@ const DashboardPage: React.FC = () => {
                                     <p className="text-slate-700 dark:text-white text-sm leading-relaxed font-medium">{aiInsight.impactSpirituel}</p>
                                 </div>
 
-                                <div className="bg-amber-50 dark:bg-amber-900/20/50 border border-amber-100 p-5 rounded-2xl">
+                                <div className="bg-amber-50 dark:bg-amber-900/20/50 border border-amber-100 p-5 rounded-lg">
                                     <h4 className="text-sm font-bold text-amber-800 uppercase tracking-widest mb-2 flex items-center">
                                         <TrendingUpIcon className="w-4 h-4 mr-2" />
                                         Vigilance Administrative
@@ -870,7 +861,7 @@ const DashboardPage: React.FC = () => {
                                     <p className="text-slate-700 dark:text-white text-sm leading-relaxed font-medium">{aiInsight.vigilanceAdministrative}</p>
                                 </div>
 
-                                <div className="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 p-5 rounded-2xl relative overflow-hidden">
+                                <div className="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 p-5 rounded-lg relative overflow-hidden">
                                     <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/10 rounded-full blur-xl -mr-10 -mt-10"></div>
                                     <h4 className="text-sm font-bold text-indigo-800 dark:text-indigo-100 uppercase tracking-widest mb-2 relative z-10 flex items-center">
                                         <SparklesIcon className="w-4 h-4 mr-2" />
@@ -894,7 +885,7 @@ const DashboardPage: React.FC = () => {
                     onClick={() => setIsSundayEntryOpen(true)}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
-                    className="fixed bottom-24 md:bottom-8 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-indigo-800 dark:from-gold dark:to-amber-600 text-white dark:text-white shadow-lg shadow-primary/30 dark:shadow-gold/30 flex items-center justify-center group"
+                    className="fixed bottom-24 md:bottom-8 right-6 z-50 w-14 h-14 rounded-full bg-primary dark:from-gold dark:to-amber-600 text-white dark:text-white shadow-md shadow-primary/30 dark:shadow-gold/30 flex items-center justify-center group"
                     title="Saisie Rapide Culte"
                 >
                     <PlusCircleIcon className="w-7 h-7 group-hover:rotate-90 transition-transform duration-300" />

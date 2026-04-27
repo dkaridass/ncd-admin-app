@@ -83,7 +83,7 @@ const brandConfig: Record<FinanceAccount, BrandConfigItem> = {
 // SVG Noise (3% opacity)
 const NoiseTexture: React.FC = () => (
   <svg
-    className="absolute inset-0 w-full h-full opacity-[0.03] pointer-events-none rounded-3xl"
+    className="absolute inset-0 w-full h-full opacity-[0.03] pointer-events-none rounded-lg"
     xmlns="http://www.w3.org/2000/svg"
   >
     <filter id="noise">
@@ -117,10 +117,10 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ item, className = '' }) => {
 
   return (
     <div
-      className={`${config.bg} ${config.textColor} relative rounded-3xl overflow-hidden shadow-xl dark:shadow-none hover:shadow-2xl dark:shadow-none transition-all duration-300 flex-shrink-0 w-[85%] min-w-[280px] sm:w-[320px] sm:min-w-[320px] ${className}`}
+      className={`${config.bg} ${config.textColor} relative rounded-lg overflow-hidden shadow-xl dark:shadow-none hover:shadow-admin dark:shadow-none transition-all duration-300 flex-shrink-0 w-[85%] min-w-[280px] sm:w-[320px] sm:min-w-[320px] ${className}`}
       style={{ aspectRatio: '1.586 / 1' }}
     >
-      <div className="absolute inset-0 border border-white/10 rounded-3xl pointer-events-none" />
+      <div className="absolute inset-0 border border-white/10 rounded-lg pointer-events-none" />
       <div className="absolute top-0 left-0 w-full h-full border-t border-l border-white/20 rounded-tl-3xl pointer-events-none" />
       <NoiseTexture />
 
@@ -139,7 +139,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ item, className = '' }) => {
               />
             </div>
           ) : (
-            <div className={`px-3 py-1.5 rounded-xl border ${useDarkLogo ? 'bg-black/10 border-gray-800/30' : 'bg-card dark:bg-card-dark border-white/20 backdrop-blur-sm'}`}>
+            <div className={`px-3 py-1.5 rounded-lg border ${useDarkLogo ? 'bg-black/10 border-gray-800/30' : 'bg-card dark:bg-card-dark border-white/20 '}`}>
               <span className={`text-xs font-bold uppercase tracking-wider ${config.textColor}`}>{config.name}</span>
             </div>
           )}

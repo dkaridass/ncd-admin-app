@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Area, ComposedChart } from 'recharts';
 import { useData } from '../../context/DataContext';
+import Card from '../ui/Card';
 
 const AttendanceChart: React.FC = () => {
     const { attendance, weeklyServices } = useData();
@@ -26,7 +27,7 @@ const AttendanceChart: React.FC = () => {
 
     if (attendance.length === 0) {
         return (
-            <div className="h-48 flex flex-col items-center justify-center text-slate-400 bg-slate-50 dark:bg-white/[0.02]/50 rounded-[2rem] border border-slate-100 dark:border-dark">
+            <div className="h-48 flex flex-col items-center justify-center text-slate-400 bg-slate-50 dark:bg-white/[0.02]/50 rounded-lg border border-slate-100 dark:border-dark">
                 <p className="font-bold text-sm">Aucune donnée de présence disponible</p>
                 <p className="text-xs mt-1">Commencez par saisir les effectifs dans l'Agenda</p>
             </div>
@@ -36,7 +37,7 @@ const AttendanceChart: React.FC = () => {
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
             return (
-                <div className="bg-card dark:bg-card-dark p-4 border border-slate-100 dark:border-dark shadow-xl dark:shadow-none rounded-2xl">
+                <div className="bg-card dark:bg-card-dark p-4 border border-slate-100 dark:border-dark shadow-xl dark:shadow-none rounded-lg">
                     <p className="text-[10px] uppercase font-black text-slate-400 tracking-widest mb-2">{payload[0].payload.fullDate}</p>
                     <p className="text-xs font-bold text-primary dark:text-white mb-3 border-b border-slate-100 dark:border-dark pb-2">
                         {payload[0].payload.session}
@@ -55,16 +56,16 @@ const AttendanceChart: React.FC = () => {
     };
 
     return (
-        <div className="bg-card dark:bg-card-dark p-6 rounded-[2.5rem] shadow-sm dark:shadow-none border border-slate-100 dark:border-dark">
+        <Card className="p-6">
             <div className="flex justify-between items-center mb-6">
                 <div>
-                    <h3 className="text-[10px] font-black uppercase text-primary dark:text-white tracking-[0.3em]">Effectifs</h3>
-                    <p className="text-xs text-slate-400 mt-1">12 derniers cultes enregistrés</p>
+                    <h3 className="text-sm font-bold text-slate-800 tracking-wide">Effectifs</h3>
+                    <p className="text-xs text-slate-500 mt-1 font-medium">12 derniers cultes enregistrés</p>
                 </div>
                 <div className="flex gap-2">
-                    <div className="flex items-center gap-1.5 px-3 py-1 bg-indigo-50 dark:bg-indigo-900/20 rounded-full">
-                        <div className="w-2 h-2 rounded-full bg-indigo-500" />
-                        <span className="text-[9px] font-bold text-indigo-700 dark:text-indigo-200 uppercase">Total</span>
+                    <div className="flex items-center gap-1.5 px-3 py-1 bg-indigo-50 rounded border border-indigo-100">
+                        <div className="w-2 h-2 rounded bg-indigo-500" />
+                        <span className="text-[10px] font-bold text-indigo-700 uppercase tracking-widest">Total</span>
                     </div>
                 </div>
             </div>
@@ -108,7 +109,7 @@ const AttendanceChart: React.FC = () => {
                     </ComposedChart>
                 </ResponsiveContainer>
             </div>
-        </div>
+        </Card>
     );
 };
 

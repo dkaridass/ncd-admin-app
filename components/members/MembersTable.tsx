@@ -10,7 +10,7 @@ interface MembersTableProps {
 
 const MembersTable: React.FC<MembersTableProps> = ({ members, onEdit }) => {
     return (
-        <div className="overflow-x-auto bg-card dark:bg-card-dark rounded-[2rem] border border-slate-100 dark:border-dark shadow-premium dark:shadow-none">
+        <div className="overflow-x-auto bg-card dark:bg-card-dark rounded-lg border border-slate-100 dark:border-dark shadow-admin">
             <table className="w-full">
                 <thead>
                     <tr className="bg-slate-50 dark:bg-white/[0.02] border-b border-slate-100 dark:border-dark/50">
@@ -33,7 +33,7 @@ const MembersTable: React.FC<MembersTableProps> = ({ members, onEdit }) => {
                                     <img
                                         src={member.avatarUrl}
                                         alt={member.name}
-                                        className="w-10 h-10 rounded-xl object-cover border border-slate-100 dark:border-dark shadow-sm dark:shadow-none group-hover:scale-105 transition-transform"
+                                        className="w-10 h-10 rounded-lg object-cover border border-slate-100 dark:border-dark shadow-sm dark:shadow-none group-hover:scale-105 transition-transform"
                                     />
                                     <div>
                                         <h4 className="text-sm font-bold text-primary dark:text-white mb-0.5">{member.name}</h4>
@@ -59,7 +59,7 @@ const MembersTable: React.FC<MembersTableProps> = ({ members, onEdit }) => {
                                 <span className="text-xs font-medium text-slate-500 dark:text-slate-400">{member.commune || '-'}</span>
                             </td>
                             <td className="px-6 py-5 text-right">
-                                <button className="p-2 rounded-xl text-slate-300 hover:text-primary dark:text-white hover:bg-card dark:bg-card-dark hover:shadow-sm dark:shadow-none transition-all">
+                                <button className="p-2 rounded-lg text-slate-300 hover:text-primary dark:text-white hover:bg-card dark:bg-card-dark hover:shadow-sm dark:shadow-none transition-all">
                                     <PencilIcon className="w-4 h-4" />
                                 </button>
                             </td>

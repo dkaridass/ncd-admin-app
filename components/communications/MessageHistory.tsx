@@ -9,7 +9,7 @@ interface Props {
 const MessageHistory: React.FC<Props> = ({ messages }) => {
     if (messages.length === 0) {
         return (
-            <Card className="border-none shadow-soft dark:shadow-none rounded-2xl p-12">
+            <Card className="border-none shadow-sm rounded-lg p-12">
                 <div className="text-center">
                     <div className="text-6xl mb-4">📭</div>
                     <p className="text-slate-400 font-medium">Aucun message envoyé</p>
@@ -19,7 +19,7 @@ const MessageHistory: React.FC<Props> = ({ messages }) => {
     }
 
     return (
-        <Card className="border-none shadow-soft dark:shadow-none rounded-2xl overflow-hidden">
+        <Card className="border-none shadow-sm rounded-lg overflow-hidden">
             <div className="overflow-x-auto">
                 <table className="w-full">
                     <thead className="bg-slate-50 dark:bg-white/[0.02] border-b border-slate-200 dark:border-dark">

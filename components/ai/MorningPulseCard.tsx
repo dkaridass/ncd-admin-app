@@ -147,73 +147,57 @@ const MorningPulseCard: React.FC = () => {
 
     return (
         <div className="w-full max-w-2xl mx-auto mb-6">
-            <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-                className="bg-white dark:bg-[#0A0E1A] backdrop-blur-md rounded-[2rem] border border-slate-200/80 dark:border-white/[0.06] shadow-xl dark:shadow-none overflow-hidden"
-            >
+            <div className="bg-white rounded-lg shadow-admin border border-border overflow-hidden">
                 {/* Header */}
-                <div className="bg-gradient-to-br from-[#0B1026] via-[#131A38] to-[#1A1F45] p-6 md:p-8 text-white relative overflow-hidden">
-                    {/* Decorative orbs */}
-                    <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-500/15 rounded-full blur-[80px] -mr-16 -mt-16"></div>
-                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-violet-500/10 rounded-full blur-[60px] -ml-10 -mb-10"></div>
-                    <div className="relative z-10 flex justify-between items-start">
-                        <div>
-                            <div className="flex items-center space-x-2 mb-2">
-                                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.06] border border-white/[0.08] backdrop-blur-sm">
-                                    <LightningBoltIcon className="w-3 h-3 text-amber-400" />
-                                    <span className="text-[9px] font-black text-amber-300/80 uppercase tracking-[0.2em]">Pouls du Ministère</span>
-                                </div>
-                            </div>
-                            <h2 className="text-3xl md:text-[2rem] font-serif font-medium tracking-tight mt-2 bg-gradient-to-r from-white to-indigo-200 bg-clip-text text-transparent">Briefing Matinal</h2>
-                            <p className="text-indigo-300/50 text-sm mt-1.5 capitalize font-medium">{today}</p>
+                <div className="bg-slate-50 p-6 border-b border-border flex items-start justify-between">
+                    <div>
+                        <div className="flex items-center gap-2 mb-1">
+                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-slate-200/50 px-2 py-0.5 rounded">
+                                Pouls du Ministère
+                            </span>
                         </div>
-                        <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-[0_2px_12px_rgba(0,0,0,0.15)] border-2 border-white/30 shrink-0">
-                            <img src="/logo.png" alt="Logo" className="w-7 h-7 object-contain" onError={(e) => { e.currentTarget.src = "https://ui-avatars.com/api/?name=NCD&background=transparent&color=fff"; }} />
-                        </div>
+                        <h2 className="text-xl font-bold text-slate-800 tracking-tight">Briefing Matinal</h2>
+                        <p className="text-xs text-slate-500 mt-1 capitalize font-medium">{today}</p>
                     </div>
                 </div>
 
                 {/* Content Grid */}
-                <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-
+                <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white">
                     {/* Section 1: Agenda Priority */}
                     <div className="space-y-3">
-                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center">
-                            <CalendarIcon className="w-3 h-3 mr-2" />
+                        <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center">
                             Priorité du Jour
                         </h3>
 
                         {/* Priority Service Card */}
                         {priorityService && (
-                            <div className="bg-white dark:bg-card-dark p-4 rounded-2xl border border-slate-200 dark:border-white/10 flex items-start space-x-3 hover:border-primary/50 dark:hover:border-gold/30 hover:shadow-md dark:shadow-none transition-all duration-300 cursor-pointer active:scale-[0.98] group"
+                            <div className="bg-white p-3 rounded-md border border-border flex items-start space-x-3 cursor-pointer hover:border-slate-300 transition-colors"
                                 onClick={() => navigate('/events')}
                             >
-                                <div className={`p-2 rounded-xl text-center min-w-[3.5rem] bg-slate-50 dark:bg-white/5 group-hover:bg-slate-100 transition-colors`}>
-                                    <span className={`block text-xs font-bold ${priorityService.status === 'ongoing' ? 'text-emerald-600' : priorityService.status === 'upcoming' ? 'text-primary' : 'text-slate-500 dark:text-slate-400'}`}>
+                                <div className="px-2 py-1.5 rounded bg-slate-50 text-center min-w-[3.5rem] border border-slate-100">
+                                    <span className={`block text-xs font-bold ${priorityService.status === 'ongoing' ? 'text-primary' : priorityService.status === 'upcoming' ? 'text-slate-800' : 'text-slate-500'}`}>
                                         {priorityService.time}
                                     </span>
                                     {priorityService.status === 'ongoing' && (
-                                        <span className="block text-[8px] text-emerald-600 font-black uppercase mt-1">En cours</span>
+                                        <span className="block text-[8px] text-primary font-black uppercase mt-0.5">En cours</span>
                                     )}
                                     {priorityService.status === 'upcoming' && (
-                                        <span className="block text-[8px] text-primary dark:text-primary-light font-black uppercase mt-1">À venir</span>
+                                        <span className="block text-[8px] text-slate-500 font-bold uppercase mt-0.5">À venir</span>
                                     )}
                                 </div>
                                 <div className="flex-1">
-                                    <div className="flex items-center gap-2 mb-1">
-                                        <h4 className={`font-semibold text-sm group-hover:text-primary dark:group-hover:text-gold transition-colors ${priorityService.status === 'ongoing' ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-800 dark:text-white'}`}>
+                                    <div className="flex items-center gap-2 mb-0.5">
+                                        <h4 className="font-bold text-sm text-slate-800">
                                             {priorityService.title}
                                         </h4>
                                         {priorityService.status === 'ongoing' && (
-                                            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                                            <span className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
                                         )}
                                     </div>
-                                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                                    <p className="text-xs text-slate-500">
                                         {priorityService.location}
                                         {priorityService.endTime && priorityService.status === 'ongoing' && (
-                                            <span className="ml-2 text-emerald-600 font-bold">→ {priorityService.endTime}</span>
+                                            <span className="ml-1 text-slate-600 font-medium">→ {priorityService.endTime}</span>
                                         )}
                                     </p>
                                 </div>
@@ -223,31 +207,25 @@ const MorningPulseCard: React.FC = () => {
                         {/* All Services Today List (if multiple services) */}
                         {todayServicesWithStatus.length > 1 && (
                             <div className="space-y-2 mt-3">
-                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">
-                                    Tous les services aujourd'hui ({todayServicesWithStatus.length})
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                    Tous les services ({todayServicesWithStatus.length})
                                 </p>
-                                <div className="space-y-1.5">
+                                <div className="space-y-1">
                                     {todayServicesWithStatus.map((service, idx) => (
                                         <div
                                             key={idx}
-                                            className={`flex items-center justify-between p-2 rounded-xl text-xs transition-colors ${service.status === 'ongoing' ? 'bg-emerald-50 border border-emerald-200' : service.status === 'upcoming' ? 'bg-indigo-50 border border-indigo-100' : 'bg-slate-50 dark:bg-white/[0.02] border border-slate-100 dark:border-dark opacity-60'}`}
+                                            className={`flex items-center justify-between p-2 rounded-md text-xs border ${service.status === 'ongoing' ? 'bg-blue-50/50 border-blue-100' : service.status === 'upcoming' ? 'bg-slate-50 border-slate-100' : 'bg-white border-slate-100 opacity-60'}`}
                                         >
                                             <div className="flex items-center gap-2">
-                                                <span className={`font-bold ${service.status === 'ongoing' ? 'text-emerald-700' : service.status === 'upcoming' ? 'text-indigo-700 dark:text-indigo-200' : 'text-slate-400'}`}>
+                                                <span className={`font-bold ${service.status === 'ongoing' ? 'text-primary' : service.status === 'upcoming' ? 'text-slate-700' : 'text-slate-400'}`}>
                                                     {service.time}
                                                 </span>
-                                                <span className={`${service.status === 'ongoing' ? 'text-emerald-800 font-bold' : service.status === 'upcoming' ? 'text-slate-700 dark:text-white' : 'text-slate-400'}`}>
+                                                <span className={`${service.status === 'ongoing' ? 'text-primary font-bold' : service.status === 'upcoming' ? 'text-slate-800' : 'text-slate-400'}`}>
                                                     {service.title}
                                                 </span>
                                             </div>
                                             {service.status === 'ongoing' && (
-                                                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
-                                            )}
-                                            {service.status === 'upcoming' && (
-                                                <span className="text-[9px] text-indigo-600 dark:text-indigo-300 font-bold">→</span>
-                                            )}
-                                            {service.status === 'passed' && (
-                                                <span className="text-[9px] text-slate-400">✓</span>
+                                                <span className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
                                             )}
                                         </div>
                                     ))}
@@ -257,8 +235,8 @@ const MorningPulseCard: React.FC = () => {
 
                         {/* No services fallback */}
                         {!priorityService && todayServicesWithStatus.length === 0 && (
-                            <div className="bg-slate-50 dark:bg-white/5 p-4 rounded-2xl border border-slate-100 dark:border-white/10">
-                                <p className="text-sm text-slate-500 dark:text-slate-400 text-center">Aucun service prévu aujourd'hui</p>
+                            <div className="p-3 bg-slate-50 rounded-md border border-dashed border-border">
+                                <p className="text-xs text-slate-500 text-center">Aucun service prévu aujourd'hui</p>
                             </div>
                         )}
                     </div>
@@ -266,19 +244,18 @@ const MorningPulseCard: React.FC = () => {
                     {/* Section 2: Finance Pulse — only for users with VIEW_FINANCES */}
                     {hasPermission && hasPermission('VIEW_FINANCES') && (
                         <div className="space-y-3">
-                            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center">
-                                <TrendingUpIcon className="w-3 h-3 mr-2" />
+                            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center">
                                 Alerte Finance
                             </h3>
-                            <div className="bg-white dark:bg-card-dark p-4 rounded-2xl border border-slate-200 dark:border-white/10 flex items-center justify-between cursor-pointer hover:border-emerald-300 dark:hover:border-emerald-500/50 active:scale-[0.98] transition-all duration-300 group shadow-sm dark:shadow-none hover:shadow-md"
+                            <div className="bg-white p-3 rounded-md border border-border flex items-center justify-between cursor-pointer hover:border-slate-300 transition-colors shadow-sm"
                                 onClick={() => navigate('/finances')}
                             >
                                 <div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-500 mb-1">Offrandes (Semaine)</p>
-                                    <p className="text-3xl font-serif font-medium text-slate-800 dark:text-white tracking-tight">${financeStats.total.toLocaleString()}</p>
+                                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">Offrandes (Semaine)</p>
+                                    <p className="text-xl font-bold text-slate-800">${financeStats.total.toLocaleString()}</p>
                                 </div>
-                                <div className={`px-2 py-1 rounded-lg border ${financeStats.isUp ? 'bg-emerald-50 border-emerald-100 text-emerald-600 dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-400' : 'bg-red-50 border-red-100 text-red-600 dark:bg-red-500/10 dark:border-red-500/20 dark:text-red-400'}`}>
-                                    <span className="text-xs font-bold">
+                                <div className={`px-2 py-0.5 rounded border ${financeStats.isUp ? 'bg-slate-50 border-slate-200 text-slate-700' : 'bg-red-50 border-red-100 text-[#D81124]'}`}>
+                                    <span className="text-[10px] font-bold tracking-wider">
                                         {financeStats.isUp ? '+' : ''}{financeStats.change}%
                                     </span>
                                 </div>
@@ -290,23 +267,22 @@ const MorningPulseCard: React.FC = () => {
 
                 {/* Section 3: Next Annual Event */}
                 {nextAnnualEvent && (
-                    <div className="px-6 pb-4">
+                    <div className="px-6 pb-4 bg-white">
                         <div
-                            className="bg-slate-50 dark:bg-white/[0.03] p-4 rounded-2xl border border-slate-200 dark:border-white/10 cursor-pointer hover:border-primary/50 dark:hover:border-gold/30 hover:shadow-md transition-all duration-300 active:scale-[0.98] group flex justify-between items-center"
+                            className="bg-slate-50 p-3 rounded-md border border-border cursor-pointer hover:border-slate-300 transition-colors flex justify-between items-center"
                             onClick={() => navigate('/events?tab=annuel')}
                         >
                             <div>
-                                <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 flex items-center">
-                                    <SparklesIcon className="w-3 h-3 mr-2" />
+                                <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
                                     Prochain Événement Annuel
                                 </h3>
-                                <p className="text-lg font-serif font-medium text-primary dark:text-white group-hover:text-gold transition-colors">
+                                <p className="text-sm font-bold text-primary">
                                     {nextAnnualEvent.title}
                                 </p>
                             </div>
                             <div className="text-right">
-                                <p className="text-xs font-bold text-slate-500 dark:text-slate-400">
-                                    {new Date(nextAnnualEvent.startDate).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }).toUpperCase()}
+                                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-2 py-1 bg-white border border-border rounded">
+                                    {new Date(nextAnnualEvent.startDate).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}
                                 </p>
                             </div>
                         </div>
@@ -314,37 +290,35 @@ const MorningPulseCard: React.FC = () => {
                 )}
 
                 {/* Section 4: Daily Rhema */}
-                <div className="px-6 pb-6">
-                    <div className="bg-white dark:bg-white/[0.02] p-6 rounded-2xl border border-slate-200 dark:border-white/[0.06] border-l-4 border-l-amber-400 dark:border-l-amber-500/60 shadow-sm dark:shadow-none relative group overflow-hidden transition-all hover:shadow-md">
-                        <div className="absolute opacity-5 -top-4 -right-2 transform rotate-12">
-                            <span className="font-serif text-9xl">"</span>
-                        </div>
-                        <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Rhéma du Jour</h3>
+                <div className="px-6 pb-6 bg-white">
+                    <div className="bg-slate-50 p-4 rounded-md border border-border relative">
+                        <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Rhéma du Jour</h3>
                         {dailyRhema ? (
                             <>
-                                <p className="text-slate-800 dark:text-slate-200 font-serif font-medium text-xl leading-snug italic relative z-10">
+                                <p className="text-slate-800 text-sm font-medium italic border-l-2 border-primary pl-3">
                                     "{dailyRhema.content}"
                                 </p>
-                                <p className="text-[10px] text-primary dark:text-gold font-black uppercase tracking-widest mt-4 text-right">— {dailyRhema.reference}</p>
+                                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2">
+                                    — {dailyRhema.reference}
+                                </p>
                             </>
                         ) : (
-                            <p className="text-slate-400 italic text-sm font-serif">Chargement de la parole du jour...</p>
+                            <p className="text-slate-400 text-xs text-center p-2">Chargement du rhéma du jour...</p>
                         )}
                     </div>
                 </div>
 
                 {/* Actions Footer */}
-                <div className="bg-slate-50/80 dark:bg-white/[0.015] px-6 py-4 flex justify-between items-center border-t border-slate-100 dark:border-white/[0.04]">
-                    <p className="text-xs text-slate-400 dark:text-white/30 font-medium">{pendingTasksCount} tâches en attente</p>
+                <div className="bg-slate-50 px-6 py-3 flex justify-between items-center border-t border-border">
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">{pendingTasksCount} Tâches</p>
                     <button
                         onClick={() => navigate('/dashboard')}
-                        className="text-indigo-600 dark:text-indigo-400 text-xs font-bold flex items-center hover:text-indigo-700 dark:hover:text-indigo-300 group transition-colors"
+                        className="text-[10px] font-bold text-primary uppercase tracking-widest hover:underline"
                     >
                         Voir le dashboard
-                        <ChevronRightIcon className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
                     </button>
                 </div>
-            </motion.div>
+            </div>
         </div>
     );
 };

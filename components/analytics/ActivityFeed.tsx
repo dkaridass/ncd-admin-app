@@ -45,12 +45,12 @@ const ActivityFeed: React.FC = () => {
     };
 
     return (
-        <div className="bg-card dark:bg-card-dark rounded-[2rem] border border-slate-100 dark:border-slate-700 shadow-sm dark:shadow-none overflow-hidden flex flex-col h-full">
-            <div className="px-6 py-5 border-b border-slate-50 dark:border-dark">
-                <h3 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">
-                    👁️ Historique d'Activité
+        <div className="bg-white rounded-lg border border-border shadow-admin overflow-hidden h-full flex flex-col">
+            <div className="px-6 py-4 border-b border-border">
+                <h3 className="text-sm font-bold text-slate-800 tracking-wide">
+                    Historique d'Activité
                 </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">
+                <p className="text-xs text-slate-500 mt-1 font-medium">
                     Dernières actions système
                 </p>
             </div>

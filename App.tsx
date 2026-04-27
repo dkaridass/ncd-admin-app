@@ -13,7 +13,6 @@ import EventsPage from './pages/EventsPage';
 import ReportsAdminPage from './pages/ReportsAdminPage';
 import FinancesPage from './pages/FinancesPage';
 import AttendancePage from './pages/AttendancePage';
-import CommunicationsPage from './pages/CommunicationsPage';
 import ResourcesPage from './pages/ResourcesPage';
 import VolunteersPage from './pages/VolunteersPage';
 import PrayerRequestsPage from './pages/PrayerRequestsPage';
@@ -118,14 +117,6 @@ function AppContent() {
             }
           />
 
-          <Route
-            path="/communications"
-            element={
-              <ProtectedRoute requiredPermission="SEND_MESSAGES">
-                <CommunicationsPage />
-              </ProtectedRoute>
-            }
-          />
           <Route
             path="/resources"
             element={

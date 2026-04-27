@@ -200,7 +200,7 @@ const ResourcesPage: React.FC = () => {
                             <button
                                 key={cat}
                                 onClick={() => setActiveCategoryFilter(cat as any)}
-                                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeCategoryFilter === cat ? 'bg-primary text-white shadow-md dark:shadow-none' : 'bg-card dark:bg-card-dark border-2 border-slate-200 dark:border-dark text-slate-700 dark:text-white hover:border-primary/50'}`}
+                                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${activeCategoryFilter === cat ? 'bg-primary text-white shadow-md dark:shadow-none' : 'bg-card dark:bg-card-dark border border-slate-200 dark:border-dark text-slate-700 dark:text-white hover:border-primary/50'}`}
                             >
                                 {cat}
                             </button>
@@ -216,7 +216,7 @@ const ResourcesPage: React.FC = () => {
                             <button
                                 key={type}
                                 onClick={() => setActiveTypeFilter(type as any)}
-                                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeTypeFilter === type ? 'bg-primary text-white shadow-md dark:shadow-none' : 'bg-card dark:bg-card-dark border-2 border-slate-200 dark:border-dark text-slate-700 dark:text-white hover:border-primary/50'}`}
+                                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${activeTypeFilter === type ? 'bg-primary text-white shadow-md dark:shadow-none' : 'bg-card dark:bg-card-dark border border-slate-200 dark:border-dark text-slate-700 dark:text-white hover:border-primary/50'}`}
                             >
                                 {type}
                             </button>
@@ -236,9 +236,9 @@ const ResourcesPage: React.FC = () => {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {filteredResources.map((resource) => (
-                            <Card key={resource.id} className="p-6 hover:shadow-lg dark:shadow-none transition-all duration-300 group">
+                            <Card key={resource.id} className="p-6 hover:shadow-md transition-all duration-300 group">
                                 <div className="flex items-start justify-between mb-4">
-                                    <div className="p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                                    <div className="p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                                         <FileTextIcon className="w-8 h-8 text-primary dark:text-white group-hover:text-white transition-colors duration-300" />
                                     </div>
                                     <Badge className={getTypeColor(resource.type)}>
@@ -331,7 +331,7 @@ const ResourcesPage: React.FC = () => {
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                 rows={3}
-                                className="block w-full px-4 py-3 border-2 border-slate-100 dark:border-dark rounded-xl bg-card dark:bg-card-dark text-slate-900 dark:text-white placeholder-slate-300 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
+                                className="block w-full px-4 py-3 border border-slate-200 dark:border-dark rounded-lg bg-card dark:bg-card-dark text-slate-900 dark:text-white placeholder-slate-300 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
                                 placeholder="Description de la ressource..."
                             />
                         </div>
@@ -344,7 +344,7 @@ const ResourcesPage: React.FC = () => {
                                 <select
                                     value={formData.type}
                                     onChange={(e) => setFormData({ ...formData, type: e.target.value as Resource['type'] })}
-                                    className="block w-full px-4 py-3 border-2 border-slate-100 dark:border-dark rounded-xl bg-card dark:bg-card-dark text-slate-900 dark:text-white focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
+                                    className="block w-full px-4 py-3 border border-slate-200 dark:border-dark rounded-lg bg-card dark:bg-card-dark text-slate-900 dark:text-white focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
                                 >
                                     {types.map((type) => (
                                         <option key={type} value={type}>{type}</option>
@@ -359,7 +359,7 @@ const ResourcesPage: React.FC = () => {
                                 <select
                                     value={formData.category}
                                     onChange={(e) => setFormData({ ...formData, category: e.target.value as Resource['category'] })}
-                                    className="block w-full px-4 py-3 border-2 border-slate-100 dark:border-dark rounded-xl bg-card dark:bg-card-dark text-slate-900 dark:text-white focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
+                                    className="block w-full px-4 py-3 border border-slate-200 dark:border-dark rounded-lg bg-card dark:bg-card-dark text-slate-900 dark:text-white focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 text-xs md:text-sm transition-all shadow-sm dark:shadow-none"
                                 >
                                     {categories.map((cat) => (
                                         <option key={cat} value={cat}>{cat}</option>

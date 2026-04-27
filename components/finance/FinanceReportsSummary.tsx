@@ -65,12 +65,12 @@ const FinanceReportsSummary: React.FC<Props> = ({ summary, previousPeriod, perio
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {summaryCards.map((card, index) => (
-                    <Card key={index} className="border-none shadow-soft dark:shadow-none rounded-2xl p-6">
+                    <Card key={index} className="border-none shadow-sm rounded-lg p-6">
                         <div className="flex items-center justify-between mb-4">
                             <p className="text-xs font-black text-slate-400 uppercase tracking-widest">
                                 {card.label}
                             </p>
-                            <div className={`w-12 h-12 rounded-xl ${card.color} flex items-center justify-center`}>
+                            <div className={`w-12 h-12 rounded-lg ${card.color} flex items-center justify-center`}>
                                 <card.icon className="w-6 h-6 text-white" />
                             </div>
                         </div>

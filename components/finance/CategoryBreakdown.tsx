@@ -41,7 +41,7 @@ const CategoryBreakdown: React.FC<Props> = ({ records, periodLabel }) => {
 
     if (categoryData.length === 0) {
         return (
-            <Card className="border-none shadow-soft dark:shadow-none rounded-2xl p-8">
+            <Card className="border-none shadow-sm rounded-lg p-8">
                 <h3 className="text-lg font-bold text-slate-700 dark:text-white mb-4">Répartition par Catégorie</h3>
                 <div className="flex flex-col items-center justify-center py-12 text-center">
                     <p className="text-sm text-slate-400">Aucune donnée pour cette période</p>
@@ -51,7 +51,7 @@ const CategoryBreakdown: React.FC<Props> = ({ records, periodLabel }) => {
     }
 
     return (
-        <Card className="border-none shadow-soft dark:shadow-none rounded-2xl p-8">
+        <Card className="border-none shadow-sm rounded-lg p-8">
             <h3 className="text-lg font-bold text-slate-700 dark:text-white mb-6">Répartition par Catégorie - {periodLabel}</h3>
 
             <div className="h-[300px] w-full">
@@ -95,7 +95,7 @@ const CategoryBreakdown: React.FC<Props> = ({ records, periodLabel }) => {
             {/* Category List */}
             <div className="mt-6 space-y-2">
                 {categoryData.map((category, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-white/[0.02] rounded-xl">
+                    <div key={index} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-white/[0.02] rounded-lg">
                         <div className="flex items-center gap-3">
                             <div
                                 className="w-4 h-4 rounded-full"

@@ -268,7 +268,7 @@ export interface AttendanceRecord {
   id: string;
   date: string;
   sessionName: string;
-  serviceType: 'Ordinaire' | 'Spécial';       // Regular vs Special service
+  serviceType: 'Ordinaire' | 'Spécial' | 'Culte';       // Regular vs Special service
   specialServiceName?: string;                  // e.g., "Noël 2026", "Pâques", "Convention"
   menCount: number;
   womenCount: number;

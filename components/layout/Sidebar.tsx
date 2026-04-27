@@ -30,22 +30,22 @@ const Sidebar: React.FC = () => {
   }, []);
 
   const navLinkClasses = ({ isActive }: { isActive: boolean }): string =>
-    `flex items-center ${isCollapsed ? 'justify-center px-3' : 'px-4'} py-3 mt-1 text-sm font-medium transition-all duration-300 transform rounded-xl relative z-10 ${isActive
-      ? 'bg-gradient-to-r from-white/10 dark:from-white/5 to-transparent text-white dark:text-white shadow-sm border-l-[3px] border-secondary translate-x-1'
-      : 'text-blue-200 dark:text-slate-400 hover:bg-white/5 dark:hover:bg-card-darkHover hover:text-white dark:hover:text-slate-200 hover:translate-x-1'
+    `flex items-center ${isCollapsed ? 'justify-center px-3' : 'px-4'} py-3 mt-1 text-sm font-medium transition-all duration-300 transform rounded-lg relative z-10 ${isActive
+      ? 'bg-white/10 text-white border-l-[3px] border-secondary translate-x-1'
+      : 'text-slate-300 hover:bg-white/5 hover:text-white hover:translate-x-1'
     }`;
 
   return (
-    <div className={`hidden md:flex flex-col ${isCollapsed ? 'w-20' : 'w-64'} bg-primary dark:bg-[#070B14] text-white shadow-xl dark:shadow-none z-20 relative overflow-hidden border-r border-white/5 dark:border-dark transition-all duration-300`}>
+    <div className={`hidden md:flex flex-col ${isCollapsed ? 'w-20' : 'w-64'} bg-sidebar text-white z-20 relative overflow-hidden transition-all duration-300`}>
       {/* Background */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none" />
 
       {/* Logo Header */}
-      <div className={`flex flex-col items-center justify-center ${isCollapsed ? 'h-24 px-2' : 'h-52 px-6 pt-6 pb-4'} border-b border-white/10 bg-primary-dark/20 relative z-10 backdrop-blur-sm transition-all duration-300`}>
-        <div className={`${isCollapsed ? 'w-12 h-12' : 'w-28 h-28'} rounded-full bg-white flex items-center justify-center shadow-[0_4px_24px_rgba(0,0,0,0.2)] border-[3px] border-white/40 transition-all duration-300 shrink-0`}>
-          <img src="/logo.png" alt="NCD Logo" className={`${isCollapsed ? 'w-8 h-8' : 'w-16 h-16'} object-contain transition-all duration-300`} />
+      <div className={`flex flex-col items-center justify-center ${isCollapsed ? 'h-24 px-2' : 'h-32 px-6 pt-6 pb-4'} border-b border-white/10 relative z-10 transition-all duration-300`}>
+        <div className={`${isCollapsed ? 'w-10 h-10' : 'w-12 h-12'} rounded bg-white flex items-center justify-center transition-all duration-300 shrink-0`}>
+          <img src="/logo.png" alt="NCD Logo" className={`${isCollapsed ? 'w-6 h-6' : 'w-8 h-8'} object-contain transition-all duration-300`} />
         </div>
-        <h1 className={`mt-4 text-[15px] font-bold text-white font-serif tracking-wide text-center whitespace-nowrap overflow-hidden transition-all duration-300 ${isCollapsed ? 'max-w-0 opacity-0 mt-0' : 'max-w-[200px] opacity-100'}`}>{churchName}</h1>
+        <h1 className={`mt-4 text-xs font-bold text-white tracking-wide text-center whitespace-nowrap overflow-hidden transition-all duration-300 ${isCollapsed ? 'max-w-0 opacity-0 mt-0' : 'max-w-[200px] opacity-100'}`}>{churchName}</h1>
       </div>
 
       {/* Collapse Toggle Button */}
@@ -131,10 +131,7 @@ const Sidebar: React.FC = () => {
           </NavLink>
         )}
 
-        <NavLink to="/communications" className={navLinkClasses} title={t('nav.communications')}>
-          <MessageSquareIcon className="w-5 h-5 opacity-90 shrink-0" />
-          <span className={`mx-3 whitespace-nowrap overflow-hidden transition-all duration-300 ${isCollapsed ? 'max-w-0 opacity-0' : 'max-w-[200px] opacity-100'}`}>{t('nav.communications')}</span>
-        </NavLink>
+
 
         <NavLink to="/resources" className={navLinkClasses} title={t('nav.resources')}>
           <FileTextIcon className="w-5 h-5 opacity-90 shrink-0" />
@@ -164,7 +161,7 @@ const Sidebar: React.FC = () => {
       </nav>
 
       {/* Footer */}
-      <div className={`${isCollapsed ? 'p-2' : 'p-4'} bg-primary-dark/30 border-t border-white/10 relative z-10 backdrop-blur-md transition-all duration-300`}>
+      <div className={`${isCollapsed ? 'p-2' : 'p-4'} bg-sidebar border-t border-white/10 relative z-10 transition-all duration-300`}>
         <div className={`flex items-center ${isCollapsed ? 'flex-col gap-2' : 'gap-3'}`}>
           <div className="w-8 h-8 rounded-full bg-secondary text-white font-bold flex items-center justify-center text-xs overflow-hidden ring-2 ring-white/10 shrink-0">
             {currentUser?.avatarUrl ? <img src={currentUser.avatarUrl} alt="Avatar" /> : currentUser?.name?.charAt(0)}
@@ -177,7 +174,7 @@ const Sidebar: React.FC = () => {
           )}
           <button
             onClick={toggleTheme}
-            className="w-8 h-8 rounded-xl bg-card dark:bg-card-dark hover:bg-card dark:bg-card-dark flex items-center justify-center transition-all duration-300 group shrink-0"
+            className="w-8 h-8 rounded-lg bg-card dark:bg-card-dark hover:bg-card dark:bg-card-dark flex items-center justify-center transition-all duration-300 group shrink-0"
             title={isDark ? 'Mode Clair' : 'Mode Sombre'}
           >
             {isDark ? (

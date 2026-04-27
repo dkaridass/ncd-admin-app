@@ -187,10 +187,10 @@ const MembersPage: React.FC = () => {
                     </div>
                     {/* Removed duplicate input field */}
                     <PermissionGuard permission="EDIT_MEMBERS">
-                        <Button onClick={() => setIsCsvModalOpen(true)} variant="secondary" className="rounded-full py-3 px-5 border-2 border-slate-200 dark:border-dark text-slate-600 dark:text-slate-300 hover:border-primary whitespace-nowrap text-[10px] uppercase font-black tracking-widest">
+                        <Button onClick={() => setIsCsvModalOpen(true)} variant="secondary" className="rounded-full py-3 px-5 border border-slate-200 dark:border-dark text-slate-600 dark:text-slate-300 hover:border-primary whitespace-nowrap text-[10px] uppercase font-black tracking-widest">
                             📄 Importer CSV
                         </Button>
-                        <Button onClick={handleAdd} className="rounded-full shadow-premium dark:shadow-none py-3 px-6 bg-primary text-white hover:bg-primary-light border-none whitespace-nowrap text-[10px] uppercase font-black tracking-widest">
+                        <Button onClick={handleAdd} className="rounded-full shadow-admin py-3 px-6 bg-primary text-white hover:bg-primary-light border-none whitespace-nowrap text-[10px] uppercase font-black tracking-widest">
                             <PlusCircleIcon className="w-4 h-4 mr-2" />
                             {language === 'ln' ? 'KOKOMISA' : 'Nouveau'}
                         </Button>
@@ -204,7 +204,7 @@ const MembersPage: React.FC = () => {
                         return (
                             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
                                 {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
-                                    <div key={i} className="h-64 bg-slate-100 rounded-xl animate-pulse" />
+                                    <div key={i} className="h-64 bg-slate-100 rounded-lg animate-pulse" />
                                 ))}
                             </div>
                         );
@@ -242,8 +242,8 @@ const MembersPage: React.FC = () => {
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
-                            <Card className="col-span-1 md:col-span-2 lg:col-span-3 border-none shadow-none bg-blue-50/50 p-6 rounded-[2rem] flex items-center gap-4 mb-4">
-                                <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                            <Card className="col-span-1 md:col-span-2 lg:col-span-3 border border-blue-100 shadow-none bg-blue-50 p-6 rounded-lg flex items-center gap-4 mb-4">
+                                <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
                                     <HeartIcon className="w-5 h-5" />
                                 </div>
                                 <div>
@@ -274,7 +274,7 @@ const MembersPage: React.FC = () => {
                 isFilterModalOpen && (
                     <div className="fixed inset-0 z-[100] flex items-end justify-center md:hidden">
                         <div
-                            className="absolute inset-0 bg-primary/40 dark:bg-black/60 backdrop-blur-sm"
+                            className="absolute inset-0 bg-slate-900/40 "
                             onClick={() => setIsFilterModalOpen(false)}
                         />
                         <div className="bg-card dark:bg-card-dark rounded-t-[2rem] w-full p-6 relative z-10 animate-fade-in border-t border-slate-100 dark:border-dark shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
@@ -293,7 +293,7 @@ const MembersPage: React.FC = () => {
                                                     setFilterGender(g as any);
                                                     setIsFilterModalOpen(false);
                                                 }}
-                                                className={`py-3 rounded-xl text-xs font-bold transition-all ${filterGender === g ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 border border-indigo-200 dark:border-indigo-800' : 'bg-slate-50 dark:bg-white/[0.02] text-slate-500 border border-transparent'}`}
+                                                className={`py-3 rounded-lg text-xs font-bold transition-all ${filterGender === g ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 border border-indigo-200 dark:border-indigo-800' : 'bg-slate-50 dark:bg-white/[0.02] text-slate-500 border border-transparent'}`}
                                             >
                                                 {g}
                                             </button>
@@ -302,7 +302,7 @@ const MembersPage: React.FC = () => {
                                 </div>
                             </div>
 
-                            <Button onClick={() => setIsFilterModalOpen(false)} className="w-full bg-primary text-white py-4 text-xs font-black uppercase tracking-widest rounded-2xl">
+                            <Button onClick={() => setIsFilterModalOpen(false)} className="w-full bg-primary text-white py-4 text-xs font-black uppercase tracking-widest rounded-lg">
                                 Appliquer
                             </Button>
                         </div>

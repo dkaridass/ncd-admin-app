@@ -41,14 +41,14 @@ const DepartmentsPage: React.FC = () => {
 
     // Create a temporary toast/notification manually since we don't have a toast system yet
     const notif = document.createElement('div');
-    notif.className = 'fixed top-4 right-4 bg-blue-600 text-white px-6 py-4 rounded-xl shadow-2xl z-[100] font-bold animate-bounce';
+    notif.className = 'fixed top-4 right-4 bg-blue-600 text-white px-6 py-4 rounded-lg shadow-admin z-[100] font-bold animate-bounce';
     notif.innerText = '🔄 Importation des Départements & Leaders en cours...';
     document.body.appendChild(notif);
 
     try {
       const count = await importDepartmentsAndLeaders(db);
 
-      notif.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-6 py-4 rounded-xl shadow-2xl z-[100] font-bold';
+      notif.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-6 py-4 rounded-lg shadow-admin z-[100] font-bold';
       notif.innerText = `✅ Succès ! ${count} départements importés. Actualisation...`;
 
       // Delay reload to let user read
@@ -57,7 +57,7 @@ const DepartmentsPage: React.FC = () => {
       }, 2000);
     } catch (e: any) {
       console.error(e);
-      notif.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-4 rounded-xl shadow-2xl z-[100] font-bold';
+      notif.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-4 rounded-lg shadow-admin z-[100] font-bold';
       notif.innerText = `❌ Erreur : ${e.message || 'Inconnue'}`;
       // Increase timeout so user can read it
       setTimeout(() => notif.remove(), 10000);
@@ -100,7 +100,7 @@ const DepartmentsPage: React.FC = () => {
           {/* Mobile Filter Button */}
           <button
             onClick={() => setIsFilterModalOpen(true)}
-            className="lg:hidden flex-1 flex items-center justify-center rounded-[2rem] border-2 border-slate-200 dark:border-dark text-slate-500 hover:text-primary transition-colors py-4 text-[10px] font-black uppercase tracking-widest"
+            className="lg:hidden flex-1 flex items-center justify-center rounded-lg border border-slate-200 text-slate-500 hover:text-primary transition-colors py-3 text-[10px] font-black uppercase tracking-widest"
           >
             <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
@@ -108,7 +108,7 @@ const DepartmentsPage: React.FC = () => {
             Catégories ({activeCategory})
           </button>
           <PermissionGuard permission="MANAGE_DEPARTMENTS">
-            <Button onClick={() => setIsAddDeptModalOpen(true)} className="flex-1 rounded-[2rem] shadow-premium dark:shadow-none px-6 md:px-10 py-4 bg-primary text-white text-[10px] font-black uppercase tracking-widest whitespace-nowrap">
+            <Button onClick={() => setIsAddDeptModalOpen(true)} className="flex-1 rounded-lg px-6 md:px-10 py-3 bg-primary text-white text-[10px] font-black uppercase tracking-widest whitespace-nowrap">
               <PlusCircleIcon className="w-4 h-4 mr-2" />
               Créer un Pôle
             </Button>
@@ -124,10 +124,10 @@ const DepartmentsPage: React.FC = () => {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`w-full flex justify-between items-center px-8 py-5 rounded-[2rem] transition-all text-left group shadow-sm dark:shadow-none border-2 ${activeCategory === cat ? 'bg-primary border-primary dark:border-white/20 text-white' : 'bg-card dark:bg-card-dark hover:bg-slate-50 border-transparent hover:border-indigo-100'}`}
+              className={`w-full flex justify-between items-center px-6 py-4 rounded-lg transition-all text-left group border ${activeCategory === cat ? 'bg-primary border-primary text-white' : 'bg-white hover:bg-slate-50 border-slate-200 hover:border-slate-300'}`}
             >
-              <span className={`text-xs font-black uppercase tracking-widest ${activeCategory === cat ? 'text-white' : 'text-slate-600 dark:text-slate-400 group-hover:text-primary'}`}>{cat}</span>
-              <Badge variant="outline" className={`text-[10px] font-black px-3 py-1 ${activeCategory === cat ? 'bg-card dark:bg-card-dark text-white border-white/20' : 'bg-slate-50'}`}>
+              <span className={`text-xs font-black uppercase tracking-widest ${activeCategory === cat ? 'text-white' : 'text-slate-600 group-hover:text-primary'}`}>{cat}</span>
+              <Badge variant="outline" className={`text-[10px] font-black px-3 py-1 ${activeCategory === cat ? 'bg-white/10 text-white border-white/20' : 'bg-slate-50'}`}>
                 {cat === 'Tous' ? departments.length : departments.filter(d => d.category === cat).length}
               </Badge>
             </button>
@@ -162,13 +162,13 @@ const DepartmentsPage: React.FC = () => {
       {isFilterModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-end justify-center lg:hidden">
           <div
-            className="absolute inset-0 bg-primary/40 dark:bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-slate-900/40 "
             onClick={() => setIsFilterModalOpen(false)}
           />
-          <div className="bg-card dark:bg-card-dark rounded-t-[2rem] w-full p-6 relative z-10 animate-fade-in border-t border-slate-100 dark:border-dark shadow-[0_-10px_40px_rgba(0,0,0,0.1)] max-h-[85vh] overflow-y-auto custom-scrollbar">
-            <div className="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-6" />
+          <div className="bg-white rounded-t-xl w-full p-6 relative z-10 animate-fade-in border-t border-slate-200 shadow-admin max-h-[85vh] overflow-y-auto custom-scrollbar">
+            <div className="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6" />
 
-            <h3 className="text-xl font-bold font-display text-primary dark:text-white mb-6">Filtrer par Pôle</h3>
+            <h3 className="text-xl font-bold font-display text-primary mb-6">Filtrer par Pôle</h3>
 
             <div className="space-y-3 mb-8">
               {categories.map(cat => (
@@ -178,7 +178,7 @@ const DepartmentsPage: React.FC = () => {
                     setActiveCategory(cat);
                     setIsFilterModalOpen(false);
                   }}
-                  className={`w-full flex justify-between items-center px-6 py-4 rounded-2xl transition-all text-left border-2 ${activeCategory === cat ? 'bg-primary border-primary text-white' : 'bg-slate-50 dark:bg-white/[0.02] border-transparent text-slate-600 dark:text-slate-400'}`}
+                  className={`w-full flex justify-between items-center px-4 py-3 rounded-lg transition-all text-left border ${activeCategory === cat ? 'bg-primary border-primary text-white' : 'bg-slate-50 border-slate-200 text-slate-600'}`}
                 >
                   <span className="text-[10px] font-black uppercase tracking-widest">{cat}</span>
                   <Badge variant="outline" className={`text-[9px] font-black px-2 py-0.5 ${activeCategory === cat ? 'text-white border-white/20' : ''}`}>

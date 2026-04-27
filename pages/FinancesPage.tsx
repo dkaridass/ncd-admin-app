@@ -526,12 +526,12 @@ const FinancesPage: React.FC = () => {
           <p className="text-slate-500 font-medium italic opacity-80 uppercase tracking-widest text-[9px]">Gestion Royale • NCD La Pentecôte</p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
-          <Button onClick={() => setShowWeeklyReport(true)} variant="secondary" className="rounded-xl text-[10px] uppercase font-black tracking-widest bg-white border-2 border-slate-200 text-slate-800 hover:border-slate-800">
+          <Button onClick={() => setShowWeeklyReport(true)} variant="secondary" className="rounded-lg text-[10px] uppercase font-black tracking-widest bg-white border border-slate-200 text-slate-800 hover:border-slate-800">
             Imprimer Rapport
           </Button>
           <ExportMenu records={periodRecords} periodLabel={dateRange.label} summary={periodSummary} />
           <PermissionGuard permission="CREATE_FINANCES">
-            <div className="flex bg-slate-100 p-1 rounded-xl">
+            <div className="flex bg-slate-100 p-1 rounded-lg">
               <button
                 onClick={() => setInputMode('SINGLE')}
                 className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${inputMode === 'SINGLE' ? 'bg-white text-primary shadow-sm border border-primary/20' : 'bg-transparent text-slate-600 hover:text-primary hover:bg-slate-50'}`}
@@ -571,11 +571,11 @@ const FinancesPage: React.FC = () => {
             </div>
             {inputMode === 'SINGLE' && (
               <div className="flex gap-2">
-                <Button onClick={() => openModal('Offrande')} className="rounded-xl px-4 py-3 bg-primary text-white text-[10px] uppercase font-black tracking-widest shadow-lg hover:scale-105 transition-transform">
+                <Button onClick={() => openModal('Offrande')} className="rounded-lg px-4 py-3 bg-primary text-white text-[10px] uppercase font-black tracking-widest shadow-md transition-colors">
                   <PlusCircleIcon className="w-4 h-4 mr-2" />
                   Entrée
                 </Button>
-                <Button onClick={() => openModal('Dépense')} className="rounded-xl px-4 py-3 bg-red-600 text-white text-[10px] uppercase font-black tracking-widest shadow-lg hover:scale-105 transition-transform">
+                <Button onClick={() => openModal('Dépense')} className="rounded-lg px-4 py-3 bg-red-600 text-white text-[10px] uppercase font-black tracking-widest shadow-md transition-colors">
                   <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
                   Sortie
                 </Button>
@@ -635,20 +635,20 @@ const FinancesPage: React.FC = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="bg-white rounded-[2.5rem] shadow-premium border border-slate-100 overflow-hidden"
+            className="bg-white rounded-lg shadow-admin border border-slate-100 overflow-hidden"
           >
             {/* Batch Header */}
             <div className="bg-slate-50/50 border-b border-slate-100 p-8 grid grid-cols-1 md:grid-cols-3 gap-6">
               <Input label="Date du Culte" type="date" value={batchSettings.date} onChange={e => setBatchSettings({ ...batchSettings, date: e.target.value })} className="bg-white" />
               <div className="md:col-span-2">
                 <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest">Session de Culte</label>
-                <select value={batchSettings.serviceName} onChange={e => setBatchSettings({ ...batchSettings, serviceName: e.target.value })} className="block w-full px-5 py-4 border-2 border-slate-200 rounded-xl bg-white font-bold text-sm text-slate-900 outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all">
+                <select value={batchSettings.serviceName} onChange={e => setBatchSettings({ ...batchSettings, serviceName: e.target.value })} className="block w-full px-5 py-4 border border-slate-200 rounded-lg bg-white font-bold text-sm text-slate-900 outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all">
                   {cultesDisponibles.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
               <div>
                 <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest">Type d'Opération</label>
-                <select value={batchSettings.defaultType} onChange={e => setBatchSettings({ ...batchSettings, defaultType: e.target.value as any })} className="block w-full px-5 py-4 border-2 border-slate-200 rounded-xl bg-white font-bold text-sm text-slate-900 outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all">
+                <select value={batchSettings.defaultType} onChange={e => setBatchSettings({ ...batchSettings, defaultType: e.target.value as any })} className="block w-full px-5 py-4 border border-slate-200 rounded-lg bg-white font-bold text-sm text-slate-900 outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all">
                   <option value="Offrande">Offrande</option>
                   <option value="Dîme">Dîme</option>
                   <option value="Action de grâce">Action de grâce</option>
@@ -659,7 +659,7 @@ const FinancesPage: React.FC = () => {
               </div>
               <div>
                 <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest">Devise du Lot</label>
-                <div className="flex bg-slate-100 p-1 rounded-xl">
+                <div className="flex bg-slate-100 p-1 rounded-lg">
                   <button onClick={() => setBatchSettings({ ...batchSettings, defaultCurrency: 'CDF' })} className={`flex-1 py-3 rounded-lg text-xs font-black transition-all ${batchSettings.defaultCurrency === 'CDF' ? 'bg-primary text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200'}`}>CDF</button>
                   <button onClick={() => setBatchSettings({ ...batchSettings, defaultCurrency: 'USD' })} className={`flex-1 py-3 rounded-lg text-xs font-black transition-all ${batchSettings.defaultCurrency === 'USD' ? 'bg-emerald-600 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200'}`}>USD</button>
                 </div>
@@ -668,7 +668,7 @@ const FinancesPage: React.FC = () => {
 
             {/* Batch Grid */}
             <div className="p-8">
-              <div className="overflow-x-auto border border-slate-200 rounded-2xl">
+              <div className="overflow-x-auto border border-slate-200 rounded-lg">
                 <table className="w-full min-w-[800px]">
                   <thead className="bg-slate-50 border-b border-slate-200">
                     <tr>
@@ -723,12 +723,12 @@ const FinancesPage: React.FC = () => {
                 </table>
               </div>
 
-              <button onClick={addBatchRow} className="mt-4 w-full py-3 border-2 border-dashed border-slate-300 rounded-xl text-slate-700 font-bold text-xs uppercase tracking-widest hover:border-primary hover:text-primary hover:bg-primary/5 transition-all bg-white">
+              <button onClick={addBatchRow} className="mt-4 w-full py-3 border-2 border-dashed border-slate-300 rounded-lg text-slate-700 font-bold text-xs uppercase tracking-widest hover:border-primary hover:text-primary hover:bg-primary/5 transition-all bg-white">
                 + Ajouter une ligne
               </button>
 
               {/* Floating Footer */}
-              <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-6 bg-primary p-6 rounded-2xl shadow-xl text-white">
+              <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-6 bg-primary p-6 rounded-lg shadow-xl text-white">
                 <div className="flex gap-8">
                   <div>
                     <p className="text-[9px] text-white/80 uppercase tracking-widest font-black">Total Batch ({batchSettings.defaultCurrency})</p>
@@ -740,7 +740,7 @@ const FinancesPage: React.FC = () => {
                   variant="white"
                   isLoading={isSubmittingBatch}
                   disabled={isSubmittingBatch}
-                  className="text-xs font-black uppercase tracking-[0.2em] px-8 py-4 rounded-xl hover:scale-105 transition-transform shadow-lg focus:ring-4 focus:ring-white/50"
+                  className="text-xs font-black uppercase tracking-[0.2em] px-8 py-4 rounded-lg transition-colors shadow-md focus:ring-4 focus:ring-white/50"
                 >
                   Valider le Lot
                 </Button>
@@ -755,26 +755,26 @@ const FinancesPage: React.FC = () => {
             exit={{ opacity: 0, y: -10 }}
             className="space-y-8"
           >
-            <div className="bg-white rounded-[2.5rem] shadow-premium border border-slate-100 overflow-hidden">
+            <div className="bg-white rounded-lg shadow-admin border border-slate-100 overflow-hidden">
               <div className="bg-slate-50/50 border-b border-slate-100 p-8 flex flex-col md:flex-row gap-6 items-end">
                 <div className="flex-1">
                   <Input label="Date du Rapport" type="date" value={reportDate} onChange={e => setReportDate(e.target.value)} className="bg-white" />
                 </div>
                 <div className="flex-1">
                   <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest">Session de Culte</label>
-                  <select value={reportService} onChange={e => setReportService(e.target.value)} className="block w-full px-5 py-4 border-2 border-slate-200 rounded-xl bg-white font-bold text-sm text-slate-900 outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all">
+                  <select value={reportService} onChange={e => setReportService(e.target.value)} className="block w-full px-5 py-4 border border-slate-200 rounded-lg bg-white font-bold text-sm text-slate-900 outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all">
                     {cultesDisponibles.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
                 <div>
-                  <Button onClick={submitServiceReport} isLoading={isSubmittingReport} className="rounded-xl px-8 py-4 bg-purple-600 hover:bg-purple-700 text-white shadow-lg uppercase font-black tracking-widest text-xs">
+                  <Button onClick={submitServiceReport} isLoading={isSubmittingReport} className="rounded-lg px-8 py-4 bg-purple-600 hover:bg-purple-700 text-white shadow-md uppercase font-black tracking-widest text-xs">
                     Valider le Rapport
                   </Button>
                 </div>
               </div>
 
               <div className="p-8">
-                <div className="overflow-x-auto border border-slate-200 rounded-2xl">
+                <div className="overflow-x-auto border border-slate-200 rounded-lg">
                   <table className="w-full min-w-[800px]">
                     <thead className="bg-slate-50 border-b border-slate-200">
                       <tr>
@@ -796,7 +796,7 @@ const FinancesPage: React.FC = () => {
                                 value={data.CDF}
                                 onChange={e => handleReportChange(category, 'CDF', e.target.value)}
                                 placeholder="0"
-                                className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-slate-100 font-bold text-slate-700 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all"
+                                className="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-200 font-bold text-slate-700 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all"
                               />
                             </div>
                           </td>
@@ -808,7 +808,7 @@ const FinancesPage: React.FC = () => {
                                 value={data.USD}
                                 onChange={e => handleReportChange(category, 'USD', e.target.value)}
                                 placeholder="0"
-                                className="w-full pl-8 pr-4 py-3 rounded-xl border-2 border-slate-100 font-bold text-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all"
+                                className="w-full pl-8 pr-4 py-3 rounded-lg border border-slate-200 font-bold text-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all"
                               />
                             </div>
                           </td>
@@ -818,7 +818,7 @@ const FinancesPage: React.FC = () => {
                               value={data.notes}
                               onChange={e => handleReportChange(category, 'notes', e.target.value)}
                               placeholder="Note optionnelle..."
-                              className="w-full px-4 py-3 rounded-xl border-2 border-slate-100 font-medium text-sm text-slate-600 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all placeholder-slate-300"
+                              className="w-full px-4 py-3 rounded-lg border border-slate-200 font-medium text-sm text-slate-600 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all placeholder-slate-300"
                             />
                           </td>
                         </tr>
@@ -855,7 +855,7 @@ const FinancesPage: React.FC = () => {
           >
             {/* Specific VUE GLOBALE Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-              <Card className="bg-white border-2 border-slate-100 p-6 rounded-3xl shadow-sm text-center">
+              <Card className="bg-white border border-slate-200 p-6 rounded-lg shadow-sm text-center">
                 <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest mb-3">Total Dîmes</p>
                 <div className="flex flex-col gap-1 items-center">
                   <div className="flex items-center gap-2">
@@ -868,7 +868,7 @@ const FinancesPage: React.FC = () => {
                   </div>
                 </div>
               </Card>
-              <Card className="bg-white border-2 border-slate-100 p-6 rounded-3xl shadow-sm text-center">
+              <Card className="bg-white border border-slate-200 p-6 rounded-lg shadow-sm text-center">
                 <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest mb-3">Total Offrandes</p>
                 <div className="flex flex-col gap-1 items-center">
                   <div className="flex items-center gap-2">
@@ -881,7 +881,7 @@ const FinancesPage: React.FC = () => {
                   </div>
                 </div>
               </Card>
-              <Card className="bg-white border-2 border-slate-100 p-6 rounded-3xl shadow-sm text-center">
+              <Card className="bg-white border border-slate-200 p-6 rounded-lg shadow-sm text-center">
                 <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest mb-3">Total Sorties</p>
                 <div className="flex flex-col gap-1 items-center">
                   <div className="flex items-center gap-2">
@@ -894,7 +894,7 @@ const FinancesPage: React.FC = () => {
                   </div>
                 </div>
               </Card>
-              <Card className="bg-slate-900 border-2 border-slate-900 p-6 rounded-3xl shadow-lg text-center relative overflow-hidden">
+              <Card className="bg-slate-900 border-2 border-slate-900 p-6 rounded-lg shadow-md text-center relative overflow-hidden">
                 <div className="absolute right-0 top-0 opacity-10 w-24 h-24 bg-white rounded-full blur-2xl"></div>
                 <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest mb-3 relative z-10">Solde Caisse</p>
                 <div className="flex flex-col gap-1 items-center relative z-10">
@@ -911,7 +911,7 @@ const FinancesPage: React.FC = () => {
             </div>
 
             {/* NEW Ledger Table */}
-            <Card className="rounded-[3rem] overflow-hidden bg-white border border-slate-100 shadow-premium" noPadding>
+            <Card className="rounded-lg overflow-hidden bg-white border border-slate-100 shadow-admin" noPadding>
               <div className="flex flex-col">
                 {/* Primary Tab Bar: Currencies */}
                 <div className="flex bg-slate-50/80 border-b border-slate-200/50 px-8 pt-4">
@@ -952,7 +952,7 @@ const FinancesPage: React.FC = () => {
                       placeholder="Chercher une opération..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="flex-1 lg:w-80 px-4 py-2 rounded-lg border-2 border-slate-200 bg-white text-slate-900 text-xs font-medium outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-slate-400"
+                      className="flex-1 lg:w-80 px-4 py-2 rounded-lg border border-slate-200 bg-white text-slate-900 text-xs font-medium outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-slate-400"
                     />
                   </div>
                 </div>
@@ -966,7 +966,7 @@ const FinancesPage: React.FC = () => {
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={`Saisie de Direction : ${modalType}`}>
         <form onSubmit={handleSubmit} className="space-y-8 max-h-[85vh] overflow-y-auto px-1 py-2 custom-scrollbar">
-          <div className="bg-primary/5 p-8 md:p-12 rounded-[3rem] border-2 border-primary/5">
+          <div className="bg-primary/5 p-8 md:p-12 rounded-lg border-2 border-primary/5">
             <label className="block text-[11px] font-black text-primary mb-6 uppercase tracking-[0.4em] text-center">Montant de l'Opération</label>
             <input
               id="amount"
@@ -975,13 +975,13 @@ const FinancesPage: React.FC = () => {
               onChange={e => setFormData({ ...formData, amount: e.target.value })}
               required
               autoFocus
-              className="w-full bg-white border-2 border-slate-200 rounded-[2rem] py-8 px-4 text-3xl md:text-5xl font-black text-slate-900 text-center outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-inner placeholder:text-slate-300"
+              className="w-full bg-white border border-slate-200 rounded-lg py-8 px-4 text-3xl md:text-5xl font-black text-slate-900 text-center outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-inner placeholder:text-slate-300"
               placeholder="0.00"
             />
 
             <div className="flex gap-4 mt-8">
-              <button type="button" onClick={() => setFormData({ ...formData, currency: 'CDF' })} className={`flex-1 py-5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${formData.currency === 'CDF' ? 'bg-primary text-white shadow-xl translate-y-[-2px]' : 'bg-white text-slate-700 border-2 border-slate-200 shadow-sm hover:border-primary/50 hover:text-primary'}`}>Francs (CDF)</button>
-              <button type="button" onClick={() => setFormData({ ...formData, currency: 'USD' })} className={`flex-1 py-5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${formData.currency === 'USD' ? 'bg-primary text-white shadow-xl translate-y-[-2px]' : 'bg-white text-slate-700 border-2 border-slate-200 shadow-sm hover:border-primary/50 hover:text-primary'}`}>Dollars (USD)</button>
+              <button type="button" onClick={() => setFormData({ ...formData, currency: 'CDF' })} className={`flex-1 py-5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${formData.currency === 'CDF' ? 'bg-primary text-white shadow-xl translate-y-[-2px]' : 'bg-white text-slate-700 border border-slate-200 shadow-sm hover:border-primary/50 hover:text-primary'}`}>Francs (CDF)</button>
+              <button type="button" onClick={() => setFormData({ ...formData, currency: 'USD' })} className={`flex-1 py-5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${formData.currency === 'USD' ? 'bg-primary text-white shadow-xl translate-y-[-2px]' : 'bg-white text-slate-700 border border-slate-200 shadow-sm hover:border-primary/50 hover:text-primary'}`}>Dollars (USD)</button>
             </div>
           </div>
 
@@ -992,7 +992,7 @@ const FinancesPage: React.FC = () => {
               <select
                 value={formData.account}
                 onChange={e => setFormData({ ...formData, account: e.target.value as FinanceAccount })}
-                className="block w-full px-5 py-4 border-2 border-slate-200 rounded-2xl bg-white font-black text-[10px] text-slate-900 outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
+                className="block w-full px-5 py-4 border border-slate-200 rounded-lg bg-white font-black text-[10px] text-slate-900 outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
               >
                 <option value="Cash">Cash / Caisse</option>
                 <option value="Rawbank">Rawbank</option>
@@ -1005,7 +1005,7 @@ const FinancesPage: React.FC = () => {
             {(modalType === 'Offrande' || modalType === 'Action de grâce' || modalType === 'Offrande du prophète') && (
               <div className="md:col-span-2">
                 <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest">Session de Culte</label>
-                <select id="serviceName" value={formData.serviceName} onChange={e => setFormData({ ...formData, serviceName: e.target.value })} className="block w-full px-5 py-4 border-2 border-slate-200 rounded-2xl bg-white font-black text-[10px] text-slate-900 outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all">
+                <select id="serviceName" value={formData.serviceName} onChange={e => setFormData({ ...formData, serviceName: e.target.value })} className="block w-full px-5 py-4 border border-slate-200 rounded-lg bg-white font-black text-[10px] text-slate-900 outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all">
                   {cultesDisponibles.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
@@ -1020,7 +1020,7 @@ const FinancesPage: React.FC = () => {
                   <select
                     value={formData.expenseCategory}
                     onChange={e => setFormData({ ...formData, expenseCategory: e.target.value as ExpenseCategory })}
-                    className="w-full px-5 py-4 border-2 border-red-200 rounded-2xl bg-red-50 font-black text-[11px] text-red-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition-all"
+                    className="w-full px-5 py-4 border-2 border-red-200 rounded-lg bg-red-50 font-black text-[11px] text-red-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition-all"
                     required
                   >
                     <option value="">Sélectionner une catégorie...</option>
@@ -1037,14 +1037,14 @@ const FinancesPage: React.FC = () => {
                   placeholder="Qui a reçu le paiement..."
                 />
                 <textarea
-                  className="w-full px-8 py-6 border-2 border-slate-200 rounded-[2.5rem] bg-white text-sm font-bold text-slate-900 placeholder-slate-400 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition-all shadow-sm"
+                  className="w-full px-8 py-6 border border-slate-200 rounded-lg bg-white text-sm font-bold text-slate-900 placeholder-slate-400 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition-all shadow-sm"
                   rows={2}
                   placeholder="Justificatif détaillé de la dépense..."
                   value={formData.notes}
                   onChange={e => setFormData({ ...formData, notes: e.target.value })}
                   required
                 />
-                <div className="p-4 border-2 border-dashed border-slate-200 rounded-3xl text-center bg-slate-50/50 hover:bg-slate-50 transition-colors">
+                <div className="p-4 border-2 border-dashed border-slate-200 rounded-lg text-center bg-slate-50/50 hover:bg-slate-50 transition-colors">
                   <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest">Facture / Reçu (Optionnel)</label>
                   <input
                     type="file"
@@ -1054,7 +1054,7 @@ const FinancesPage: React.FC = () => {
                         setFormData({ ...formData, receiptFile: e.target.files[0] });
                       }
                     }}
-                    className="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+                    className="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-slate-900/20"
                   />
                   {formData.receiptFile && <p className="mt-2 text-[10px] font-black text-emerald-600">{formData.receiptFile.name}</p>}
                 </div>
@@ -1065,12 +1065,12 @@ const FinancesPage: React.FC = () => {
           </div>
 
           <div className="flex flex-col-reverse md:flex-row justify-end gap-4 pt-8 border-t border-slate-100">
-            <Button type="button" variant="ghost" onClick={() => setIsModalOpen(false)} className="rounded-2xl px-10 text-[11px]" disabled={isSubmitting || isUploadingFile}>Annuler</Button>
+            <Button type="button" variant="ghost" onClick={() => setIsModalOpen(false)} className="rounded-lg px-10 text-[11px]" disabled={isSubmitting || isUploadingFile}>Annuler</Button>
             <Button
               type="submit"
               isLoading={isSubmitting || isUploadingFile}
               disabled={isSubmitting || isUploadingFile}
-              className={`flex-1 py-5 rounded-[2rem] uppercase font-black tracking-widest text-[11px] text-white shadow-premium ${modalType === 'Dépense' ? 'bg-red-600' : 'bg-primary'}`}
+              className={`flex-1 py-5 rounded-lg uppercase font-black tracking-widest text-[11px] text-white shadow-admin ${modalType === 'Dépense' ? 'bg-red-600' : 'bg-primary'}`}
             >
               {isUploadingFile ? "Upload du Reçu..." : "Confirmer l'Opération"}
             </Button>

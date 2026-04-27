@@ -32,7 +32,6 @@ const BottomNav: React.FC = () => {
     { to: '/finances', label: 'Finances', icon: DollarSignIcon, color: 'text-emerald-600', permission: 'VIEW_FINANCES' },
     { to: '/departments', label: 'Départements', icon: UsersIcon, color: 'text-indigo-600', permission: 'MANAGE_DEPARTMENTS' },
     { to: '/reports-admin', label: 'Rapports', icon: FileTextIcon, color: 'text-rose-600', permission: 'MANAGE_DEPARTMENTS' },
-    { to: '/communications', label: 'Annonces', icon: MessageSquareIcon, color: 'text-blue-500', permission: 'MANAGE_ANNOUNCEMENTS' },
     { to: '/resources', label: 'Ressources', icon: FileTextIcon, color: 'text-slate-600', permission: 'MANAGE_RESOURCES' },
     { to: '/prayer-requests', label: 'Prières', icon: HeartIcon, color: 'text-rose-400', permission: 'VIEW_PASTORAL_CARE' },
     { to: '/settings', label: 'Paramètres', icon: ShieldIcon, color: 'text-slate-400', permission: 'MANAGE_SETTINGS' },
@@ -78,14 +77,14 @@ const BottomNav: React.FC = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMenuOpen(false)}
-              className="fixed inset-0 bg-primary/20 dark:bg-black/50 backdrop-blur-md z-[60] md:hidden"
+              className="fixed inset-0 bg-slate-900/20  z-[60] md:hidden"
             />
             <motion.div
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed bottom-0 left-0 right-0 bg-card dark:bg-card-dark rounded-t-[2.5rem] z-[70] md:hidden shadow-2xl dark:shadow-none overflow-hidden border-t border-slate-50 dark:border-slate-700"
+              className="fixed bottom-0 left-0 right-0 bg-card dark:bg-card-dark rounded-t-[2.5rem] z-[70] md:hidden shadow-admin dark:shadow-none overflow-hidden border-t border-slate-50 dark:border-slate-700"
             >
               <div className="p-8 pb-24">
                 <div className="w-12 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full mx-auto mb-8" />
@@ -103,9 +102,9 @@ const BottomNav: React.FC = () => {
                         key={item.to}
                         to={item.to}
                         onClick={() => setIsMenuOpen(false)}
-                        className={`flex flex-col items-center justify-center p-4 rounded-3xl transition-all ${isActive ? 'bg-primary/5 dark:bg-gold/10 border-2 border-primary/10 dark:border-gold/20' : 'bg-slate-50 dark:bg-white/5 border-2 border-transparent'}`}
+                        className={`flex flex-col items-center justify-center p-4 rounded-lg transition-all ${isActive ? 'bg-primary/5 dark:bg-gold/10 border-2 border-primary/10 dark:border-gold/20' : 'bg-slate-50 dark:bg-white/5 border-2 border-transparent'}`}
                       >
-                        <div className={`p-3 rounded-2xl bg-white dark:bg-white/10 shadow-sm dark:shadow-none mb-3 ${item.color}`}>
+                        <div className={`p-3 rounded-lg bg-white dark:bg-white/10 shadow-sm dark:shadow-none mb-3 ${item.color}`}>
                           <item.icon className="w-5 h-5" />
                         </div>
                         <span className={`text-[8px] font-black uppercase tracking-wider text-center ${isActive ? 'text-primary dark:text-gold' : 'text-slate-500 dark:text-slate-400'}`}>

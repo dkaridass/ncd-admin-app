@@ -149,23 +149,23 @@ const MemberEngagementScoreboard: React.FC = () => {
     );
 
     return (
-        <div className="bg-card dark:bg-card-dark rounded-[2rem] border border-slate-100 dark:border-slate-700 shadow-sm dark:shadow-none overflow-hidden">
+        <div className="bg-white rounded-lg border border-border shadow-admin overflow-hidden h-full flex flex-col">
             {/* Header */}
-            <div className="px-6 py-5 border-b border-slate-50 dark:border-dark flex items-center justify-between flex-wrap gap-4">
+            <div className="px-6 py-4 border-b border-border flex items-center justify-between flex-wrap gap-4">
                 <div>
-                    <h3 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">
-                        🔥 Score d'Engagement
+                    <h3 className="text-sm font-bold text-slate-800 tracking-wide">
+                        Score d'Engagement
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">
+                    <p className="text-xs text-slate-500 mt-1 font-medium">
                         Profil + Activité + Leadership + Contributions
                     </p>
                 </div>
                 <div className="flex gap-4">
                     <div className="text-right">
-                        <p className="text-2xl font-black text-primary dark:text-gold font-display">
+                        <p className="text-2xl font-bold text-primary font-display leading-none">
                             <AnimatedCounter value={stats.avg} />
                         </p>
-                        <p className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Score Moyen</p>
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Score Moyen</p>
                     </div>
                 </div>
             </div>
@@ -211,7 +211,7 @@ const MemberEngagementScoreboard: React.FC = () => {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: i * 0.1 }}
-                                className="flex items-center gap-4 group cursor-pointer py-2 px-2 rounded-xl hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors"
+                                className="flex items-center gap-4 group cursor-pointer py-2 px-2 rounded-lg hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors"
                                 onClick={() => setExpandedMember(expandedMember === s.member.id ? null : s.member.id)}
                             >
                                 {/* Rank Badge */}
@@ -220,11 +220,11 @@ const MemberEngagementScoreboard: React.FC = () => {
                                 </div>
 
                                 {/* Avatar */}
-                                <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-600">
+                                <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-700 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-600">
                                     {s.member.avatarUrl ? (
                                         <img src={s.member.avatarUrl} alt={s.member.name} className="w-full h-full object-cover" />
                                     ) : (
-                                        <div className="w-full h-full flex items-center justify-center bg-primary/5 dark:bg-primary/20 text-primary dark:text-gold font-bold text-sm">
+                                        <div className="w-full h-full flex items-center justify-center bg-primary/5 dark:bg-slate-900/20 text-primary dark:text-gold font-bold text-sm">
                                             {s.member.name.charAt(0)}
                                         </div>
                                     )}
@@ -264,7 +264,7 @@ const MemberEngagementScoreboard: React.FC = () => {
                                     initial={{ opacity: 0, height: 0 }}
                                     animate={{ opacity: 1, height: 'auto' }}
                                     exit={{ opacity: 0, height: 0 }}
-                                    className="ml-12 mr-2 mb-2 p-3 bg-slate-50 dark:bg-white/[0.02] rounded-xl border border-slate-100 dark:border-dark space-y-2"
+                                    className="ml-12 mr-2 mb-2 p-3 bg-slate-50 dark:bg-white/[0.02] rounded-lg border border-slate-100 dark:border-dark space-y-2"
                                 >
                                     <BreakdownBar label="Profil" value={s.breakdown.profile} max={25} color="bg-blue-400" />
                                     <BreakdownBar label="Activité" value={s.breakdown.activity} max={30} color="bg-purple-400" />

@@ -92,7 +92,7 @@ const HealthCheckPage: React.FC = () => {
                 <Card className="mb-6">
                     <div className="p-6">
                         <h3 className="text-xl font-black text-primary dark:text-white mb-4">System State</h3>
-                        <pre className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-xl overflow-auto text-xs font-mono">
+                        <pre className="bg-slate-50 dark:bg-white/[0.02] p-4 rounded-lg overflow-auto text-xs font-mono">
                             {JSON.stringify(healthData, null, 2)}
                         </pre>
                     </div>

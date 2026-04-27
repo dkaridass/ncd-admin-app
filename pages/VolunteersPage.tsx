@@ -21,15 +21,15 @@ const VolunteersPage: React.FC = () => {
   // Filter volunteers
   const filteredVolunteers = useMemo(() => {
     let filtered = volunteers;
-    
+
     if (statusFilter !== 'Tous') {
       filtered = filtered.filter(v => v.volunteerStatus === statusFilter);
     }
-    
+
     if (departmentFilter !== 'Tous') {
       filtered = filtered.filter(v => v.volunteerDepartmentId === departmentFilter);
     }
-    
+
     return filtered;
   }, [volunteers, statusFilter, departmentFilter]);
 
@@ -85,7 +85,7 @@ const VolunteersPage: React.FC = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
-            className="block w-full px-4 py-2 border border-gray-300 rounded-lg bg-card dark:bg-card-dark text-gray-900 focus:ring-2 focus:ring-primary"
+            className="block w-full px-4 py-2 border border-slate-200 rounded-lg bg-white text-slate-700 focus:ring-2 focus:ring-primary shadow-sm"
           >
             <option value="Tous">Tous les statuts</option>
             <option value="Actif">Actif</option>
@@ -98,7 +98,7 @@ const VolunteersPage: React.FC = () => {
           <select
             value={departmentFilter}
             onChange={(e) => setDepartmentFilter(e.target.value)}
-            className="block w-full px-4 py-2 border border-gray-300 rounded-lg bg-card dark:bg-card-dark text-gray-900 focus:ring-2 focus:ring-primary"
+            className="block w-full px-4 py-2 border border-slate-200 rounded-lg bg-white text-slate-700 focus:ring-2 focus:ring-primary shadow-sm"
           >
             <option value="Tous">Tous les départements</option>
             {departments.map(dept => (
@@ -110,15 +110,15 @@ const VolunteersPage: React.FC = () => {
 
       {/* Empty State */}
       {filteredVolunteers.length === 0 && (
-        <Card className="p-12 text-center border-2 border-dashed border-gray-200">
-          <p className="text-gray-400 mb-2">
-            {volunteers.length === 0 
-              ? "Aucun bénévole enregistré" 
+        <Card className="p-12 text-center border border-dashed border-slate-300 rounded-lg bg-slate-50 shadow-none">
+          <p className="text-slate-400 mb-2 font-medium">
+            {volunteers.length === 0
+              ? "Aucun bénévole enregistré"
               : "Aucun bénévole ne correspond aux filtres"}
           </p>
           <p className="text-sm text-gray-400">
-            {volunteers.length === 0 
-              ? "Marquez des membres comme bénévoles depuis la page Membres" 
+            {volunteers.length === 0
+              ? "Marquez des membres comme bénévoles depuis la page Membres"
               : "Essayez de modifier les filtres"}
           </p>
         </Card>
@@ -127,60 +127,63 @@ const VolunteersPage: React.FC = () => {
       {/* Volunteers by Department */}
       {Object.keys(volunteersByDepartment).length > 0 && (
         <div className="space-y-6">
-          {Object.entries(volunteersByDepartment).map(([deptId, deptVolunteers]) => (
-            <Card key={deptId} className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-gray-900">
-                  {getDepartmentName(deptId)}
-                </h3>
-                <Badge variant="primary">{deptVolunteers.length} bénévole{deptVolunteers.length > 1 ? 's' : ''}</Badge>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {deptVolunteers.map(volunteer => (
-                  <div
-                    key={volunteer.id}
-                    className="p-4 bg-gray-50 rounded-xl border border-gray-200 hover:shadow-md dark:shadow-none transition-shadow cursor-pointer"
-                    onClick={() => navigate(`/members?memberId=${volunteer.id}`)}
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 text-primary dark:text-white text-sm flex items-center justify-center font-bold mr-3">
-                          {volunteer.name.charAt(0).toUpperCase()}
-                        </div>
-                        <div>
-                          <h4 className="font-bold text-gray-900">{volunteer.name}</h4>
-                          <p className="text-xs text-gray-500">{volunteer.role}</p>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {volunteer.volunteerRoles && volunteer.volunteerRoles.length > 0 && (
-                      <div className="mb-2">
-                        <div className="flex flex-wrap gap-1">
-                          {volunteer.volunteerRoles.map((role, idx) => (
-                            <Badge key={idx} variant="ghost" className="text-xs">
-                              {role}
-                            </Badge>
-                          ))}
+          {Object.entries(volunteersByDepartment).map(([deptId, deptVolunteers]) => {
+            const items = deptVolunteers as Member[];
+            return (
+              <Card key={deptId} className="p-6 rounded-lg bg-white border border-slate-200 shadow-admin">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-bold text-slate-800">
+                    {getDepartmentName(deptId)}
+                  </h3>
+                  <Badge variant="primary">{items.length} bénévole{items.length > 1 ? 's' : ''}</Badge>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {items.map(volunteer => (
+                    <div
+                      key={volunteer.id}
+                      className="p-4 bg-slate-50 rounded-lg border border-slate-200 hover:border-primary/20 hover:shadow-md transition-all cursor-pointer"
+                      onClick={() => navigate(`/members?memberId=${volunteer.id}`)}
+                    >
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center">
+                          <div className="w-10 h-10 rounded-full bg-primary/10 text-primary dark:text-white text-sm flex items-center justify-center font-bold mr-3">
+                            {volunteer.name.charAt(0).toUpperCase()}
+                          </div>
+                          <div>
+                            <h4 className="font-bold text-gray-900">{volunteer.name}</h4>
+                            <p className="text-xs text-gray-500">{volunteer.role}</p>
+                          </div>
                         </div>
                       </div>
-                    )}
 
-                    <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-200">
-                      <Badge className={statusColors[volunteer.volunteerStatus || 'Actif']}>
-                        {volunteer.volunteerStatus || 'Actif'}
-                      </Badge>
-                      {volunteer.volunteerStartDate && (
-                        <span className="text-xs text-gray-500">
-                          Depuis {new Date(volunteer.volunteerStartDate).toLocaleDateString('fr-FR', { month: 'short', year: 'numeric' })}
-                        </span>
+                      {volunteer.volunteerRoles && volunteer.volunteerRoles.length > 0 && (
+                        <div className="mb-2">
+                          <div className="flex flex-wrap gap-1">
+                            {volunteer.volunteerRoles.map((role, idx) => (
+                              <Badge key={idx} variant="ghost" className="text-xs">
+                                {role}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
                       )}
+
+                      <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-200">
+                        <Badge className={statusColors[volunteer.volunteerStatus || 'Actif']}>
+                          {volunteer.volunteerStatus || 'Actif'}
+                        </Badge>
+                        {volunteer.volunteerStartDate && (
+                          <span className="text-xs text-gray-500">
+                            Depuis {new Date(volunteer.volunteerStartDate).toLocaleDateString('fr-FR', { month: 'short', year: 'numeric' })}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          ))}
+                  ))}
+                </div>
+              </Card>
+            )
+          })}
         </div>
       )}
 
@@ -190,7 +193,7 @@ const VolunteersPage: React.FC = () => {
           {filteredVolunteers.map(volunteer => (
             <Card
               key={volunteer.id}
-              className="p-4 cursor-pointer hover:shadow-md dark:shadow-none transition-shadow"
+              className="p-4 rounded-lg bg-white border border-slate-200 hover:border-primary/20 hover:shadow-md transition-all cursor-pointer"
               onClick={() => navigate(`/members?memberId=${volunteer.id}`)}
             >
               <div className="flex items-start justify-between mb-3">
@@ -204,7 +207,7 @@ const VolunteersPage: React.FC = () => {
                   </div>
                 </div>
               </div>
-              
+
               {volunteer.volunteerRoles && volunteer.volunteerRoles.length > 0 && (
                 <div className="mb-2">
                   <div className="flex flex-wrap gap-1">

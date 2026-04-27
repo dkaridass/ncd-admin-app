@@ -12,13 +12,13 @@ interface MemberCardProps {
 
 const MemberCard: React.FC<MemberCardProps> = ({ member, onClick }) => {
     const { departments } = useData();
-    
+
     // Defensive checks: ensure member has required fields
     if (!member || !member.name) {
         console.warn('MemberCard: Invalid member data', member);
         return null;
     }
-    
+
     const departmentName = member.primaryDepartmentId
         ? departments.find(d => d.id === member.primaryDepartmentId)?.name
         : null;
@@ -31,10 +31,8 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, onClick }) => {
     return (
         <div
             onClick={onClick}
-            className={`group relative bg-card dark:bg-card-dark rounded-xl p-6 border ${statusBorder} shadow-sm dark:shadow-none hover:shadow-premium dark:shadow-none hover:-translate-y-1 transition-all cursor-pointer overflow-hidden`}
+            className={`group relative bg-white rounded-lg p-5 border ${statusBorder} shadow-admin hover:shadow-md transition-all cursor-pointer overflow-hidden`}
         >
-            {/* Background Decoration */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 dark:bg-white/[0.02] rounded-bl-[4rem] -z-0 transition-transform group-hover:scale-110 group-hover:bg-primary/5" />
 
             <div className="relative z-10 flex flex-col items-center text-center">
                 {/* Avatar */}
@@ -42,9 +40,9 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, onClick }) => {
                     <img
                         src={member.avatarUrl || `https://ui-avatars.com/api/?name=${member.name}&background=random`}
                         alt={member.name}
-                        className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg dark:shadow-none group-hover:shadow-primary dark:shadow-none/20 transition-all"
+                        className="w-20 h-20 rounded-lg object-cover border-4 border-white shadow-sm group-hover:shadow-md transition-all"
                     />
-                    <div className="absolute -bottom-2 -right-2 bg-card dark:bg-card-dark p-1.5 rounded-full shadow-sm dark:shadow-none">
+                    <div className="absolute -bottom-2 -right-2 bg-white p-1 rounded-lg border border-slate-100 shadow-sm">
                         <Badge variant={member.gender === 'Homme' ? 'info' : 'warning'} className="text-[8px] px-2 py-0.5 uppercase">
                             {member.gender === 'Homme' ? 'M' : 'F'}
                         </Badge>

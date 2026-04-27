@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import { useData } from '../../context/DataContext';
+import Card from '../ui/Card';
 
 const RevenueByServiceChart: React.FC = () => {
     const { financeRecords } = useData();
@@ -44,7 +45,7 @@ const RevenueByServiceChart: React.FC = () => {
 
     if (financeRecords.length === 0) {
         return (
-            <div className="h-48 flex flex-col items-center justify-center text-slate-400 bg-slate-50 dark:bg-white/[0.02]/50 rounded-[2rem] border border-slate-100 dark:border-dark">
+            <div className="h-48 flex flex-col items-center justify-center text-slate-400 bg-slate-50 dark:bg-white/[0.02]/50 rounded-lg border border-slate-100 dark:border-dark">
                 <p className="font-bold text-sm">Aucune donnée financière disponible</p>
                 <p className="text-xs mt-1">Les recettes par culte apparaîtront ici</p>
             </div>
@@ -54,7 +55,7 @@ const RevenueByServiceChart: React.FC = () => {
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
             return (
-                <div className="bg-white dark:bg-card-dark p-3 border border-slate-100 dark:border-white/5 shadow-xl dark:shadow-none rounded-xl">
+                <div className="bg-white dark:bg-card-dark p-3 border border-slate-100 dark:border-white/5 shadow-xl dark:shadow-none rounded-lg">
                     <p className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">{label}</p>
                     <p className="text-sm font-black text-primary dark:text-gold">
                         {currency === 'USD' ? '$' : 'FC'} {payload[0].value.toLocaleString()}
@@ -66,11 +67,11 @@ const RevenueByServiceChart: React.FC = () => {
     };
 
     return (
-        <div className="bg-card dark:bg-card-dark p-6 rounded-[2.5rem] shadow-sm dark:shadow-none border border-slate-100 dark:border-dark">
+        <Card className="p-6">
             <div className="flex justify-between items-center mb-6">
                 <div>
-                    <h3 className="text-[10px] font-black uppercase text-primary dark:text-white tracking-[0.3em]">Recettes</h3>
-                    <p className="text-xs text-slate-400 mt-1">30 derniers jours</p>
+                    <h3 className="text-sm font-bold text-slate-800 tracking-wide">Recettes</h3>
+                    <p className="text-xs text-slate-500 mt-1 font-medium">30 derniers jours</p>
                 </div>
                 <div className="flex bg-slate-100 rounded-lg p-1">
                     <button
@@ -115,7 +116,7 @@ const RevenueByServiceChart: React.FC = () => {
                     </BarChart>
                 </ResponsiveContainer>
             </div>
-        </div>
+        </Card>
     );
 };
 

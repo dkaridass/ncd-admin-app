@@ -90,7 +90,7 @@ const AddDepartmentModal: React.FC<AddDepartmentModalProps> = ({ isOpen, onClose
         <Modal isOpen={isOpen} onClose={onClose} title="Créer un Nouveau Pôle">
             <form onSubmit={handleSubmit} className="space-y-6">
                 {error && (
-                    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-bold">
+                    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm font-bold">
                         {error}
                     </div>
                 )}
@@ -103,7 +103,7 @@ const AddDepartmentModal: React.FC<AddDepartmentModalProps> = ({ isOpen, onClose
                         required
                         value={name}
                         onChange={e => setName(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-dark focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-bold text-slate-700 dark:text-white"
+                        className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-bold text-slate-700 dark:text-white"
                         placeholder="Ex: Protocole"
                         disabled={isLoading}
                     />
@@ -114,7 +114,7 @@ const AddDepartmentModal: React.FC<AddDepartmentModalProps> = ({ isOpen, onClose
                     <input
                         value={code}
                         onChange={e => setCode(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-dark focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-bold text-slate-700 dark:text-white"
+                        className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-bold text-slate-700 dark:text-white"
                         placeholder="Ex: PROTO"
                         disabled={isLoading}
                     />
@@ -127,7 +127,7 @@ const AddDepartmentModal: React.FC<AddDepartmentModalProps> = ({ isOpen, onClose
                     <select
                         value={category}
                         onChange={e => setCategory(e.target.value as any)}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-dark focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-bold text-slate-700 dark:text-white"
+                        className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-bold text-slate-700 dark:text-white"
                         disabled={isLoading}
                     >
                         {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
@@ -154,7 +154,7 @@ const AddDepartmentModal: React.FC<AddDepartmentModalProps> = ({ isOpen, onClose
                             type="text"
                             value={meetingDay}
                             onChange={e => setMeetingDay(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-dark focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-bold text-slate-700 dark:text-white"
+                            className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-bold text-slate-700 dark:text-white"
                             placeholder="Ou saisir manuellement (ex: Samedi)"
                             disabled={isLoading}
                         />
@@ -167,7 +167,7 @@ const AddDepartmentModal: React.FC<AddDepartmentModalProps> = ({ isOpen, onClose
                         type="text"
                         value={meetingTime}
                         onChange={e => setMeetingTime(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-dark focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-bold text-slate-700 dark:text-white"
+                        className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-bold text-slate-700 dark:text-white"
                         placeholder="Ex: 17h00"
                         disabled={isLoading}
                     />
@@ -179,7 +179,7 @@ const AddDepartmentModal: React.FC<AddDepartmentModalProps> = ({ isOpen, onClose
                         value={description}
                         onChange={e => setDescription(e.target.value)}
                         rows={3}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-dark focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-bold text-slate-700 dark:text-white resize-none"
+                        className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-dark focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-bold text-slate-700 dark:text-white resize-none"
                         placeholder="Description du département..."
                         disabled={isLoading}
                     />
@@ -197,7 +197,7 @@ const AddDepartmentModal: React.FC<AddDepartmentModalProps> = ({ isOpen, onClose
                     <Button 
                         type="submit" 
                         disabled={isLoading} 
-                        className="bg-primary text-white rounded-xl px-6"
+                        className="bg-primary text-white rounded-lg px-6"
                     >
                         {isLoading ? 'Création...' : 'Créer le Pôle'}
                     </Button>
