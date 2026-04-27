@@ -130,7 +130,7 @@ const AiAssistantPage: React.FC = () => {
     ];
 
     return (
-        <div className="flex flex-col md:flex-row h-[calc(100vh-2rem)] gap-6 overflow-hidden">
+        <div className="flex flex-col md:flex-row h-[calc(100dvh-8rem)] md:h-[calc(100vh-6rem)] gap-4 md:gap-6 overflow-hidden pb-4 md:pb-0">
             {/* Studio Modals */}
             {activeArtifactType === 'sermon' ? (
                 <SermonStudioOverlay
@@ -147,8 +147,8 @@ const AiAssistantPage: React.FC = () => {
             ) : null}
 
             {/* Left Panel — The Brain/Vision Module */}
-            <div className="w-full md:w-[340px] rounded-lg bg-white flex flex-col shadow-admin relative overflow-hidden shrink-0 border border-border">
-                <div className="relative z-10 flex-1 flex flex-col p-8">
+            <div className="w-full md:w-[340px] rounded-lg bg-white flex flex-col shadow-admin relative overflow-hidden border border-border shrink-0 h-[220px] md:h-auto">
+                <div className="relative z-10 flex-1 flex flex-col p-4 md:p-8">
                     {/* Module Header */}
                     <div className="mb-10">
                         <div className="flex items-center gap-2 mb-3">

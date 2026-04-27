@@ -33,6 +33,9 @@ const BottomNav: React.FC = () => {
     { to: '/departments', label: 'Départements', icon: UsersIcon, color: 'text-indigo-600', permission: 'MANAGE_DEPARTMENTS' },
     { to: '/reports-admin', label: 'Rapports', icon: FileTextIcon, color: 'text-rose-600', permission: 'MANAGE_DEPARTMENTS' },
     { to: '/resources', label: 'Ressources', icon: FileTextIcon, color: 'text-slate-600', permission: 'MANAGE_RESOURCES' },
+    { to: '/documents', label: 'Documents', icon: ClipboardListIcon, color: 'text-blue-500', permission: 'MANAGE_SETTINGS' },
+    { to: '/attendance', label: 'Présences', icon: UsersIcon, color: 'text-fuchsia-500', permission: 'VIEW_DEPARTMENTS' },
+    { to: '/users', label: 'Rôles', icon: ShieldIcon, color: 'text-purple-600', permission: 'MANAGE_ROLES' },
     { to: '/prayer-requests', label: 'Prières', icon: HeartIcon, color: 'text-rose-400', permission: 'VIEW_PASTORAL_CARE' },
     { to: '/settings', label: 'Paramètres', icon: ShieldIcon, color: 'text-slate-400', permission: 'MANAGE_SETTINGS' },
   ];
