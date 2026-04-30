@@ -1,5 +1,5 @@
 import { auth, db } from '../firebase';
-import { signInWithEmailAndPassword, signOut, onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged, User as FirebaseUser, sendPasswordResetEmail } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { User } from '../types';
 
@@ -123,6 +123,18 @@ export const authService = {
             return userData;
         } catch (error) {
             console.error("Registration error:", error);
+            throw error;
+        }
+    },
+
+    /**
+     * Send password reset email.
+     */
+    resetPassword: async (email: string): Promise<void> => {
+        try {
+            await sendPasswordResetEmail(auth, email);
+        } catch (error) {
+            console.error("Reset password error:", error);
             throw error;
         }
     }

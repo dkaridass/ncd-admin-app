@@ -10,6 +10,8 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [isSignup, setIsSignup] = useState(false); // Toggle for signup mode
+  const [isForgotPassword, setIsForgotPassword] = useState(false); // Toggle for forgot password mode
+  const [resetSent, setResetSent] = useState(false); // Success state for forgot password
 
   // Dev simulations (preserved)
   const [selectedRole, setSelectedRole] = useState<AppRole>('SUPER_ADMIN');
@@ -53,7 +55,11 @@ const LoginPage: React.FC = () => {
     setError(null);
 
     try {
-      if (isSignup) {
+      if (isForgotPassword) {
+        // FORGOT PASSWORD FLOW
+        await authService.resetPassword(email);
+        setResetSent(true);
+      } else if (isSignup) {
         // REGISTER FLOW
         const name = email.split('@')[0];
         await authService.register(email, password, name);
@@ -125,8 +131,12 @@ const LoginPage: React.FC = () => {
         <div className="w-full max-w-[380px]">
 
           <div className="mb-8 text-center lg:text-left">
-            <h3 className="text-2xl lg:text-3xl font-black text-slate-900 mb-2">Bienvenue</h3>
-            <p className="text-sm font-medium text-slate-500">Connectez-vous à votre espace sécurisé.</p>
+            <h3 className="text-2xl lg:text-3xl font-black text-slate-900 mb-2">
+              {isForgotPassword ? 'Mot de passe oublié' : 'Bienvenue'}
+            </h3>
+            <p className="text-sm font-medium text-slate-500">
+              {isForgotPassword ? 'Entrez votre email pour réinitialiser.' : 'Connectez-vous à votre espace sécurisé.'}
+            </p>
           </div>
 
 
@@ -152,6 +162,25 @@ const LoginPage: React.FC = () => {
                 Connecter API Key
               </button>
             </div>
+          ) : resetSent ? (
+            <div className="space-y-6 text-center">
+              <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h4 className="text-lg font-bold text-slate-800">Email envoyé</h4>
+              <p className="text-sm text-slate-500">
+                Si un compte existe pour <strong>{email}</strong>, un lien de réinitialisation vous a été envoyé.
+              </p>
+              <button
+                type="button"
+                onClick={() => { setIsForgotPassword(false); setResetSent(false); }}
+                className="w-full py-4 px-4 rounded-lg font-bold text-slate-900 bg-slate-100 hover:bg-slate-200 transition-colors"
+              >
+                Retour à la connexion
+              </button>
+            </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
@@ -169,40 +198,53 @@ const LoginPage: React.FC = () => {
                 />
               </div>
 
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="password" className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                    Mot de passe
-                  </label>
-                </div>
-                <input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-sm font-bold text-slate-900 bg-slate-50"
-                  placeholder="••••••••"
-                />
-              </div>
+              {!isForgotPassword && (
+                <>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label htmlFor="password" className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                        Mot de passe
+                      </label>
+                    </div>
+                    <input
+                      id="password"
+                      type="password"
+                      required={!isForgotPassword}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full px-4 py-3.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-sm font-bold text-slate-900 bg-slate-50"
+                      placeholder="••••••••"
+                    />
+                  </div>
 
-              <div className="flex items-center justify-between pt-2 pb-4">
-                <div className="flex items-center">
-                  <input
-                    id="remember-me"
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="h-4 w-4 text-primary bg-slate-100 border-slate-200 rounded focus:ring-primary/20 cursor-pointer"
-                  />
-                  <label htmlFor="remember-me" className="ml-2 block text-xs font-bold text-slate-500 cursor-pointer select-none">
-                    Se souvenir de moi
-                  </label>
-                </div>
-                <button type="button" className="text-xs font-bold text-primary hover:text-blue-700 transition-colors">
-                  Oublié ?
-                </button>
-              </div>
+                  <div className="flex items-center justify-between pt-2 pb-4">
+                    <div className="flex items-center">
+                      <input
+                        id="remember-me"
+                        type="checkbox"
+                        checked={rememberMe}
+                        onChange={(e) => setRememberMe(e.target.checked)}
+                        className="h-4 w-4 text-primary bg-slate-100 border-slate-200 rounded focus:ring-primary/20 cursor-pointer"
+                      />
+                      <label htmlFor="remember-me" className="ml-2 block text-xs font-bold text-slate-500 cursor-pointer select-none">
+                        Se souvenir de moi
+                      </label>
+                    </div>
+                    <button 
+                      type="button" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log("Oublié button clicked, setting isForgotPassword to true");
+                        setIsForgotPassword(true);
+                      }}
+                      className="text-xs font-bold text-primary hover:text-blue-700 transition-colors relative z-20 cursor-pointer"
+                    >
+                      Oublié ?
+                    </button>
+                  </div>
+                </>
+              )}
 
               {error && (
                 <div className="p-3 bg-red-50 border border-red-100 rounded-lg flex items-start gap-2">
@@ -224,24 +266,37 @@ const LoginPage: React.FC = () => {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    <span>{isSignup ? 'Création...' : 'Connexion...'}</span>
+                    <span>{isForgotPassword ? 'Envoi...' : isSignup ? 'Création...' : 'Connexion...'}</span>
                   </div>
                 ) : (
-                  isSignup ? 'Créer mon espace' : 'Accéder au Portail'
+                  isForgotPassword ? 'Envoyer le lien' : isSignup ? 'Créer mon espace' : 'Accéder au Portail'
                 )}
               </button>
             </form>
           )}
 
-          <div className="mt-8 text-center border-t border-slate-100 pt-6">
-            <button
-              type="button"
-              onClick={() => { setIsSignup(!isSignup); setError(null); }}
-              className="text-xs font-bold text-slate-500 hover:text-primary transition-colors"
-            >
-              {isSignup ? "Déjà membre ? Se connecter" : "Premier accès ? Activer un compte"}
-            </button>
-          </div>
+          {!resetSent && (
+            <div className="mt-8 text-center border-t border-slate-100 pt-6 flex flex-col gap-3">
+              {!isForgotPassword && (
+                <button
+                  type="button"
+                  onClick={() => { setIsSignup(!isSignup); setError(null); }}
+                  className="text-xs font-bold text-slate-500 hover:text-primary transition-colors"
+                >
+                  {isSignup ? "Déjà membre ? Se connecter" : "Premier accès ? Activer un compte"}
+                </button>
+              )}
+              {isForgotPassword && (
+                <button
+                  type="button"
+                  onClick={() => { setIsForgotPassword(false); setError(null); }}
+                  className="text-xs font-bold text-slate-500 hover:text-primary transition-colors"
+                >
+                  Retour à la connexion
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
