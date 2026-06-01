@@ -1,0 +1,29 @@
+name: Supabase Keep-Alive
+
+on:
+  schedule:
+    # Runs every 3 days at 08:00 UTC (Mon, Thu, Sun pattern approximation)
+    - cron: "0 8 */3 * *"
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+jobs:
+  ping-supabase:
+    name: Ping Supabase to prevent auto-pause
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send keep-alive request to Supabase
+        run: |
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
+
+          echo "Supabase responded with HTTP status: $RESPONSE"
+
+          if [ "$RESPONSE" -ge 200 ] && [ "$RESPONSE" -lt 400 ]; then
+            echo "✅ Keep-alive ping successful. Project remains active."
+          else
+            echo "❌ Unexpected response. Check your Supabase project status."
+            exit 1
+          fi

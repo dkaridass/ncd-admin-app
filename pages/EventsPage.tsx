@@ -78,37 +78,11 @@ const EventsPage: React.FC = () => {
 
     const allowedRoles = ['SUPER_ADMIN', 'PASTOR', 'STAFF_ADMIN'];
     if (!allowedRoles.includes(currentUser.role)) {
-      // If user is admin@ncd.com, try to fix their role first
-      if (currentUser.email?.toLowerCase() === 'admin@ncd.com') {
-        const fixRole = await confirm({
-          title: 'Corriger votre rôle ?',
-          message: `Votre rôle actuel est "${currentUser.role}" mais vous devriez être SUPER_ADMIN. Voulez-vous corriger votre rôle maintenant ?`,
-          confirmLabel: 'Corriger',
-          variant: 'warning',
-        });
-        if (fixRole) {
-          setIsInitializing(true);
-          try {
-            await ensureSuperAdminExists();
-            showSuccess('✅ Rôle corrigé ! Veuillez réessayer l\'initialisation.');
-            setTimeout(() => window.location.reload(), 1500);
-            return;
-          } catch (error: any) {
-            showError(`❌ Erreur lors de la correction du rôle: ${error.message}`);
-            setIsInitializing(false);
-            return;
-          }
-        }
-      }
-
       showError(
         `❌ Permissions insuffisantes.\n\n` +
         `Votre rôle actuel: ${currentUser.role}\n` +
         `Rôles autorisés: SUPER_ADMIN, PASTOR, STAFF_ADMIN\n\n` +
-        `Solutions possibles:\n` +
-        `1. Vérifiez que votre rôle dans Firestore (/users/${currentUser.id}) est SUPER_ADMIN\n` +
-        `2. Déployez les règles Firestore: firebase deploy --only firestore:rules\n` +
-        `3. Voir docs/FIX_PROGRAMME_PERMISSIONS.md pour plus de détails`
+        `Contactez un Super Administrateur pour corriger votre rôle.`
       );
       return;
     }
@@ -135,7 +109,7 @@ const EventsPage: React.FC = () => {
       // More detailed error message
       let errorMessage = error.message || 'Erreur inconnue';
       if (errorMessage.includes('permission') || errorMessage.includes('Permission')) {
-        errorMessage = `Permissions insuffisantes.\n\nVotre rôle: ${currentUser.role}\n\nVérifiez que:\n1. Vous êtes connecté comme admin@ncd.com\n2. Votre rôle dans Firestore est SUPER_ADMIN\n3. Les règles Firestore sont déployées`;
+        errorMessage = `Permissions insuffisantes.\n\nVotre rôle: ${currentUser.role}\n\nVérifiez que votre rôle dans Firestore est SUPER_ADMIN et que les règles sont déployées.`;
       }
 
       showError(`❌ Erreur lors de l'initialisation:\n\n${errorMessage}\n\nVérifiez la console pour plus de détails.`);

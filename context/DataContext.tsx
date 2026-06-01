@@ -168,16 +168,18 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const logAudit = (action: AuditAction, targetType: string, targetLabel?: string, targetId?: string, details?: string) => {
     if (!currentUser) return;
-    auditService.log({
+    // Strip undefined optional fields — Firestore rejects them
+    const payload: Record<string, any> = {
       action,
       userId: currentUser.id,
       userName: currentUser.name,
       userRole: currentUser.role,
       targetType,
-      targetLabel,
-      targetId,
-      details
-    });
+    };
+    if (targetLabel !== undefined) payload.targetLabel = targetLabel;
+    if (targetId !== undefined) payload.targetId = targetId;
+    if (details !== undefined) payload.details = details;
+    auditService.log(payload as any);
   };
 
   // Data State
@@ -885,7 +887,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const updateReportStatus = async (id: string, status: DepartmentReport['status'], feedback?: string) => {
     try {
-      await reportsService.update(id, { status, feedback });
+      await reportsService.update(id, { status, ...(feedback !== undefined && { feedback }) });
     } catch (e) { setError("Erreur maj rapport"); throw e; }
   };
 

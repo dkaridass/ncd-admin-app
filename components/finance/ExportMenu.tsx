@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FinanceRecord } from '../../types';
-import * as XLSX from 'xlsx';
+import Papa from 'papaparse';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -17,25 +17,7 @@ interface Props {
 const ExportMenu: React.FC<Props> = ({ records, periodLabel, summary }) => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const exportToExcel = () => {
-        // Create workbook
-        const wb = XLSX.utils.book_new();
-
-        // Summary sheet data
-        const summaryData = [
-            ['Rapport Financier - NCD La Pentecôte'],
-            ['Période:', periodLabel],
-            ['Date de génération:', new Date().toLocaleDateString('fr-FR')],
-            [],
-            ['Résumé Financier'],
-            ['Catégorie', 'USD', 'CDF'],
-            ['Revenus Totaux', summary.income.usd, summary.income.cdf],
-            ['Dépenses Totales', summary.expenses.usd, summary.expenses.cdf],
-            ['Solde Net', summary.balance.usd, summary.balance.cdf],
-            [],
-            ['Détail des Transactions'],
-        ];
-
+    const exportToCSV = () => {
         // Transactions data
         const transactionsData = records.map(r => ({
             Date: r.date,
@@ -47,16 +29,16 @@ const ExportMenu: React.FC<Props> = ({ records, periodLabel, summary }) => {
             'Enregistré par': r.recordedBy,
         }));
 
-        // Add summary sheet
-        const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
-        XLSX.utils.book_append_sheet(wb, wsSummary, 'Résumé');
-
-        // Add transactions sheet
-        const wsTransactions = XLSX.utils.json_to_sheet(transactionsData);
-        XLSX.utils.book_append_sheet(wb, wsTransactions, 'Transactions');
-
-        // Download
-        XLSX.writeFile(wb, `Rapport_Finances_${periodLabel.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.xlsx`);
+        const csv = Papa.unparse(transactionsData);
+        const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", `Rapport_Finances_${periodLabel.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
         setIsOpen(false);
     };
 
@@ -139,7 +121,7 @@ const ExportMenu: React.FC<Props> = ({ records, periodLabel, summary }) => {
                     <div className="absolute right-0 top-full mt-2 w-64 bg-card dark:bg-card-dark rounded-lg shadow-admin border border-slate-100 dark:border-dark overflow-hidden z-50">
                         <div className="p-2">
                             <button
-                                onClick={exportToExcel}
+                                onClick={exportToCSV}
                                 className="w-full text-left px-4 py-3 rounded-lg hover:bg-emerald-50 dark:bg-emerald-900/20 transition-colors group"
                             >
                                 <div className="flex items-center gap-3">
@@ -147,8 +129,8 @@ const ExportMenu: React.FC<Props> = ({ records, periodLabel, summary }) => {
                                         <span className="text-lg">📊</span>
                                     </div>
                                     <div>
-                                        <p className="text-sm font-bold text-slate-800 dark:text-white">Exporter en Excel</p>
-                                        <p className="text-xs text-slate-500 dark:text-slate-400">Format .xlsx</p>
+                                        <p className="text-sm font-bold text-slate-800 dark:text-white">Exporter en CSV</p>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400">Format .csv (Compatible Excel)</p>
                                     </div>
                                 </div>
                             </button>

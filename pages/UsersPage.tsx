@@ -81,7 +81,7 @@ const UsersPage: React.FC = () => {
             // Success feedback
             const toast = document.createElement('div');
             toast.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-md z-50 animate-fade-in';
-            toast.innerHTML = `✅ Rôle de ${userName} mis à jour: ${getRoleLabel(newRole)}`;
+            toast.textContent = `✅ Rôle de ${userName} mis à jour: ${getRoleLabel(newRole)}`;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         } catch (error: any) {
@@ -109,7 +109,7 @@ const UsersPage: React.FC = () => {
             await updateUserStatus(userId, newStatus);
             const toast = document.createElement('div');
             toast.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-md z-50 animate-fade-in';
-            toast.innerHTML = `✅ Compte de ${userName} ${newStatus ? 'activé' : 'désactivé'}`;
+            toast.textContent = `✅ Compte de ${userName} ${newStatus ? 'activé' : 'désactivé'}`;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         } catch (error: any) {
@@ -139,7 +139,7 @@ const UsersPage: React.FC = () => {
             await deleteUser(userId);
             const toast = document.createElement('div');
             toast.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-md z-50 animate-fade-in';
-            toast.innerHTML = `✅ Utilisateur ${userName} supprimé`;
+            toast.textContent = `✅ Utilisateur ${userName} supprimé`;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         } catch (error: any) {
@@ -170,7 +170,7 @@ const UsersPage: React.FC = () => {
             setEditingUser(null);
             const toast = document.createElement('div');
             toast.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-md z-50 animate-fade-in';
-            toast.innerHTML = `✅ Profil mis à jour`;
+            toast.textContent = '✅ Profil mis à jour';
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         } catch (error: any) {

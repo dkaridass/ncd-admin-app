@@ -1,47 +1,48 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
+
     // --- Helper Functions ---
-    
-    // Check if user is authenticated
+
     function isAuthenticated() {
       return request.auth != null;
     }
-    
-    // Get the User Document to check roles (Cost: 1 Read per request context)
+
     function getUserData() {
       let userDoc = get(/databases/$(database)/documents/users/$(request.auth.uid));
       return userDoc != null ? userDoc.data : {'role': 'VIEWER'};
     }
 
-    // Role Check Helpers
     function hasRole(role) {
       return isAuthenticated() && getUserData().role == role;
     }
-    
-    function isSuperAdmin() { return hasRole('SUPER_ADMIN'); }
-    function isPastor() { return hasRole('PASTOR'); }
+
+    function isSuperAdmin()   { return hasRole('SUPER_ADMIN'); }
+    function isPastor()       { return hasRole('PASTOR'); }
     function isFinanceAdmin() { return hasRole('FINANCE_ADMIN'); }
-    function isStaffAdmin() { return hasRole('STAFF_ADMIN'); }
-    function isDeptLeader() { return hasRole('DEPT_LEADER'); }
-    function isSecretary() { return hasRole('SECRETARY'); }
+    function isStaffAdmin()   { return hasRole('STAFF_ADMIN'); }
+    function isDeptLeader()   { return hasRole('DEPT_LEADER'); }
+    function isSecretary()    { return hasRole('SECRETARY'); }
+
     function isInternalStaff() {
       return isSuperAdmin() || isPastor() || isStaffAdmin() || isSecretary() || isDeptLeader();
     }
 
-    // --- Collection Rules ---
+    function canManageReports() {
+      return isSuperAdmin() || isPastor() || isStaffAdmin();
+    }
 
-    // 1. Users Collection
+    // --- Collections ---
+
+    // 1. Users
     match /users/{userId} {
       allow read: if isInternalStaff() || request.auth.uid == userId;
       allow write: if isSuperAdmin() || request.auth.uid == userId;
     }
 
-    // 2. Members Collection
+    // 2. Members
     match /members/{memberId} {
-      // Internal staff can read all members. A normal user can't read the whole DB.
-      allow read: if isInternalStaff(); 
+      allow read: if isInternalStaff();
       allow write: if isSuperAdmin() || isPastor() || isStaffAdmin() || isSecretary();
     }
 
@@ -71,35 +72,46 @@ service cloud.firestore {
 
     // 7. Prayer Requests
     match /prayer_requests/{requestId} {
-      allow read: if isSuperAdmin() || isPastor() || request.auth.uid == resource.data.authorId || (isAuthenticated() && resource.data.isPrivate == false);
+      allow read: if isSuperAdmin() || isPastor()
+                  || request.auth.uid == resource.data.authorId
+                  || (isAuthenticated() && resource.data.isPrivate == false);
       allow create: if isAuthenticated();
       allow update, delete: if isSuperAdmin() || isPastor() || request.auth.uid == resource.data.authorId;
     }
-    
-    // AI Content: Rhema, Sermon Plans, Briefings
+
+    // 8. Department Reports
+    match /departmentReports/{reportId} {
+      allow read: if isAuthenticated();
+      allow create: if isInternalStaff();
+      allow update, delete: if canManageReports();
+    }
+
+    // 9. Department Chat — FIX: was missing entirely
+    match /departmentChat/{messageId} {
+      allow read: if isInternalStaff();
+      allow create: if isInternalStaff();
+      allow update, delete: if isSuperAdmin() || isPastor() || isStaffAdmin();
+    }
+
+    // 10. AI / Pastoral content
     match /rhema/{rhemaId} {
       allow read: if isAuthenticated();
       allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
     }
-    match /sermonPlans/{planId} {
-      allow read: if isInternalStaff();
-      allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
-    }
-    match /briefings/{briefingId} {
+
+    // FIX: code uses 'sermon_plans' (underscore), not 'sermonPlans'
+    match /sermon_plans/{planId} {
       allow read: if isInternalStaff();
       allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
     }
 
-    // Other settings and reports
-    match /reports/{reportId} {
-      allow read: if isAuthenticated();
+    // FIX: code uses 'pastoral_briefings', not 'briefings'
+    match /pastoral_briefings/{briefingId} {
+      allow read: if isInternalStaff();
       allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
     }
-    match /departmentReports/{reportId} {
-      allow read: if isAuthenticated();
-      allow create: if isInternalStaff();
-      allow update, delete: if isSuperAdmin() || isPastor() || isStaffAdmin();
-    }
+
+    // 11. Weekly / Annual programme
     match /weeklyServices/{serviceId} {
       allow read: if isAuthenticated();
       allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
@@ -108,10 +120,14 @@ service cloud.firestore {
       allow read: if isAuthenticated();
       allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
     }
+
+    // 12. App settings
     match /appSettings/{settingId} {
       allow read: if isAuthenticated();
       allow write: if isSuperAdmin();
     }
+
+    // 13. Communications
     match /messageTemplates/{templateId} {
       allow read: if isInternalStaff();
       allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
@@ -120,22 +136,35 @@ service cloud.firestore {
       allow read: if isInternalStaff();
       allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
     }
-    match /followUps/{followUpId} {
-      allow read: if isInternalStaff();
-      allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
-    }
-    match /auditLogs/{logId} {
-      allow read: if isSuperAdmin() || isStaffAdmin();
-      allow write: if isAuthenticated(); // Append-only by authorized users in cloud function ideally, but allow write for now
-    }
-    match /tasks/{taskId} {
-      allow read, write: if isInternalStaff();
-    }
     match /announcements/{announcementId} {
       allow read: if isAuthenticated();
       allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
     }
+
+    // 14. Resources & Tasks
     match /resources/{resourceId} {
+      allow read: if isAuthenticated();
+      allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
+    }
+    match /tasks/{taskId} {
+      allow read, write: if isInternalStaff();
+    }
+
+    // 15. Follow-ups
+    match /followUps/{followUpId} {
+      allow read: if isInternalStaff();
+      allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
+    }
+
+    // 16. Audit / Activity Log — FIX: code writes to 'activityLog', not 'auditLogs'
+    match /activityLog/{logId} {
+      allow read: if isSuperAdmin() || isStaffAdmin();
+      allow create: if isAuthenticated();
+      allow update, delete: if false; // Logs are append-only
+    }
+
+    // 17. Reports (generic)
+    match /reports/{reportId} {
       allow read: if isAuthenticated();
       allow write: if isSuperAdmin() || isPastor() || isStaffAdmin();
     }

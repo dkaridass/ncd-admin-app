@@ -18,7 +18,7 @@ interface DepartmentDashboardProps {
 }
 
 const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClose, department }) => {
-    const { departmentReports, addDepartmentReport, updateReportStatus, hasPermission, members, updateDepartment, deleteDepartment, isLoading, currentUser } = useData();
+    const { departmentReports, addDepartmentReport, updateReportStatus, deleteDepartmentReport, hasPermission, members, updateDepartment, deleteDepartment, isLoading, currentUser } = useData();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'reports' | 'settings'>('overview');
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -190,6 +190,28 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
             console.error('Error approving report:', error);
             alert('Erreur lors de l\'approbation: ' + (error.message || 'Erreur inconnue'));
         }
+    };
+
+    const handleDeleteReport = async (reportId: string, reportLabel: string) => {
+        const accepted = await confirm({
+            title: 'Supprimer ce rapport ?',
+            message: `Le rapport "${reportLabel}" sera supprimé définitivement. Cette action est irréversible.`,
+            confirmLabel: 'Supprimer',
+            variant: 'danger',
+        });
+        if (!accepted) return;
+        try {
+            await deleteDepartmentReport(reportId);
+        } catch (error: any) {
+            console.error('Error deleting report:', error);
+            alert('Erreur lors de la suppression: ' + (error.message || 'Erreur inconnue'));
+        }
+    };
+
+    // Returns true if report is older than 30 days
+    const isExpired = (submittedAt: string) => {
+        const age = (Date.now() - new Date(submittedAt).getTime()) / (1000 * 60 * 60 * 24);
+        return age > 30;
     };
 
     const handleSaveSettings = async () => {
@@ -556,43 +578,58 @@ const DepartmentDashboard: React.FC<DepartmentDashboardProps> = ({ isOpen, onClo
                                         departmentReports
                                             .filter(r => r.departmentId === department.id)
                                             .sort((a, b) => {
-                                                // Sort by year desc, then month desc
                                                 if (a.year !== b.year) return b.year - a.year;
                                                 const months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
                                                 return months.indexOf(b.month.toLowerCase()) - months.indexOf(a.month.toLowerCase());
                                             })
                                             .map(report => (
-                                                <div key={report.id} className="bg-card dark:bg-card-dark p-4 rounded-lg border border-slate-100 dark:border-dark flex justify-between items-center hover:shadow-sm dark:shadow-none transition-all">
-                                                    <div className="flex items-center gap-4 flex-1 min-w-0">
-                                                        <div className="w-10 h-10 bg-slate-50 dark:bg-white/[0.02] rounded-lg flex items-center justify-center text-primary dark:text-white flex-shrink-0">
-                                                            <FileTextIcon className="w-5 h-5" />
-                                                        </div>
-                                                        <div className="flex-1 min-w-0">
-                                                            <p className="text-xs font-black text-primary dark:text-white uppercase truncate">{report.month} {report.year}</p>
-                                                            {report.fileName && (
-                                                                <p className="text-[9px] text-slate-400 truncate mt-1">{report.fileName}</p>
-                                                            )}
-                                                            {report.fileUrl && (
-                                                                <a href={report.fileUrl} target="_blank" rel="noopener noreferrer" className="inline-flex mt-1.5 px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-[9px] font-bold hover:bg-blue-100 transition-colors">
-                                                                    Télécharger la pièce jointe
-                                                                </a>
-                                                            )}
-                                                            <div className="mt-1">
-                                                                <Badge variant={report.status === 'Approuvé' ? 'success' : report.status === 'Révisé' ? 'warning' : 'outline'} className="text-[8px] px-2 py-0.5">{report.status}</Badge>
+                                                <div key={report.id} className={`bg-card dark:bg-card-dark p-4 rounded-lg border hover:shadow-sm dark:shadow-none transition-all ${isExpired(report.submittedAt) ? 'border-red-200 dark:border-red-900/40' : 'border-slate-100 dark:border-dark'}`}>
+                                                    {isExpired(report.submittedAt) && (
+                                                        <p className="text-[8px] font-black text-red-400 uppercase tracking-widest mb-2">⚠ Rapport expiré — suppression recommandée</p>
+                                                    )}
+                                                    <div className="flex justify-between items-center">
+                                                        <div className="flex items-center gap-4 flex-1 min-w-0">
+                                                            <div className="w-10 h-10 bg-slate-50 dark:bg-white/[0.02] rounded-lg flex items-center justify-center text-primary dark:text-white flex-shrink-0">
+                                                                <FileTextIcon className="w-5 h-5" />
+                                                            </div>
+                                                            <div className="flex-1 min-w-0">
+                                                                <p className="text-xs font-black text-primary dark:text-white uppercase truncate">{report.month} {report.year}</p>
+                                                                {report.fileName && (
+                                                                    <p className="text-[9px] text-slate-400 truncate mt-1">{report.fileName}</p>
+                                                                )}
+                                                                {report.fileUrl && (
+                                                                    <a href={report.fileUrl} target="_blank" rel="noopener noreferrer" className="inline-flex mt-1.5 px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-[9px] font-bold hover:bg-blue-100 transition-colors">
+                                                                        Télécharger la pièce jointe
+                                                                    </a>
+                                                                )}
+                                                                <div className="mt-1">
+                                                                    <Badge variant={report.status === 'Approuvé' ? 'success' : report.status === 'Révisé' ? 'warning' : 'outline'} className="text-[8px] px-2 py-0.5">{report.status}</Badge>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                    {hasPermission('MANAGE_DEPARTMENTS') && report.status === 'En attente' && (
-                                                        <Button
-                                                            onClick={() => handleApprove(report.id)}
-                                                            size="sm"
-                                                            variant="secondary"
-                                                            className="rounded-lg text-[8px] uppercase font-black px-3 ml-2 flex-shrink-0"
-                                                        >
-                                                            Approuver
-                                                        </Button>
-                                                    )}
+                                                        <div className="flex items-center gap-2 ml-2 flex-shrink-0">
+                                                            {hasPermission('MANAGE_DEPARTMENTS') && report.status === 'En attente' && (
+                                                                <Button
+                                                                    onClick={() => handleApprove(report.id)}
+                                                                    size="sm"
+                                                                    variant="secondary"
+                                                                    className="rounded-lg text-[8px] uppercase font-black px-3"
+                                                                >
+                                                                    Approuver
+                                                                </Button>
+                                                            )}
+                                                            {hasPermission('MANAGE_DEPARTMENTS') && (
+                                                                <button
+                                                                    onClick={() => handleDeleteReport(report.id, `${report.month} ${report.year}`)}
+                                                                    className="p-1.5 rounded-lg text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                                                                    title="Supprimer ce rapport"
+                                                                >
+                                                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             ))
                                     ) : (

@@ -30,7 +30,11 @@ export const reportsService = {
     update: async (id: string, updates: Partial<DepartmentReport>): Promise<void> => {
         try {
             const docRef = doc(db, COLLECTION_NAME, id);
-            await updateDoc(docRef, updates);
+            // Firestore rejects any key with value `undefined` — strip them out
+            const safeUpdates = Object.fromEntries(
+                Object.entries(updates).filter(([, v]) => v !== undefined)
+            );
+            await updateDoc(docRef, safeUpdates);
         } catch (error) {
             console.error("Error updating report:", error);
             throw error;

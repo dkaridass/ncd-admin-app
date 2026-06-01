@@ -14,7 +14,7 @@ export const rhemaService = {
 
             // Check if Groq is configured
             if (!aiService.isConfigured()) {
-                console.warn('⚠️ Groq API key not configured, falling back to Bible API');
+                console.warn('⚠️ Groq API key not configured, falling back to Bible verses');
                 return await rhemaService.generateFallbackRhema(dateStr);
             }
 
@@ -29,18 +29,20 @@ export const rhemaService = {
                 content: data.content,
                 reference: data.reference,
                 theme: data.theme,
+                meditation: data.meditation || '',
                 author: data.author || 'Inspiration Divine'
             };
 
             // Save to Firestore
             const savedRhema = await rhemaService.add(newRhema);
+            console.log(`✅ Rhéma généré par IA: ${data.reference} — ${data.theme}`);
             return savedRhema;
 
         } catch (error) {
             console.error("Error generating Rhema:", error);
 
-            // FALLBACK: Use Bible API when Groq fails
-            console.log("📖 Groq failed, falling back to Bible API...");
+            // FALLBACK: Use curated Bible verses when Groq fails
+            console.log("📖 Groq failed, falling back to curated verses...");
             return await rhemaService.generateFallbackRhema(dateStr);
         }
     },
@@ -51,8 +53,8 @@ export const rhemaService = {
      */
     generateFallbackRhema: async (dateStr: string): Promise<DailyRhema | null> => {
         try {
-            const { getRandomFrenchVerse } = await import('../data/frenchBibleVerses');
-            const verse = getRandomFrenchVerse();
+            const { getDailyFrenchVerse } = await import('../data/frenchBibleVerses');
+            const verse = getDailyFrenchVerse(dateStr);
 
             if (!verse) {
                 console.error("French verse selection failed");
@@ -62,14 +64,14 @@ export const rhemaService = {
             const newRhema: Omit<DailyRhema, 'id'> = {
                 date: dateStr,
                 content: verse.text,
-                reference: verse.referenceFr,  // French reference
+                reference: verse.referenceFr,
                 theme: verse.theme,
+                meditation: `Aujourd'hui, méditons sur ce verset qui nous ramène à Jésus. Que Sa Parole transforme notre journée et renouvelle notre focus sur Lui.`,
                 author: "Parole de Dieu (Louis Segond)"
             };
 
-            // Save to Firestore
             const savedRhema = await rhemaService.add(newRhema);
-            console.log("✅ Rhéma en français créé avec succès:", verse.referenceFr);
+            console.log("✅ Rhéma fallback créé:", verse.referenceFr);
             return savedRhema;
 
         } catch (error) {

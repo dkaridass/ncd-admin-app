@@ -431,7 +431,8 @@ export interface DailyRhema {
   date: string; // ISO Date YYYY-MM-DD
   content: string; // The verse text
   reference: string; // e.g. "Jérémie 29:11"
-  theme?: string; // Optional theme title
+  theme?: string; // Optional theme title — always tied to "Focus sur Jésus"
+  meditation?: string; // AI-generated short spiritual reflection (2-3 sentences)
   author?: string; // Who added it
 }
 

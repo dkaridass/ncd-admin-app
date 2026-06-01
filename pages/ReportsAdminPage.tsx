@@ -123,8 +123,9 @@ const ReportsAdminPage: React.FC = () => {
             await updateReportStatus(id, status);
             showSuccess(`Rapport marqué comme ${status}`);
             if (viewReport?.id === id) setViewReport(null);
-        } catch (error) {
-            showError("Erreur lors de la mise à jour");
+        } catch (error: any) {
+            console.error('handleStatusUpdate error:', error);
+            showError(`Erreur lors de la mise à jour: ${error?.message || 'Erreur inconnue'}`);
         }
     };
 

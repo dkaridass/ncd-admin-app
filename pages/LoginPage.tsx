@@ -6,20 +6,24 @@ import { authService } from '../services/authService';
 
 const LoginPage: React.FC = () => {
   const { loginAsRole } = useData();
-  const [email, setEmail] = useState('admin@ncd.com'); // Fixed: correct super admin email
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const [isSignup, setIsSignup] = useState(false); // Toggle for signup mode
-  const [isForgotPassword, setIsForgotPassword] = useState(false); // Toggle for forgot password mode
-  const [resetSent, setResetSent] = useState(false); // Success state for forgot password
+  const [isSignup, setIsSignup] = useState(false);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
 
-  // Dev simulations (preserved)
   const [selectedRole, setSelectedRole] = useState<AppRole>('SUPER_ADMIN');
 
   const [hasApiKey, setHasApiKey] = useState(false);
   const [checkingKey, setCheckingKey] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Brute-force rate limiting: lock for 30s after 3 failed attempts
+  const [failCount, setFailCount] = useState(0);
+  const [lockedUntil, setLockedUntil] = useState<number | null>(null);
+  const isLocked = lockedUntil !== null && Date.now() < lockedUntil;
 
   useEffect(() => {
     const checkKey = async () => {
@@ -70,15 +74,27 @@ const LoginPage: React.FC = () => {
         // Navigation handled automatically by App.tsx watching currentUser state
       }
     } catch (err: any) {
-      console.error("Auth Error:", err);
+      // Track failed login attempts for rate limiting
+      if (!isForgotPassword && !isSignup) {
+        const newCount = failCount + 1;
+        setFailCount(newCount);
+        if (newCount >= 3) {
+          setLockedUntil(Date.now() + 30_000);
+          setFailCount(0);
+        }
+      }
       if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
-        setError("Identifiants incorrects. Veuillez réessayer.");
+        setError('Identifiants incorrects. Veuillez réessayer.');
       } else if (err.code === 'auth/email-already-in-use') {
-        setError("Cet email est déjà utilisé.");
+        setError('Cet email est déjà utilisé.');
       } else if (err.code === 'auth/weak-password') {
-        setError("Le mot de passe doit contenir au moins 6 caractères.");
+        setError('Le mot de passe doit contenir au moins 6 caractères.');
+      } else if (err.code === 'auth/too-many-requests') {
+        setError('Trop de tentatives. Veuillez patienter quelques minutes.');
       } else {
-        setError("Erreur : " + err.message);
+        // Do NOT expose err.message — log to console only
+        console.error('Auth Error:', err);
+        setError('Une erreur est survenue. Veuillez réessayer.');
       }
     } finally {
       setIsLoading(false);
@@ -255,9 +271,14 @@ const LoginPage: React.FC = () => {
                 </div>
               )}
 
+              {isLocked && (
+                <div className="p-3 bg-orange-50 border border-orange-100 rounded-lg text-xs font-bold text-orange-700 text-center">
+                  Trop de tentatives — réessayez dans 30 secondes.
+                </div>
+              )}
               <button
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || isLocked}
                 className="w-full flex justify-center py-4 px-4 rounded-lg font-bold text-slate-900 bg-amber-400 hover:bg-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-400/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-[0_4px_14px_0_rgba(251,191,36,0.39)]"
               >
                 {isLoading ? (

@@ -343,8 +343,8 @@ const DashboardPage: React.FC = () => {
                             <div className="flex-1">
                                 <h3 className="text-sm font-bold text-blue-900 mb-1">Action Requise: Activer SUPER_ADMIN</h3>
                                 <p className="text-blue-800 text-xs mb-4">
-                                    Vous êtes connecté en tant que <strong>admin@ncd.com</strong> mais votre rôle actuel est <strong>VIEWER</strong>.
-                                    Activez vos privilèges de Super Administrateur dans la base de données.
+                                    Vous êtes connecté avec <strong>le compte Super Administrateur</strong> mais votre rôle actuel est <strong>VIEWER</strong>.
+                                    Activez vos privilèges dans la base de données.
                                 </p>
                                 <Button
                                     onClick={async () => {

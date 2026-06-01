@@ -56,7 +56,7 @@ const DocumentsPage: React.FC = () => {
             await uploadDocument(file);
             const toast = document.createElement('div');
             toast.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-md z-50 animate-fade-in';
-            toast.innerHTML = `✅ Document "${file.name}" ajouté avec succès`;
+            toast.textContent = `✅ Document "${file.name}" ajouté avec succès`;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 4000);
         } catch (error: any) {
@@ -90,7 +90,7 @@ const DocumentsPage: React.FC = () => {
             await deleteDocument(id, url);
             const toast = document.createElement('div');
             toast.className = 'fixed top-4 right-4 bg-amber-500 text-white px-6 py-3 rounded-lg shadow-md z-50 animate-fade-in';
-            toast.innerHTML = `🗑️ Document supprimé`;
+            toast.textContent = '🗑️ Document supprimé';
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 4000);
         } catch (error: any) {

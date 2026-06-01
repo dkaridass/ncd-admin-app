@@ -292,7 +292,12 @@ const MorningPulseCard: React.FC = () => {
                 {/* Section 4: Daily Rhema */}
                 <div className="px-6 pb-6 bg-white">
                     <div className="bg-slate-50 p-4 rounded-md border border-border relative">
-                        <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Rhéma du Jour</h3>
+                        <div className="flex items-center justify-between mb-2">
+                            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Rhéma du Jour</h3>
+                            <span className="text-[8px] font-black text-primary uppercase tracking-widest bg-primary/5 px-2 py-0.5 rounded-full border border-primary/10">
+                                Focus sur Jésus
+                            </span>
+                        </div>
                         {dailyRhema ? (
                             <>
                                 <p className="text-slate-800 text-sm font-medium italic border-l-2 border-primary pl-3">
@@ -301,6 +306,18 @@ const MorningPulseCard: React.FC = () => {
                                 <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2">
                                     — {dailyRhema.reference}
                                 </p>
+                                {dailyRhema.theme && (
+                                    <p className="text-[9px] text-primary/70 font-bold uppercase tracking-widest mt-1">
+                                        🎯 {dailyRhema.theme}
+                                    </p>
+                                )}
+                                {dailyRhema.meditation && (
+                                    <div className="mt-3 pt-3 border-t border-border">
+                                        <p className="text-xs text-slate-600 leading-relaxed">
+                                            💭 {dailyRhema.meditation}
+                                        </p>
+                                    </div>
+                                )}
                             </>
                         ) : (
                             <p className="text-slate-400 text-xs text-center p-2">Chargement du rhéma du jour...</p>

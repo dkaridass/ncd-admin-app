@@ -176,22 +176,30 @@ Tu aides les admins/pasteurs avec :
         content: string;
         reference: string;
         theme: string;
+        meditation: string;
         author: string;
     }> => {
-        const systemPrompt = `Tu es un assistant spirituel pour l'église 'NCD La Pentecôte'.
-Le thème de l'année 2026 est "Focus sur Jésus".
+        const dayOfYear = Math.floor((new Date(dateStr).getTime() - new Date(new Date(dateStr).getFullYear(), 0, 0).getTime()) / 86400000);
+
+        const systemPrompt = `Tu es un pasteur spirituel pour l'église 'NCD La Pentecôte'.
+Le thème de l'année 2026 est "FOCUS SUR JÉSUS" — chaque verset et méditation doit ramener le croyant à la personne de Jésus-Christ.
 
 Génère une "Pensée du Jour" (Rhéma) basée sur le verset fourni.
 
 RÈGLES IMPORTANTES:
 - Le verset fourni est déjà donné, ne le modifie pas
-- Génère une courte méditation/pratique (2-3 phrases) en français basée sur ce verset
-- Le thème doit être lié à Jésus et au verset
+- Génère un THÈME court (3-5 mots) lié à Jésus
+- Génère une MÉDITATION spirituelle (2-3 phrases en français) qui:
+  * Relie le verset à la vie quotidienne du croyant
+  * Ramène toujours à Jésus-Christ
+  * Est encourageante et pratique
+- Jour de l'année: ${dayOfYear} (utilise cela pour varier le ton et l'angle)
 - Réponds UNIQUEMENT avec un objet JSON au format:
 {
   "content": "Le verset biblique complet en français (identique à celui fourni)",
   "reference": "Référence biblique (ex: Jean 3:16)",
-  "theme": "Thème lié à Jésus (ex: Amour de Jésus, Jésus Sauveur)",
+  "theme": "Thème court lié à Jésus (ex: Jésus notre Repos)",
+  "meditation": "2-3 phrases de méditation pratique qui ramènent à Jésus",
   "author": "Inspiration Divine"
 }`;
 
@@ -206,10 +214,9 @@ Génère le Rhéma avec une méditation basée sur ce verset.`;
             { role: 'user', content: userPrompt }
         ], {
             response_format: { type: 'json_object' },
-            max_tokens: 500
+            max_tokens: 600
         });
 
-        // Parse JSON response
         const cleanContent = response.replace(/```json/g, '').replace(/```/g, '').trim();
         const parsed = JSON.parse(cleanContent);
 
@@ -217,6 +224,7 @@ Génère le Rhéma avec une méditation basée sur ce verset.`;
             content: parsed.content || verseText,
             reference: parsed.reference || verseReference,
             theme: parsed.theme || 'Focus sur Jésus',
+            meditation: parsed.meditation || '',
             author: parsed.author || 'Inspiration Divine'
         };
     },
@@ -229,35 +237,45 @@ Génère le Rhéma avec une méditation basée sur ce verset.`;
         content: string;
         reference: string;
         theme: string;
+        meditation: string;
         author: string;
     }> => {
-        const systemPrompt = `Tu es un assistant spirituel pour l'église 'NCD La Pentecôte'.
-Le thème de l'année 2026 est "Focus sur Jésus".
+        // Use day-of-year to ensure unique daily content
+        const dayOfYear = Math.floor((new Date(dateStr).getTime() - new Date(new Date(dateStr).getFullYear(), 0, 0).getTime()) / 86400000);
+        const dayOfWeekFr = new Date(dateStr).toLocaleDateString('fr-FR', { weekday: 'long' });
 
-Génère une "Pensée du Jour" (Rhéma) pour la date du ${dateStr}.
+        const systemPrompt = `Tu es un pasteur spirituel pour l'église 'NCD La Pentecôte'.
+Le thème de l'année 2026 est "FOCUS SUR JÉSUS".
 
-RÈGLES IMPORTANTES:
-- Le verset DOIT parler de Jésus Christ (Sa personne, Son œuvre, Ses promesses, Sa divinité, Son amour, Sa puissance)
+Génère une "Pensée du Jour" (Rhéma) pour le JOUR ${dayOfYear} de l'année (${dayOfWeekFr}, ${dateStr}).
+
+RÈGLES STRICTES:
+- Le verset DOIT parler de Jésus-Christ (Sa personne, Son œuvre, Ses promesses, Sa divinité, Son amour, Sa puissance, Sa résurrection)
 - Utilise la traduction Louis Segond 1910
 - Le verset doit être en FRANÇAIS
-- Le thème doit être lié à Jésus
+- Le thème doit être un titre court (3-5 mots) lié à Jésus
+- La méditation doit être 2-3 phrases qui:
+  * Relient le verset à la vie quotidienne
+  * Ramènent toujours à la personne de Jésus
+  * Sont encourageantes, pratiques et inspirantes
+- IMPORTANT: Le jour ${dayOfYear} doit donner un verset DIFFÉRENT des jours précédents. Varie les livres (Jean, Matthieu, Luc, Marc, Romains, Hébreux, Colossiens, Philippiens, Éphésiens, 1 Pierre, Apocalypse, etc.)
 - Réponds UNIQUEMENT avec un objet JSON au format:
 {
   "content": "Le verset biblique complet en français",
   "reference": "Référence biblique (ex: Jean 3:16)",
-  "theme": "Thème lié à Jésus (ex: Amour de Jésus, Jésus Sauveur)",
+  "theme": "Thème court lié à Jésus (ex: Jésus notre Lumière)",
+  "meditation": "2-3 phrases de méditation pratique qui ramènent à Jésus",
   "author": "Inspiration Divine"
 }`;
 
         const response = await callGroq([
             { role: 'system', content: systemPrompt },
-            { role: 'user', content: `Génère le Rhéma pour ${dateStr}` }
+            { role: 'user', content: `Génère le Rhéma pour le jour ${dayOfYear} (${dateStr}, ${dayOfWeekFr}). Choisis un verset unique et puissant sur Jésus.` }
         ], {
             response_format: { type: 'json_object' },
-            max_tokens: 500
+            max_tokens: 600
         });
 
-        // Parse JSON response
         const cleanContent = response.replace(/```json/g, '').replace(/```/g, '').trim();
         const parsed = JSON.parse(cleanContent);
 
@@ -265,6 +283,7 @@ RÈGLES IMPORTANTES:
             content: parsed.content,
             reference: parsed.reference,
             theme: parsed.theme || 'Focus sur Jésus',
+            meditation: parsed.meditation || '',
             author: parsed.author || 'Inspiration Divine'
         };
     },

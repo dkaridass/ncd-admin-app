@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import Modal from '../ui/Modal';
 import Button from '../ui/Button';
-import * as XLSX from 'xlsx';
+
 import { parseCsvText, validateAndTransform, CsvParseResult, CsvValidationResult } from '../../utils/csvHelpers';
 import { Member } from '../../types';
 import { showSuccess, showError } from '../../utils/toast';
@@ -40,26 +40,8 @@ const CsvImportModal: React.FC<CsvImportModalProps> = ({ isOpen, onClose, existi
         if (!file) return;
 
         setFileName(file.name);
-        const isExcel = file.name.endsWith('.xlsx') || file.name.endsWith('.xls');
-        const reader = new FileReader();
-
         reader.onload = (event) => {
-            let text = '';
-
-            if (isExcel) {
-                try {
-                    const data = new Uint8Array(event.target?.result as ArrayBuffer);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const firstSheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[firstSheetName];
-                    text = XLSX.utils.sheet_to_csv(worksheet);
-                } catch (err) {
-                    showError('Erreur de lecture du fichier Excel');
-                    return;
-                }
-            } else {
-                text = event.target?.result as string;
-            }
+            let text = event.target?.result as string;
 
             if (!text || text.trim() === '') {
                 showError('Fichier vide ou illisible');
@@ -83,11 +65,7 @@ const CsvImportModal: React.FC<CsvImportModalProps> = ({ isOpen, onClose, existi
             setStep('PREVIEW');
         };
 
-        if (isExcel) {
-            reader.readAsArrayBuffer(file);
-        } else {
-            reader.readAsText(file);
-        }
+        reader.readAsText(file);
     }, [existingMembers]);
 
     const handleImport = async () => {
@@ -115,7 +93,7 @@ const CsvImportModal: React.FC<CsvImportModalProps> = ({ isOpen, onClose, existi
     const unmappedHeaders = parseResult ? parseResult.headers.filter(h => !parseResult.columnMapping[h]) : [];
 
     return (
-        <Modal isOpen={isOpen} onClose={handleClose} title="📄 Import — Membres (CSV & Excel)">
+        <Modal isOpen={isOpen} onClose={handleClose} title="📄 Import — Membres (CSV)">
             <div className="space-y-6 min-h-[300px]">
 
                 {/* STEP 1: Upload */}
@@ -129,11 +107,11 @@ const CsvImportModal: React.FC<CsvImportModalProps> = ({ isOpen, onClose, existi
                                 Glissez un fichier CSV ici ou cliquez pour sélectionner
                             </p>
                             <p className="text-xs text-slate-400 mb-4">
-                                Formats supportés : Excel (.xlsx, .xls), CSV, TSV
+                                Formats supportés : CSV, TSV
                             </p>
                             <input
                                 type="file"
-                                accept=".csv,.tsv,.txt,.xlsx,.xls"
+                                accept=".csv,.tsv,.txt"
                                 onChange={handleFileSelect}
                                 className="hidden"
                                 id="csv-file-input"

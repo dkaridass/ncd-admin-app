@@ -252,7 +252,7 @@ const SettingsPage: React.FC = () => {
                 </table>
               </div>
 
-              {/* Super Admin Bootstrap - Only visible to admin@ncd.com */}
+              {/* Super Admin Bootstrap - Only visible to configured super admin */}
               {isCurrentUserSuperAdminEmail() && (
                 <div className="p-6 bg-indigo-50 border-t border-indigo-100 flex items-start gap-4">
                   <ShieldIcon className="w-5 h-5 text-indigo-600 dark:text-indigo-300 shrink-0 mt-0.5" />

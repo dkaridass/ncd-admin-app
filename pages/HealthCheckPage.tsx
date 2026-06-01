@@ -151,7 +151,7 @@ const HealthCheckPage: React.FC = () => {
                     <div className="p-6">
                         <h3 className="text-lg font-black text-blue-900 mb-3">🔧 Troubleshooting</h3>
                         <div className="text-sm text-blue-800 space-y-2">
-                            <p><strong>Not SUPER_ADMIN?</strong> Log out and log in again as admin@ncd.com</p>
+                            <p><strong>Not SUPER_ADMIN?</strong> Log out and log in again with the Super Admin account</p>
                             <p><strong>No data showing?</strong> Check Firestore security rules are deployed</p>
                             <p><strong>Permission errors?</strong> Open browser console (F12) for details</p>
                             <p><strong>Need help?</strong> Check docs/PERMISSIONS.md for full documentation</p>

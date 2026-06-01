@@ -166,7 +166,19 @@ export const frenchBibleVerses: FrenchBibleVerse[] = [
 ];
 
 /**
- * Get a random French Bible verse from the curated list
+ * Get a deterministic French Bible verse for a given date.
+ * Uses day-of-year to cycle through the list so the same day always returns the same verse.
+ */
+export const getDailyFrenchVerse = (dateStr?: string): FrenchBibleVerse => {
+    const date = dateStr ? new Date(dateStr) : new Date();
+    const startOfYear = new Date(date.getFullYear(), 0, 0);
+    const dayOfYear = Math.floor((date.getTime() - startOfYear.getTime()) / 86400000);
+    const index = dayOfYear % frenchBibleVerses.length;
+    return frenchBibleVerses[index];
+};
+
+/**
+ * Get a random French Bible verse (legacy fallback)
  */
 export const getRandomFrenchVerse = (): FrenchBibleVerse => {
     const randomIndex = Math.floor(Math.random() * frenchBibleVerses.length);
