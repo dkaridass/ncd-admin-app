@@ -2,7 +2,7 @@ name: Supabase Keep-Alive
 
 on:
   schedule:
-    # Runs every 3 days at 08:00 UTC (Mon, Thu, Sun pattern approximation)
+    # Runs every 3 days at 08:00 UTC
     - cron: "0 8 */3 * *"
   workflow_dispatch: # Allow manual trigger from GitHub UI
 
@@ -12,18 +12,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Send keep-alive request to Supabase
+      - name: Ping Auth Health endpoint
         run: |
           RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
-            "${{ secrets.SUPABASE_URL }}/rest/v1/" \
-            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
+            "${{ secrets.SUPABASE_URL }}/auth/v1/health" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}")
 
-          echo "Supabase responded with HTTP status: $RESPONSE"
+          echo "Supabase Auth Health responded with HTTP status: $RESPONSE"
 
           if [ "$RESPONSE" -ge 200 ] && [ "$RESPONSE" -lt 400 ]; then
             echo "✅ Keep-alive ping successful. Project remains active."
           else
-            echo "❌ Unexpected response. Check your Supabase project status."
+            echo "❌ Unexpected response ($RESPONSE). Check your Supabase project status."
             exit 1
+          fi
+
+      - name: Ping Storage endpoint (secondary check)
+        run: |
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
+            "${{ secrets.SUPABASE_URL }}/storage/v1/bucket" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
+
+          echo "Supabase Storage responded with HTTP status: $RESPONSE"
+
+          if [ "$RESPONSE" -ge 200 ] && [ "$RESPONSE" -lt 400 ]; then
+            echo "✅ Storage ping successful."
+          else
+            echo "⚠️ Storage ping returned $RESPONSE (non-critical)."
           fi
